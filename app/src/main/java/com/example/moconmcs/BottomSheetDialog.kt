@@ -28,17 +28,15 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
-
-        try{
-            bottomSheetDialogListener = context as BottomSheetButtonClickListener
-        }catch (e: ClassCastException){
-            Toast.makeText(getActivity(), "에러가 발생하였습니다. 다음에 다시 시도해주세요", Toast.LENGTH_SHORT).show()
-        }
+        bottomSheetDialogListener = context as BottomSheetButtonClickListener
+//        try{
+//        }catch (e: ClassCastException){
+//            Toast.makeText(getActivity(), "에러가 발생하였습니다. 다음에 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         binding.BarCodeClick.setOnClickListener {
             bottomSheetDialogListener.layoutClick("왼쪽이 눌림")
         }

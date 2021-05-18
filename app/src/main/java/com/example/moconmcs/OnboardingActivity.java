@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -38,24 +41,41 @@ public class OnboardingActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        Button next = findViewById(R.id.obnext);
+        Button prev = findViewById(R.id.obprev);
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         fragmentTransaction.add(R.id.obframe, new OnboardingFragment1());
 
-        Button next = findViewById(R.id.obnext);
-        Button prev = findViewById(R.id.obprev);
+//        SharedPreferences preferences = getSharedPreferences("FirstCheck", Activity.MODE_PRIVATE);
+//        boolean checkFirst = preferences.getBoolean("checkFirst", false);
+//        if(checkFirst){
+//            Log.d("asdf", "onCreate: if가 실행이됨"+checkFirst);
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putBoolean("checkFirst", false);
+//            editor.apply();
+//            startActivity(new Intent(OnboardingActivity.this, MainActivity.class));
+//           finish();
+//        }else{
+//            Log.d("asdf", "onCreate: else가 실행이됨"+checkFirst);
+//            startActivity(new Intent(OnboardingActivity.this, MainActivity.class));
+//            finish();
+//        }
 
         next.setOnClickListener(v -> {
             curPage++;
             if(curPage > 3) {
                 Intent intent = new Intent(OnboardingActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
             else switchFragment();
         });
