@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1020662886391",
+    "project_id": "moconsick",
+    "storage_bucket": "moconsick.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020662886391:android:7c97e9cfc662cddae908f2",
+        "android_client_info": {
+          "package_name": "com.example.moconmcs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020662886391-lrd69ltb45k2hl4v0mjbjciln3hflnl5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaunmE68wSG0tkL_c1HfEHQi7-C-oFcbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020662886391-lrd69ltb45k2hl4v0mjbjciln3hflnl5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

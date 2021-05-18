@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/food_map"
+        android:title="푸드맵" />
+
+    <item
+        android:checked="false"
+        android:title=""
+        android:enabled="false"/>
+    <item
+        android:id="@+id/setting"
+        android:title="다이어리"/>
+</menu>
