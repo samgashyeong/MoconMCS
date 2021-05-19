@@ -10,13 +10,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    int curPage = 0;
+    private Button next, prev;
+    
+    private int curPage = 0;
 
     private void switchFragment() {
+
+        if(prev == null || next == null) return;
+        
+        if(curPage == 0) prev.setVisibility(View.GONE);
+        else prev.setVisibility(View.VISIBLE);
+        if(curPage == 3) next.setText("완료!");
+        else next.setText("다음");
 
         Fragment fr = null;
         switch (curPage) {
@@ -47,8 +57,11 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
-        Button next = findViewById(R.id.obnext);
-        Button prev = findViewById(R.id.obprev);
+        next = findViewById(R.id.obnext);
+        prev = findViewById(R.id.obprev);
+        
+        if(curPage == 0) prev.setVisibility(View.GONE);
+        if(curPage == 3) next.setText("완료!");
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
