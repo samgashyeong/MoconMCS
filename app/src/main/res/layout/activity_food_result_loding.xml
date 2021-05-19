@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".FoodResultLoding">
@@ -26,6 +26,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/prb"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvResult_dataSuccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="데이터를 불러오는데에 성공함"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvResult" />
+
+        <TextView
+            android:id="@+id/tvResut_foodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="식품명"
+            android:textColor="#000"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvResult_dataSuccess"/>
+
+        <TextView
+            android:id="@+id/tvResut_foodNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="식품명"
+            android:textColor="#000"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvResut_foodName" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

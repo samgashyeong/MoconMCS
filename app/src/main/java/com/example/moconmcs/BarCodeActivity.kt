@@ -19,6 +19,7 @@ import com.example.moconmcs.databinding.ActivityBarCodeBinding
 import com.google.android.gms.common.util.DataUtils
 
 class BarCodeActivity : AppCompatActivity() {
+    private var isIntent : Boolean = false
     private val CAMERA_REQUEST_CODE = 1001
     private lateinit var codeScanner: CodeScanner
     private lateinit var binding: ActivityBarCodeBinding
@@ -46,11 +47,12 @@ class BarCodeActivity : AppCompatActivity() {
 
             decodeCallback = DecodeCallback {
                 runOnUiThread{
-                    Log.d("asdf", "scan: ${it.text}")
-//                    Toast.makeText(this@BarCodeActivity, it.text, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@BarCodeActivity, FoodResultLoding::class.java)
-                        .putExtra("barcodenum", it.text))
-                    finish()
+                    if(!isIntent){
+                        isIntent = true
+                        startActivity(Intent(this@BarCodeActivity, FoodResultLoding::class.java)
+                            .putExtra("barcodenum", it.text))
+                        finish()
+                    }
                 }
             }
 
