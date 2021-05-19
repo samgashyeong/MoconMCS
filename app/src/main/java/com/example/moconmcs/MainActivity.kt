@@ -1,7 +1,9 @@
 package com.example.moconmcs
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -39,11 +41,6 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
         }
     }
 
-    override fun layoutClick(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
-
-
     fun setFragment(num: Int, title: String){
         lateinit var fr :Fragment
         when(num){
@@ -55,5 +52,13 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
                             .replace(R.id.frame, fr)
                             .commit()
         binding.toolbar.title = title
+    }
+
+    override fun layoutClick(num: Int) {
+//        Toast.makeText(this, , Toast.LENGTH_SHORT).show()
+        when(num){
+            1->startActivity(Intent(this, BarCodeActivity::class.java))
+            2-> Log.d("asdf", "layoutClick: 오른쪽이 클릭됨")
+        }
     }
 }

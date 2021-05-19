@@ -38,10 +38,10 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.BarCodeClick.setOnClickListener {
-            bottomSheetDialogListener.layoutClick("왼쪽이 눌림")
+            bottomSheetDialogListener.layoutClick(1)
         }
         binding.NumClick.setOnClickListener {
-            bottomSheetDialogListener.layoutClick("오른쪽이 눌림")
+            bottomSheetDialogListener.layoutClick(2)
         }
     }
 }

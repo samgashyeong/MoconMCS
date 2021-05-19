@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.moconmcs">
 
+    <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -15,15 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
-
-<!--        밑에꺼 완성되면 application에 추가할것-->
-<!--        android:fullBackupContent="@xml/backup_descriptor"-->
-
-<!--        apikey 발급되면 주석 해제할 것-->
-<!--        <meta-data-->
-<!--            android:name="com.google.android.geo.API_KEY"-->
-<!--            android:value="${MAPS_API_KEY}" />-->
-
+        <activity android:name=".BarCodeActivity"></activity>
+        <!-- 밑에꺼 완성되면 application에 추가할것 -->
+        <!-- android:fullBackupContent="@xml/backup_descriptor" -->
+        <!-- apikey 발급되면 주석 해제할 것 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
         <activity android:name=".OnboardingActivity" />
         <activity android:name=".MainActivity" />
