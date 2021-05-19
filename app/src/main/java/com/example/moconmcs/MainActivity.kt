@@ -17,18 +17,16 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+
         binding.bottmnavview.background=null
 
 
         binding.bottmnavview.run{
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
-                    R.id.food_map ->{
-                        setFragment(1, "푸드맵")
-                    }
-                    R.id.setting->{
-                        setFragment(2, "식단다이어리")
-                    }
+                    R.id.food_map -> setFragment(1, "푸드맵")
+                    R.id.setting-> setFragment(2, "식단다이어리")
                 }
                 true
             }
