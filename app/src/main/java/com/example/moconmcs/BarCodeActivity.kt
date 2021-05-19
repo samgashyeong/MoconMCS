@@ -1,5 +1,6 @@
 package com.example.moconmcs
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Camera
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +47,10 @@ class BarCodeActivity : AppCompatActivity() {
             decodeCallback = DecodeCallback {
                 runOnUiThread{
                     Log.d("asdf", "scan: ${it.text}")
-                    Toast.makeText(this@BarCodeActivity, it.text, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@BarCodeActivity, it.text, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@BarCodeActivity, FoodResultLoding::class.java)
+                        .putExtra("barcodenum", it.text))
+                    finish()
                 }
             }
 

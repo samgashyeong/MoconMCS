@@ -3,11 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.moconmcs">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+
 
     <application
         android:allowBackup="true"
@@ -16,14 +22,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
-
-<!--        밑에꺼 완성되면 application에 추가할것-->
-<!--        android:fullBackupContent="@xml/backup_descriptor"-->
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
+
+        <activity
+            android:name=".FoodResultLoding"
+            android:label="@string/title_activity_food_result_loding">
+        </activity>
         <activity android:name=".BarCodeActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".OnboardingActivity" />
