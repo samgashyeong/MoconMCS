@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
 
 
         binding.bottmnavview.background=null
-
-
         binding.bottmnavview.run{
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
@@ -34,8 +32,6 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
             }
             selectedItemId = R.id.food_map
         }
-
-
         binding.floatingBtn.setOnClickListener {
             bottomSheetDialog.show(supportFragmentManager, "foodBottomSheet")
         }
