@@ -51,10 +51,15 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
     }
 
     override fun layoutClick(num: Int) {
-//        Toast.makeText(this, , Toast.LENGTH_SHORT).show()
         when(num){
-            1->startActivity(Intent(this, BarCodeActivity::class.java))
-            2-> Log.d("asdf", "layoutClick: 오른쪽이 클릭됨")
+            1->{
+                startActivity(Intent(this, BarCodeActivity::class.java))
+                bottomSheetDialog.dismiss()
+            }
+            2->{
+                startActivity(Intent(this, FoodNumInput::class.java))
+                bottomSheetDialog.dismiss()
+            }
         }
     }
 }

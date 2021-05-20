@@ -35,14 +35,17 @@ class FoodResultLoding : AppCompatActivity() {
 
         Log.d("asdf", "onCreate: ${barCode}")
         if (barCode != null) {
-            getData(barCode)
+            getFoodNum(barCode)
+        }
+        if(Intent.getStringExtra("Etname")!=null){
+            getResult(Intent.getStringExtra("Etname")!!)
         }
     }
 
     @SuppressLint("SetTextI18n")
-    fun getData(barCode:String){
+    fun getFoodNum(barCode:String){
         val api = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_URL_BARCODE)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GetFoodNum::class.java)
@@ -56,8 +59,6 @@ class FoodResultLoding : AppCompatActivity() {
             if(response.isSuccessful and execution.isSuccessful){
                 val foodData = response.body()
                 val isExecution = execution.body()
-                
-
 
                 withContext(Dispatchers.Main){
 //                    val foodName = isExecution?.C005?.row?.get(0)!!.PRDLST_NM
@@ -82,6 +83,7 @@ class FoodResultLoding : AppCompatActivity() {
                         Log.d("asdf", "getData: ${isExecution.C005.row[0].PRDLST_REPORT_NO}\n" +
                                 isExecution.C005.row[0].PRDLST_NM
                         )
+                        getResult(isExecution.C005.row[0].PRDLST_REPORT_NO)
                     }
 //                    Log.d("asdf", "getData: ${isExecution.total_count.toInt()}")
 //                    if(isExecution?.total_count?.toInt()?.equals(0)!!){
@@ -95,8 +97,12 @@ class FoodResultLoding : AppCompatActivity() {
         }
     }
 
+    fun getResult(FoodNum : String){
+
+    }
     companion object {
         const val serViceKey = "6a957af97bed49989b74"
-        const val BASE_URL = "https://openapi.foodsafetykorea.go.kr/api/${serViceKey}/C005/json/"
+        const val BASE_URL_BARCODE = "https://openapi.foodsafetykorea.go.kr/api/${serViceKey}/C005/json/"
+        const val BASE_URL_KYUNGROK_API = "엄경록 화이팅!"
     }
 }

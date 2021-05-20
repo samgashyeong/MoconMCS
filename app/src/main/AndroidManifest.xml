@@ -13,8 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,15 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
+        <activity android:name=".FoodNumInput"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
-
         <activity
             android:name=".FoodResultLoding"
-            android:label="@string/title_activity_food_result_loding">
-        </activity>
+            android:label="@string/title_activity_food_result_loding"></activity>
         <activity android:name=".BarCodeActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".OnboardingActivity" />
