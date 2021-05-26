@@ -33,7 +33,7 @@ class FoodResultLoding : AppCompatActivity() {
 
         Toast.makeText(this, "로딩화면에서 뜸${barCode}", Toast.LENGTH_SHORT).show()
 
-        Log.d("asdf", "onCreate: ${barCode}")
+        Log.d("asdf", "onCreate: ${barCode}") //바코드 번호가져오기
         if (barCode != null) {
             getFoodNum(barCode)
         }
@@ -43,7 +43,7 @@ class FoodResultLoding : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun getFoodNum(barCode:String){
+    fun getFoodNum(barCode:String){ //데이터 호출
         val api = Retrofit.Builder()
             .baseUrl(BASE_URL_BARCODE)
             .addConverterFactory(GsonConverterFactory.create())
@@ -53,19 +53,17 @@ class FoodResultLoding : AppCompatActivity() {
         Log.d("asdf", "api: ${api}")
 
         GlobalScope.launch(Dispatchers.IO){
-            val response = api.getFoodCreateNum(barCode).awaitResponse()
             val execution = api.isExecutionCode(barCode).awaitResponse()
-            Log.d("response", "response : ${response}${execution}")
-            if(response.isSuccessful and execution.isSuccessful){
-                val foodData = response.body()
+            Log.d("response", "response :${execution}")
+            if(execution.isSuccessful){
                 val isExecution = execution.body()
 
                 withContext(Dispatchers.Main){
 //                    val foodName = isExecution?.C005?.row?.get(0)!!.PRDLST_NM
 //                    val foodNum = isExecution.C005.row[0].PRDLST_REPORT_NO
 
-                    Log.d("asdf", "getData : ${foodData}\n ${isExecution}\n${isExecution?.C005?.total_count}")
-                    if(isExecution?.C005?.total_count.equals("0")){
+                    Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
+                    if(isExecution?.C005?.total_count.equals("0")){ //만약 데이터가 안나온다
                         binding.tvResultDataSuccess.visibility = View.VISIBLE
                         binding.tvResultDataSuccess.text = "데이터를 불러오는데에 실패하였습니다."
                         binding.tvResutFoodName.visibility = View.VISIBLE
@@ -73,7 +71,7 @@ class FoodResultLoding : AppCompatActivity() {
                         binding.tvResutFoodNum.visibility = View.VISIBLE
                         binding.tvResutFoodNum.text = "NULL"
                     }
-                    else{
+                    else{ //나온다?
                         binding.tvResultDataSuccess.visibility = View.VISIBLE
                         binding.tvResultDataSuccess.text = "데이터를 불러오는데에 성공하였습니다."
                         binding.tvResutFoodName.visibility = View.VISIBLE
@@ -85,13 +83,6 @@ class FoodResultLoding : AppCompatActivity() {
                         )
                         getResult(isExecution.C005.row[0].PRDLST_REPORT_NO)
                     }
-//                    Log.d("asdf", "getData: ${isExecution.total_count.toInt()}")
-//                    if(isExecution?.total_count?.toInt()?.equals(0)!!){
-//                        Toast.makeText(this@FoodResultLoding, "해당되는 데이터가 없음", Toast.LENGTH_SHORT).show()
-//                    }else{
-//
-//                    }
-//                    Toast.makeText(this@FoodResultLoding, foodData!!.PRDLST_REPORT_NO.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         }

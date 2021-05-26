@@ -45,6 +45,7 @@ class BarCodeActivity : AppCompatActivity() {
             isAutoFocusEnabled = true
             isFlashEnabled = false
 
+
             decodeCallback = DecodeCallback {
                 runOnUiThread{
                     if(!isIntent){

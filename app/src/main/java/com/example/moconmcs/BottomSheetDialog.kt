@@ -26,7 +26,7 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
     }
 
 
-    override fun onAttach(activity: Activity) {
+    override fun onAttach(activity: Activity) { //선언
         super.onAttach(activity)
         bottomSheetDialogListener = context as BottomSheetButtonClickListener
 //        try{
@@ -35,7 +35,7 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
 //        }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) { //눌러서 Activity한테 데이터 전달
         super.onActivityCreated(savedInstanceState)
         binding.BarCodeClick.setOnClickListener {
             bottomSheetDialogListener.layoutClick(1)

@@ -9,8 +9,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GetFoodNum {
-    @GET("1/1/BAR_CD={BarcodeNum}")
-    fun getFoodCreateNum(@Path("BarcodeNum") BarCodeNum : String) : Call<Row>
 
     @GET("1/1/BAR_CD={BarcodeNum}")
     fun isExecutionCode(@Path("BarcodeNum") BarCodeNum : String) : Call<BarCode>

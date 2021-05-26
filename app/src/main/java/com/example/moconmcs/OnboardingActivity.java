@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,6 +61,7 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +103,10 @@ public class OnboardingActivity extends AppCompatActivity {
         next.setOnClickListener(v -> {
             curPage++;
             if(curPage > 4) {
-                startActivity(new Intent(OnboardingActivity.this, MainActivity.class));
+                startActivity(new Intent(OnboardingActivity.this, MainActivity.class)
+                .setFlags(Intent.EXTRA_DOCK_STATE_UNDOCKED));
+                Intent intent1 = new Intent();
+                intent1.setFlags(Intent.EXTRA_DOCK_STATE_HE_DESK);
                 finish();
             }
             else switchFragment();
