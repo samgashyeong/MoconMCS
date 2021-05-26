@@ -46,7 +46,6 @@ public class OnboardingActivity extends AppCompatActivity {
         try {
             Constructor<? extends Fragment> ctr = frclass.getConstructor();
             fr = ctr.newInstance();
-            Toast.makeText(getApplicationContext(), "프래그먼트 가져오기 성공" + fr.toString(), Toast.LENGTH_SHORT).show();
         }
         catch (Exception e) {
             Log.e("fragment_switch", e.getMessage());
