@@ -11,8 +11,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -47,6 +49,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
@@ -128,6 +131,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(requireActivity().getApplicationContext(),
                     "권한이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_LONG).show();
+            setPermisson();
             return null;
         }
         for (String provider : providers) {
@@ -276,5 +280,36 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             e.printStackTrace();
         }
         return placemarks;
+    }
+
+    private void setPermisson(){
+        Log.d(TAG, "setPermisson: 퍼미션 띄어짐");
+        int permisson1 = ContextCompat.checkSelfPermission(requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permisson1 != PackageManager.PERMISSION_GRANTED){
+            makeRequest();
+        }
+
+    }
+
+
+    private void makeRequest(){
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1002);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1002:{
+                if(grantResults.length==0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행이됩니다.", Toast.LENGTH_SHORT).show();
+                    setPermisson();
+                }
+                onMapReady(googleMap);
+            }
+        }
     }
 }
