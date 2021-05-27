@@ -18,8 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -52,13 +49,13 @@ import java.util.Scanner;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 
-public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
+public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap googleMap;
     private MapView mapView;
     private static List<Placemark> placemarks;
-    private View marker_root_view;
-    private TextView tv_marker;
+    private Marker selectedMarker;
+    private TextView placeTitle, placeDesc, placeRate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +63,10 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         View view = inflater.inflate(R.layout.fragment_food_map, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.getMapAsync(this);
+
+        placeTitle = view.findViewById(R.id.map_title);
+        placeDesc = view.findViewById(R.id.map_desc);
+        placeRate = view.findViewById(R.id.map_rate);
 
         return view;
     }
@@ -146,86 +147,73 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return bestLocation;
     }
 
-    private void setCustomMarkerView() {
-        marker_root_view = LayoutInflater.from(requireContext()).inflate(R.layout.map_marker_layout, null);
-        tv_marker = marker_root_view.findViewById(R.id.tv_map_marker);
-    }
-
     private void addMarker(Placemark placemark) {
         LatLng position = new LatLng(placemark.getPos().get(0), placemark.getPos().get(1));
-
-        String title = placemark.getName();
-        if(title.length() > 5) title = title.substring(0, 4) + "..";
-        tv_marker.setText(title);
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(placemark.getName());
         markerOptions.position(position);
         markerOptions.snippet(placemark.getDesc());
 
-        Bitmap bitmap = createDrawableFromView(getActivity(), marker_root_view);
-        if(bitmap != null)
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_0));
 
         googleMap.addMarker(markerOptions);
     }
 
-    private void updateMarkers() {
-        googleMap.clear();
-        LatLng curPos = googleMap.getCameraPosition().target;
-        double zoomLv = 1 - (googleMap.getCameraPosition().zoom - googleMap.getMinZoomLevel())
-                / (googleMap.getMaxZoomLevel() - googleMap.getMinZoomLevel());
-        zoomLv = Math.max((zoomLv - 0.4) / 0.6, 0.01);
-        double dist = 1.5 * zoomLv;
-        for (Placemark placemark : placemarks) {
-            if(Math.abs(googleMap.getCameraPosition().target.latitude - placemark.getLatitude()) < dist
-                        && Math.abs(googleMap.getCameraPosition().target.longitude - placemark.getLongitude()) < dist) {
-                //화면 밖의 마커는 추가하지 않음.
-                addMarker(placemark);
-            }
-        }
-        Log.d("zz:ZoomLv", zoomLv + "");
-        Log.d("zz:Distance", dist + "");
+    private Marker changeMarker(Marker origin, boolean isSelected) {
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.title(origin.getTitle());
+        markerOptions.position(origin.getPosition());
+        markerOptions.snippet(origin.getSnippet());
+
+        if(isSelected)
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_1));
+        else
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_0));
+
+        origin.remove();
+        return googleMap.addMarker(markerOptions);
     }
 
-    private Bitmap createDrawableFromView(Context context, View view) {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
-        view.buildDrawingCache();
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+    private void addMarkers() {
+        for (Placemark placemark : placemarks) {
+            addMarker(placemark);
+        }
+    }
 
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+    private void changeSelectedMarker(Marker marker) {
+        if (selectedMarker != null) {
+            changeMarker(selectedMarker, false);
+        }
 
-        return bitmap;
+        if (marker != null) {
+            selectedMarker = changeMarker(marker, true);
+        }
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
         googleMap.animateCamera(center);
+
+        changeSelectedMarker(marker);
+
+        placeDesc.setText(marker.getSnippet());
+        placeTitle.setText(marker.getTitle());
+        placeRate.setText("★★★★☆");
 
         return true;
     }
 
-
-    @Override
-    public void onCameraIdle() {
-        updateMarkers();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         this.googleMap = googleMap;
-        googleMap.setOnCameraIdleListener(this);
         googleMap.setOnMarkerClickListener(this);
-        setCustomMarkerView();
         if (placemarks == null) placemarks = getPlacemarkList();
-        updateMarkers();
+        addMarkers();
+
         LatLng curPos = new LatLng(37.56, 126.97);
         if (getActivity() != null) {
             Location location = getLastKnownLocation();
@@ -233,8 +221,6 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 curPos = new LatLng(latitude, longitude);
-                Toast.makeText(getActivity().getApplicationContext(), "위치 정보를 가져오는 데에 성공했습니다."
-                        + latitude + "," + longitude, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), "위치 정보를 가져오는 데에 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
@@ -246,10 +232,15 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             }
             Handler handler = new Handler();
             LatLng finalCurPos = curPos;
+            googleMap.setMinZoomPreference(8);
             handler.postDelayed(() -> googleMap
-                    .animateCamera(CameraUpdateFactory.newLatLngZoom(finalCurPos, 13))
+                    .animateCamera(CameraUpdateFactory.newLatLngZoom(finalCurPos, 12))
                     , 1000);
         }
+
+        selectedMarker = null;
+        placeTitle.setText("       ");
+        placeRate.setText("☆☆☆☆☆");
     }
 
     private List<Placemark> getPlacemarkList() {
