@@ -31,6 +31,14 @@ public class Placemark {
         return pos;
     }
 
+    public double getLatitude() {
+        return pos.get(0);
+    }
+
+    public double getLongitude() {
+        return pos.get(1);
+    }
+
     @NotNull
     @Override
     public String toString() {

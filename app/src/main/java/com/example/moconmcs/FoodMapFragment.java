@@ -49,7 +49,7 @@ import java.util.Scanner;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
 
     private GoogleMap googleMap;
     private MapView mapView;
@@ -144,7 +144,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     private void setCustomMarkerView() {
         marker_root_view = LayoutInflater.from(requireContext()).inflate(R.layout.map_marker_layout, null);
-        tv_marker = (TextView) marker_root_view.findViewById(R.id.tv_map_marker);
+        tv_marker = marker_root_view.findViewById(R.id.tv_map_marker);
     }
 
     private void addMarker(Placemark placemark) {
@@ -164,6 +164,24 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
         googleMap.addMarker(markerOptions);
+    }
+
+    private void updateMarkers() {
+        googleMap.clear();
+        LatLng curPos = googleMap.getCameraPosition().target;
+        double zoomLv = 1 - (googleMap.getCameraPosition().zoom - googleMap.getMinZoomLevel())
+                / (googleMap.getMaxZoomLevel() - googleMap.getMinZoomLevel());
+        zoomLv = Math.max((zoomLv - 0.4) / 0.6, 0.01);
+        double dist = 1.5 * zoomLv;
+        for (Placemark placemark : placemarks) {
+            if(Math.abs(googleMap.getCameraPosition().target.latitude - placemark.getLatitude()) < dist
+                        && Math.abs(googleMap.getCameraPosition().target.longitude - placemark.getLongitude()) < dist) {
+                //화면 밖의 마커는 추가하지 않음.
+                addMarker(placemark);
+            }
+        }
+        Log.d("zz:ZoomLv", zoomLv + "");
+        Log.d("zz:Distance", dist + "");
     }
 
     private Bitmap createDrawableFromView(Context context, View view) {
@@ -190,14 +208,20 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return true;
     }
 
+
+    @Override
+    public void onCameraIdle() {
+        updateMarkers();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        googleMap.setOnCameraIdleListener(this);
+        googleMap.setOnMarkerClickListener(this);
         setCustomMarkerView();
         if (placemarks == null) placemarks = getPlacemarkList();
-        for (Placemark placemark : placemarks) {
-            addMarker(placemark);
-        }
+        updateMarkers();
         LatLng curPos = new LatLng(37.56, 126.97);
         if (getActivity() != null) {
             Location location = getLastKnownLocation();
