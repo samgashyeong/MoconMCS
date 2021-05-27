@@ -203,6 +203,17 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return true;
     }
 
+    private void updateCameraToCurrentLocation() {
+        Location location = getLastKnownLocation();
+        LatLng curPos = new LatLng(37.56, 126.97);
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            curPos = new LatLng(latitude, longitude);
+        }
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 12));
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -232,7 +243,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             googleMap.setMinZoomPreference(8);
             handler.postDelayed(() -> googleMap
                     .animateCamera(CameraUpdateFactory.newLatLngZoom(finalCurPos, 12))
-                    , 1000);
+                    , 500);
         }
 
         selectedMarker = null;
@@ -287,6 +298,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 1002);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
