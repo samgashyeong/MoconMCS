@@ -1,6 +1,7 @@
 package com.example.moconmcs;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.location.Location;
@@ -292,24 +293,20 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     }
 
-
     private void makeRequest(){
-        ActivityCompat.requestPermissions(requireActivity(),
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                1002);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1002);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case 1002:{
-                if(grantResults.length==0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행이됩니다.", Toast.LENGTH_SHORT).show();
-                    setPermisson();
-                }
-                onMapReady(googleMap);
+        if (requestCode == 1002) {
+
+            if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행이됩니다.", Toast.LENGTH_SHORT).show();
+                setPermisson();
             }
+            updateCameraToCurrentLocation();
         }
     }
 }
