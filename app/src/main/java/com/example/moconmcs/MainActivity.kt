@@ -1,10 +1,9 @@
 package com.example.moconmcs
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.widget.Toast
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,7 +19,8 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 
-        binding.bottmnavview.background=null
+        setSupportActionBar(binding.toolbar)
+
         binding.bottmnavview.run{
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
@@ -60,5 +60,27 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
                 bottomSheetDialog.dismiss()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.profile->{
+                startActivity(Intent(this, ProfileActivity::class.java))
+            }
+            R.id.setting->{
+                startActivity(Intent(this, SettingActivity::class.java))
+            }
+            R.id.helpMenu->{
+                startActivity(Intent(this, HelpMenuActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 }

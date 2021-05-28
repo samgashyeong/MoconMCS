@@ -22,7 +22,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:titleTextColor="#fff"/>
+                app:titleTextColor="#fff"
+                app:title="응애"
+                app:menu="@menu/toolbar_menu"/>
         </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -31,9 +33,7 @@
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:elevation="0dp"
-            android:background="@android:color/transparent"/>
+            android:layout_gravity="bottom"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -44,8 +44,8 @@
                 android:id="@+id/bottmnavview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                app:menu="@menu/main_menu" />
+                android:background="#fff"
+                app:menu="@menu/main_menu"/>
         </FrameLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

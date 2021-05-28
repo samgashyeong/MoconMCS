@@ -1,7 +1,6 @@
 package com.example.moconmcs;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.location.Location;
@@ -292,6 +291,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
 
     }
+
 
     private void makeRequest(){
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1002);
