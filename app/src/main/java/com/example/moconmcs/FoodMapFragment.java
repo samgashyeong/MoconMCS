@@ -144,32 +144,30 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return bestLocation;
     }
 
-    private void addMarker(Placemark placemark) {
-        LatLng position = new LatLng(placemark.getPos().get(0), placemark.getPos().get(1));
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.title(placemark.getName());
-        markerOptions.position(position);
-        markerOptions.snippet(placemark.getDesc());
-
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_0));
-
-        googleMap.addMarker(markerOptions);
-    }
-
-    private Marker changeMarker(Marker origin, boolean isSelected) {
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.title(origin.getTitle());
-        markerOptions.position(origin.getPosition());
-        markerOptions.snippet(origin.getSnippet());
+    private void modifyMarkerOptions(MarkerOptions markerOptions, String title, LatLng pos, String snippet, boolean isSelected) {
+        markerOptions.title(title);
+        markerOptions.position(pos);
+        markerOptions.snippet(snippet);
 
         if(isSelected)
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_1));
         else
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_0));
+    }
 
+    private void addMarker(Placemark placemark) {
+        LatLng position = new LatLng(placemark.getPos().get(0), placemark.getPos().get(1));
+        MarkerOptions markerOptions = new MarkerOptions();
+        modifyMarkerOptions(markerOptions, placemark.getName(), position, placemark.getDesc(), false);
+
+        googleMap.addMarker(markerOptions);
+    }
+
+    private Marker changeMarker(Marker origin, boolean isSelected) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        modifyMarkerOptions(markerOptions, origin.getTitle(), origin.getPosition(), origin.getSnippet(), isSelected);
         origin.remove();
+
         return googleMap.addMarker(markerOptions);
     }
 
