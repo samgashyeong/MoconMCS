@@ -21,22 +21,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
-        <activity android:name=".HelpMenuActivity"></activity>
-        <activity android:name=".SettingActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".FoodNumInput" />
+        <activity android:name=".Menu.HelpMenuActivity"></activity>
+        <activity android:name=".Menu.SettingActivity" />
+        <activity android:name=".Menu.ProfileActivity" />
+        <activity android:name=".Main.SearchFood.FoodNumInput" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
         <activity
-            android:name=".FoodResultLoding"
+            android:name=".Main.SearchFood.FoodResultLoding"
             android:label="@string/title_activity_food_result_loding" />
-        <activity android:name=".BarCodeActivity" />
+        <activity android:name=".Main.SearchFood.BarCodeActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".OnboardingActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Onboarding.OnboardingActivity" />
+        <activity android:name=".Main.MainActivity" />
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

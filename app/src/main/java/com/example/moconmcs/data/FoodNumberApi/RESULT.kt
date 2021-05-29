@@ -1,4 +1,4 @@
-package com.example.moconmcs.data
+package com.example.moconmcs.data.FoodNumberApi
 
 data class RESULT(
     val CODE: String,

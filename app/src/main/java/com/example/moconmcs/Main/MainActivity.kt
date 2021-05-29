@@ -1,4 +1,4 @@
-package com.example.moconmcs
+package com.example.moconmcs.Main
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,16 +7,30 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.example.moconmcs.*
+import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
+import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
+import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
+import com.example.moconmcs.Main.FoodMap.FoodMapFragment
+import com.example.moconmcs.Main.SearchFood.BarCodeActivity
+import com.example.moconmcs.Main.SearchFood.FoodNumInput
+import com.example.moconmcs.Menu.HelpMenuActivity
+import com.example.moconmcs.Menu.ProfileActivity
+import com.example.moconmcs.Menu.SettingActivity
 import com.example.moconmcs.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
+class MainActivity : AppCompatActivity(),
+    BottomSheetButtonClickListener {
     private lateinit var binding : ActivityMainBinding
-    val bottomSheetDialog : BottomSheetDialog = BottomSheetDialog()
+    val bottomSheetDialog : BottomSheetDialog =
+        BottomSheetDialog()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_main
+        )
 
 
         setSupportActionBar(binding.toolbar)
@@ -25,7 +39,7 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
                     R.id.food_map -> setFragment(1, "푸드맵")
-                    R.id.setting-> setFragment(2, "식단다이어리")
+                    R.id.setting -> setFragment(2, "식단다이어리")
                 }
                 true
             }
@@ -70,13 +84,13 @@ class MainActivity : AppCompatActivity(), BottomSheetButtonClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.profile->{
+            R.id.profile ->{
                 startActivity(Intent(this, ProfileActivity::class.java))
             }
-            R.id.setting->{
+            R.id.setting ->{
                 startActivity(Intent(this, SettingActivity::class.java))
             }
-            R.id.helpMenu->{
+            R.id.helpMenu ->{
                 startActivity(Intent(this, HelpMenuActivity::class.java))
             }
         }

@@ -1,4 +1,4 @@
-package com.example.moconmcs;
+package com.example.moconmcs.Onboarding;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.moconmcs.Main.MainActivity;
+import com.example.moconmcs.R;
+import com.example.moconmcs.SignupActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 

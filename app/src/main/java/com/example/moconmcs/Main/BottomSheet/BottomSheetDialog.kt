@@ -1,17 +1,14 @@
-package com.example.moconmcs
+package com.example.moconmcs.Main.BottomSheet
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.example.moconmcs.R
 import com.example.moconmcs.databinding.CheckBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.lang.ClassCastException
 
 class BottomSheetDialog: BottomSheetDialogFragment() {
     lateinit var bottomSheetDialogListener: BottomSheetButtonClickListener
@@ -21,7 +18,8 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.check_bottom_sheet, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.check_bottom_sheet, container, false)
         return binding.root
     }
 

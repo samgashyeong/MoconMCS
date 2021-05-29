@@ -1,8 +1,7 @@
-package com.example.moconmcs
+package com.example.moconmcs.Main.SearchFood
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Camera
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +14,8 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityBarCodeBinding
-import com.google.android.gms.common.util.DataUtils
 
 class BarCodeActivity : AppCompatActivity() {
     private var isIntent : Boolean = false
@@ -27,7 +26,9 @@ class BarCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bar_code)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_bar_code)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_bar_code
+        )
 
         setPermissions()
         scan()

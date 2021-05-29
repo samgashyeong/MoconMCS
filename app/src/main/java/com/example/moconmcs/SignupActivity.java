@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.moconmcs.data.User;
+import com.example.moconmcs.Onboarding.OnboardingActivity;
+import com.example.moconmcs.data.FirebaseDb.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

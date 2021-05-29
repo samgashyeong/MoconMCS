@@ -1,9 +1,10 @@
-package com.example.moconmcs
+package com.example.moconmcs.Menu
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityHelpMenuBinding
 
 class HelpMenuActivity : AppCompatActivity() {
@@ -12,7 +13,9 @@ class HelpMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_help_menu)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_help_menu)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_help_menu
+        )
 
         setSupportActionBar(binding.toolbar)
 

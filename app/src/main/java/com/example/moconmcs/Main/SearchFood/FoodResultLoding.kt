@@ -1,4 +1,4 @@
-package com.example.moconmcs
+package com.example.moconmcs.Main.SearchFood
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -7,15 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import com.example.moconmcs.data.C005
-import com.example.moconmcs.data.Row
+import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityFoodResultLodingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
-import retrofit2.await
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,7 +24,9 @@ class FoodResultLoding : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result_loding)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_food_result_loding)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_food_result_loding
+        )
 
         val Intent = intent
         val barCode = intent.getStringExtra("barcodenum")
@@ -93,7 +93,7 @@ class FoodResultLoding : AppCompatActivity() {
     }
     companion object {
         const val serViceKey = "6a957af97bed49989b74"
-        const val BASE_URL_BARCODE = "https://openapi.foodsafetykorea.go.kr/api/${serViceKey}/C005/json/"
+        const val BASE_URL_BARCODE = "https://openapi.foodsafetykorea.go.kr/api/$serViceKey/C005/json/"
         const val BASE_URL_KYUNGROK_API = "엄경록 화이팅!"
     }
 }

@@ -1,4 +1,4 @@
-package com.example.moconmcs;
+package com.example.moconmcs.Main.FoodMap;
 
 import androidx.annotation.NonNull;
 

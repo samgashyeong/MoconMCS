@@ -1,4 +1,4 @@
-package com.example.moconmcs;
+package com.example.moconmcs.Main.FoodMap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.moconmcs.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

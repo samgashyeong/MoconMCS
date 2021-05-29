@@ -1,9 +1,6 @@
-package com.example.moconmcs
+package com.example.moconmcs.Main.SearchFood
 
-import com.example.moconmcs.data.BarCode
-import com.example.moconmcs.data.C005
-import com.example.moconmcs.data.RESULT
-import com.example.moconmcs.data.Row
+import com.example.moconmcs.data.FoodNumberApi.BarCode
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
