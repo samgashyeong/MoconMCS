@@ -1,23 +1,16 @@
-package com.example.moconmcs;
+package com.example.moconmcs.SignUP;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.example.moconmcs.Onboarding.OnboardingActivity;
-import com.example.moconmcs.data.FirebaseDb.User;
+import com.example.moconmcs.R;
 import com.example.moconmcs.databinding.ActivitySignupBinding;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -79,21 +72,28 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void prev(){
-        Fragment fm = new SignUpFragment2();
+        SignUpFragment1 tf = (SignUpFragment1) getSupportFragmentManager().findFragmentById(R.id.frame);
+        assert tf != null;
+        SignUpFragment2 fm = new SignUpFragment2();
         FragmentManager fmm = getSupportFragmentManager();
         fmm.beginTransaction()
                 .replace(R.id.frame, fm)
                 .commit();
+//        SignUpFragment2 tf1 = (SignUpFragment2) getSupportFragmentManager().findFragmentById();
+        tf.loadData(fm);
         binding.backBtn.setVisibility(View.VISIBLE);
         binding.prevBtn.setVisibility(View.INVISIBLE);
     }
 
     private void back(){
-        Fragment fm = new SignUpFragment1();
+        SignUpFragment2 tf = (SignUpFragment2) getSupportFragmentManager().findFragmentById(R.id.frame);
+        assert tf != null;
+        SignUpFragment1 fm = new SignUpFragment1();
         FragmentManager fmm = getSupportFragmentManager();
         fmm.beginTransaction()
                 .replace(R.id.frame, fm)
                 .commit();
+        tf.loadData(fm);
         binding.backBtn.setVisibility(View.INVISIBLE);
         binding.prevBtn.setVisibility(View.VISIBLE);
     }

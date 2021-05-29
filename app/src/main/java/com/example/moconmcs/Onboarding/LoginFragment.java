@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.moconmcs.Main.MainActivity;
 import com.example.moconmcs.R;
-import com.example.moconmcs.SignupActivity;
+import com.example.moconmcs.SignUP.SignupActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 

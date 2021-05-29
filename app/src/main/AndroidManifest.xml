@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
-        <activity android:name=".Menu.HelpMenuActivity"></activity>
+        <activity android:name=".Menu.HelpMenuActivity"/>
         <activity android:name=".Menu.SettingActivity" />
         <activity android:name=".Menu.ProfileActivity" />
         <activity android:name=".Main.SearchFood.FoodNumInput" />
@@ -34,7 +34,7 @@
             android:name=".Main.SearchFood.FoodResultLoding"
             android:label="@string/title_activity_food_result_loding" />
         <activity android:name=".Main.SearchFood.BarCodeActivity" />
-        <activity android:name=".SignupActivity" />
+        <activity android:name=".SignUP.SignupActivity" />
         <activity android:name=".Onboarding.OnboardingActivity" />
         <activity android:name=".Main.MainActivity" />
         <activity android:name=".Splash">
