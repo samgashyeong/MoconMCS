@@ -12,12 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +50,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static android.content.ContentValues.TAG;
@@ -53,7 +68,13 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private MapView mapView;
     private static List<Placemark> placemarks;
     private Marker selectedMarker;
-    private TextView placeTitle, placeDesc, placeRate;
+    private TextView placeTitle, placeDesc;
+    private RatingBar placeRate;
+
+    private final ArrayList<ReviewInfo> arrayList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private ProgressBar reviewLoading;
+    private ReviewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +86,14 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeTitle = view.findViewById(R.id.map_title);
         placeDesc = view.findViewById(R.id.map_desc);
         placeRate = view.findViewById(R.id.map_rate);
+        reviewLoading = view.findViewById(R.id.map_review_loading);
+
+        recyclerView = view.findViewById(R.id.reviews);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new ReviewAdapter(arrayList);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -188,16 +217,64 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean onMarkerClick(Marker marker) {
         CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
         googleMap.animateCamera(center);
+        arrayList.clear();
 
         changeSelectedMarker(marker);
 
+        placeDesc.setVisibility(View.VISIBLE);
+        placeTitle.setVisibility(View.VISIBLE);
+        placeRate.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
         placeDesc.setText(marker.getSnippet());
         placeTitle.setText(marker.getTitle());
-        placeRate.setText("★★★★☆");
+        placeRate.setRating(0);
+        placeRate.setIsIndicator(true);
+
+        reviewLoading.setVisibility(View.VISIBLE);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+
+        DocumentReference docRef = db.collection("Place").document(marker.getTitle());
+        docRef.get().addOnCompleteListener(task -> {
+            reviewLoading.setVisibility(View.GONE);
+            if(task.isSuccessful()) {
+                int reviewerCount = 0;
+                float averRate = 0;
+                DocumentSnapshot document = task.getResult();
+                if(document.getData() == null) {
+                    Map<String, Object> datas = new HashMap<>();
+                    Map<String, ReviewInfo> reviewers = new HashMap<>();
+                    datas.put("reviewers", reviewers);
+                    docRef.set(datas);
+                }
+                else {
+                    Map<String, HashMap<String, Object>> reviews =
+                            (Map<String, HashMap<String, Object>>) document.get("reviewers");
+                    if (reviews != null) {
+                        for(HashMap<String, Object> rv : reviews.values()) {
+                            float rate = Float.parseFloat(rv.get("rate") + "");
+                            String reviewText = rv.get("review") + "";
+                            String name = rv.get("name") + "";
+                            long timeStamp = Long.parseLong(rv.get("timestamp") + "");
+                            arrayList.add(new ReviewInfo(rate, reviewText, name, timeStamp));
+                            adapter.notifyDataSetChanged();
+
+                            reviewerCount++;
+                            averRate += rate;
+                        }
+                    }
+                }
+                averRate /= reviewerCount;
+                placeRate.setRating(averRate);
+            }
+        });
 
         return true;
     }
@@ -246,8 +323,9 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
 
         selectedMarker = null;
-        placeTitle.setText("       ");
-        placeRate.setText("☆☆☆☆☆");
+        placeTitle.setVisibility(View.INVISIBLE);
+        placeRate.setVisibility(View.INVISIBLE);
+        placeDesc.setVisibility(View.INVISIBLE);
     }
 
     private List<Placemark> getPlacemarkList() {
