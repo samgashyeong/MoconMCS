@@ -11,7 +11,7 @@ import com.example.moconmcs.databinding.CheckBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetDialog: BottomSheetDialogFragment() {
-    lateinit var bottomSheetDialogListener: BottomSheetButtonClickListener
+    private lateinit var bottomSheetDialogListener: BottomSheetButtonClickListener
     lateinit var binding: CheckBottomSheetBinding
     override fun onCreateView(
         inflater: LayoutInflater,
