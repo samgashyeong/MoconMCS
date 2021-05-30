@@ -72,7 +72,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        if(auth.getCurrentUser() == null){
+        if(auth.getCurrentUser() != null){
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
