@@ -306,7 +306,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         db.collection("Place").document(marker.getTitle()).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 DocumentSnapshot placeDoc = task.getResult();
-                if(placeDoc.get(uid) != null) writeReviewBtn.setText("리뷰 수정");
+                if(placeDoc.get("reviewers." + uid) != null) writeReviewBtn.setText("리뷰 수정");
                 else writeReviewBtn.setText("리뷰 작성");
             }
         });
