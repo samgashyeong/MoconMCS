@@ -1,6 +1,7 @@
 package com.example.moconmcs.Main.FoodMap;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.location.Location;
@@ -20,6 +21,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -39,8 +42,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,6 +74,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private Marker selectedMarker;
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
+    private Button writeReviewBtn;
 
     private final ArrayList<ReviewInfo> arrayList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -87,6 +92,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeDesc = view.findViewById(R.id.map_desc);
         placeRate = view.findViewById(R.id.map_rate);
         reviewLoading = view.findViewById(R.id.map_review_loading);
+        writeReviewBtn = view.findViewById(R.id.write_review_btn);
 
         recyclerView = view.findViewById(R.id.reviews);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
@@ -95,7 +101,28 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         adapter = new ReviewAdapter(arrayList);
         recyclerView.setAdapter(adapter);
 
+        writeReviewBtn.setOnClickListener(v -> {
+            openReviewWriteDialog();
+        });
+
         return view;
+    }
+
+    private void openReviewWriteDialog() {
+        Dialog dialog = new Dialog(requireActivity());
+        dialog.setContentView(R.layout.layout_review_write);
+        dialog.show();
+        Button cancel = dialog.findViewById(R.id.btn_review_cancel);
+        Button upload = dialog.findViewById(R.id.btn_review_upload);
+        EditText content = dialog.findViewById(R.id.review_content);
+        RatingBar ratingBar = dialog.findViewById(R.id.user_rating_bar_review);
+        cancel.setOnClickListener(v -> dialog.dismiss());
+        upload.setOnClickListener(v -> {
+            String review_content = content.getText().toString();
+            float rateNum = ratingBar.getRating();
+            uploadReview(review_content, rateNum);
+            dialog.dismiss();
+        });
     }
 
     @Override
@@ -217,12 +244,46 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
     }
 
-    @SuppressWarnings("unchecked")
+    private void uploadReview(String content, float rate) {
+        if(selectedMarker == null) return;
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+
+        db.collection("User").document(uid).get().addOnCompleteListener(userTask -> {
+           if(userTask.isSuccessful()) {
+               DocumentSnapshot userDoc = userTask.getResult();
+               if(userDoc.get("name") != null) {
+                   String name = userDoc.get("name") + "";
+                   DocumentReference docRef = db.collection("Place").document(selectedMarker.getTitle());
+                   docRef.get().addOnCompleteListener(task -> {
+                       reviewLoading.setVisibility(View.GONE);
+                       if(task.isSuccessful()) {
+                           DocumentSnapshot placeDoc = task.getResult();
+                           if(placeDoc.getData() == null) {
+                               Map<String, Object> datas = new HashMap<>();
+                               Map<String, ReviewInfo> reviewers = new HashMap<>();
+                               datas.put("reviewers", reviewers);
+                               docRef.set(datas);
+                           }
+                           else {
+                               docRef.update("reviewers." + uid,
+                                       new ReviewInfo(rate, content, name, Calendar.getInstance().getTimeInMillis()));
+                               updateReviewList(selectedMarker.getTitle());
+                           }
+                       }
+                   });
+               }
+           }
+        });
+
+
+    }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
         googleMap.animateCamera(center);
-        arrayList.clear();
 
         changeSelectedMarker(marker);
 
@@ -237,11 +298,19 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
         reviewLoading.setVisibility(View.VISIBLE);
 
+        updateReviewList(marker.getTitle());
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateReviewList(String title) {
+        arrayList.clear();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
-        DocumentReference docRef = db.collection("Place").document(marker.getTitle());
+        DocumentReference docRef = db.collection("Place").document(title);
         docRef.get().addOnCompleteListener(task -> {
             reviewLoading.setVisibility(View.GONE);
             if(task.isSuccessful()) {
@@ -264,6 +333,12 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                             String name = rv.get("name") + "";
                             long timeStamp = Long.parseLong(rv.get("timestamp") + "");
                             arrayList.add(new ReviewInfo(rate, reviewText, name, timeStamp));
+                            arrayList.sort((o1, o2) -> {
+                                long dif = o2.getTimestamp() - o1.getTimestamp();
+                                if (dif == 0) return 0;
+                                if (dif > 0) return 1;
+                                return -1;
+                            });
                             adapter.notifyDataSetChanged();
 
                             reviewerCount++;
@@ -275,9 +350,8 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 placeRate.setRating(averRate);
             }
         });
-
-        return true;
     }
+
 
     private void updateCameraToCurrentLocation() {
         Location location = getLastKnownLocation();
