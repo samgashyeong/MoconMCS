@@ -39,13 +39,6 @@ public class SignupActivity extends AppCompatActivity {
 //        binding.backBtn.setOnClickListener(v ->{
 //            back();
 //        });
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-
-        Button signup = findViewById(R.id.loginButton);
 
 //        signup.setOnClickListener(v -> {
 //            if(!pw1.getText().toString().equals(pw2.getText().toString())) {

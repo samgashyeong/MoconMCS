@@ -13,7 +13,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.R
-import com.example.moconmcs.data.FirebaseDb.SignUpUser
 import com.example.moconmcs.databinding.FragmentSignUp1Binding
 
 class SignUpFragment1 : Fragment() {

@@ -35,17 +35,22 @@ public class LoginFragment extends Fragment {
         });
 
         view.findViewById(R.id.loginButton).setOnClickListener(v -> {
-            auth.signInWithEmailAndPassword(emailEdit.getText().toString(), pwEdit.getText().toString()).addOnCompleteListener(task -> {
-               if(task.isSuccessful()) {
-                   Toast.makeText(getContext(), "로그인 성공!", Toast.LENGTH_SHORT).show();
-                   startActivity(new Intent(getContext(), MainActivity.class));
-                   if(getActivity() != null)
-                       getActivity().finish();
-               }
-               else {
-                   Toast.makeText(getContext(), "로그인 실패!", Toast.LENGTH_SHORT).show();
-               }
-            });
+            if(emailEdit.getText().length() <=0 || pwEdit.getText().length() <= 0){
+                Toast.makeText(getActivity(), "빈칸을 채워주세요", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                auth.signInWithEmailAndPassword(emailEdit.getText().toString(), pwEdit.getText().toString()).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(getContext(), "로그인 성공!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                        if(getActivity() != null)
+                            getActivity().finish();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "비밀번호랑 이메일을 확인하고 다시시도해주세요!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
 
         return view;

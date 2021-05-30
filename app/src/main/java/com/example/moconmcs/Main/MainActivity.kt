@@ -2,6 +2,7 @@ package com.example.moconmcs.Main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +19,15 @@ import com.example.moconmcs.Menu.HelpMenuActivity
 import com.example.moconmcs.Menu.ProfileActivity
 import com.example.moconmcs.Menu.SettingActivity
 import com.example.moconmcs.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(),
     BottomSheetButtonClickListener {
     private lateinit var binding : ActivityMainBinding
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
+
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,9 @@ class MainActivity : AppCompatActivity(),
             R.layout.activity_main
         )
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        Log.d("asedrf", "onCreate: ${firebaseAuth.currentUser!!.uid}")
 
         setSupportActionBar(binding.toolbar)
 

@@ -15,9 +15,6 @@ public class OnboardingFragment3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.onboarding_3, container, false);
-
-
-
         return view;
     }
 }

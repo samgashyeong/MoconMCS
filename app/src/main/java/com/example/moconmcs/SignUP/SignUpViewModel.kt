@@ -2,7 +2,6 @@ package com.example.moconmcs.SignUP
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moconmcs.data.FirebaseDb.SignUpUser
 
 class SignUpViewModel:ViewModel() {
     var email : MutableLiveData<String> = MutableLiveData()

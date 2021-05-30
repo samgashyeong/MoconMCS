@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.example.moconmcs.Main.MainActivity;
 import com.example.moconmcs.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class OnboardingActivity extends AppCompatActivity {
             OnboardingFragment4.class,
             LoginFragment.class
     );
+    private FirebaseAuth auth;
 
     private void switchFragment() {
 
@@ -66,7 +68,14 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
+        auth = FirebaseAuth.getInstance();
+
         Intent intent = getIntent();
+
+        if(auth.getCurrentUser() == null){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
 
         next = findViewById(R.id.obnext);
         prev = findViewById(R.id.obprev);
