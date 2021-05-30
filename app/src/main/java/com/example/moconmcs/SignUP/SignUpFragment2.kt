@@ -1,23 +1,23 @@
 package com.example.moconmcs.SignUP
 
-import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.Onboarding.OnboardingActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.FirebaseDb.User
 import com.example.moconmcs.databinding.FragmentSignUp2Binding
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import android.content.Intent as Intent
 
 
 class SignUpFragment2 : Fragment() {
@@ -31,6 +31,8 @@ class SignUpFragment2 : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var userUid : String
+    private lateinit var viewModel: SignUpViewModel
+    private lateinit var activity: SignupActivity
 
     fun saveData(email : String, pw : String, name : String){
         this.email = email
@@ -50,6 +52,9 @@ class SignUpFragment2 : Fragment() {
 
 
         binding.btn1.visibility = View.INVISIBLE
+        binding.backBtn.setOnClickListener {
+            activity.changeFragment(0)
+        }
         binding.viganGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
                 R.id.vigan-> {userKind = "비건"
@@ -69,8 +74,10 @@ class SignUpFragment2 : Fragment() {
             }
         }
 
+//        (activity as AppCompatActivity?)!!.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
+
         binding.btn1.setOnClickListener {
-            firebaseAuth.createUserWithEmailAndPassword(email, pw)
+            firebaseAuth.createUserWithEmailAndPassword(viewModel.email.value.toString(), viewModel.pw.value.toString())
                 .addOnFailureListener {
                     Toast.makeText(context, "실패하였습니다. 다시 시도 해주세요", Toast.LENGTH_SHORT).show()
                 }
@@ -85,6 +92,7 @@ class SignUpFragment2 : Fragment() {
                                 val intent: Intent = Intent(context, OnboardingActivity::class.java)
                                 intent.putExtra("isLoginBack", true);
                                 startActivity(intent)
+                                activity.finish()
                             }
                     }
                 }
@@ -96,11 +104,32 @@ class SignUpFragment2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(context, email + pw + name, Toast.LENGTH_SHORT).show()
+//        viewModel.email.observe(requireActivity(), Observer {
+//            viewModel.email
+//        })
+//        viewModel.pw.observe(requireActivity(), Observer {
+//            this.pw = viewModel.pw.value.toString()
+//        })
+//        viewModel.name.observe(requireActivity(), Observer {
+//            this.name = viewModel.name.value.toString()
+//        })
+        Toast.makeText(context, viewModel.email.value.toString(), Toast.LENGTH_SHORT).show()
     }
 
-    fun loadData(fm : SignUpFragment1){
-        fm.saveData(email, pw, name)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(requireActivity()).get(SignUpViewModel::class.java)
+        activity = getActivity() as SignupActivity
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity.onDetachedFromWindow()
+    }
+
+//    fun loadData(fm : SignUpFragment1){
+//        fm.saveData(email, pw, name)
+//    }
 
 }
+

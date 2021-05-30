@@ -9,7 +9,9 @@ class SignUpViewModel:ViewModel() {
     var pw : MutableLiveData<String> = MutableLiveData()
     var name : MutableLiveData<String> = MutableLiveData()
 
-//    fun setSignUser(email:String ){
-//        email.value =
-//    }
+    fun setSignUser(email:String, pw:String, name:String  ){
+        this.email.value = email
+        this.pw.value = pw
+        this.name.value = name
+    }
 }

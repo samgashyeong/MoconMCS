@@ -30,15 +30,15 @@ public class SignupActivity extends AppCompatActivity {
         fm.beginTransaction()
                 .replace(R.id.frame, new SignUpFragment1())
                 .commit();
-        binding.backBtn.setVisibility(View.INVISIBLE);
-        binding.prevBtn.setVisibility(View.VISIBLE);
-
-        binding.prevBtn.setOnClickListener(v -> {
-            prev();
-        });
-        binding.backBtn.setOnClickListener(v ->{
-            back();
-        });
+//        binding.backBtn.setVisibility(View.INVISIBLE);
+//        binding.prevBtn.setVisibility(View.VISIBLE);
+//
+//        binding.prevBtn.setOnClickListener(v -> {
+//            prev();
+//        });
+//        binding.backBtn.setOnClickListener(v ->{
+//            back();
+//        });
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -72,29 +72,45 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void prev(){
-        SignUpFragment1 tf = (SignUpFragment1) getSupportFragmentManager().findFragmentById(R.id.frame);
-        assert tf != null;
+//        SignUpFragment1 tf = (SignUpFragment1) getSupportFragmentManager().findFragmentById(R.id.frame);
+//        assert tf != null;
         SignUpFragment2 fm = new SignUpFragment2();
         FragmentManager fmm = getSupportFragmentManager();
         fmm.beginTransaction()
                 .replace(R.id.frame, fm)
                 .commit();
 //        SignUpFragment2 tf1 = (SignUpFragment2) getSupportFragmentManager().findFragmentById();
-        tf.loadData(fm);
-        binding.backBtn.setVisibility(View.VISIBLE);
-        binding.prevBtn.setVisibility(View.INVISIBLE);
+//        tf.loadData(fm);
+//        binding.backBtn.setVisibility(View.VISIBLE);
+//        binding.prevBtn.setVisibility(View.INVISIBLE);
     }
 
     private void back(){
-        SignUpFragment2 tf = (SignUpFragment2) getSupportFragmentManager().findFragmentById(R.id.frame);
-        assert tf != null;
+//        SignUpFragment2 tf = (SignUpFragment2) getSupportFragmentManager().findFragmentById(R.id.frame);
+//        assert tf != null;
         SignUpFragment1 fm = new SignUpFragment1();
         FragmentManager fmm = getSupportFragmentManager();
         fmm.beginTransaction()
                 .replace(R.id.frame, fm)
                 .commit();
-        tf.loadData(fm);
-        binding.backBtn.setVisibility(View.INVISIBLE);
-        binding.prevBtn.setVisibility(View.VISIBLE);
+//        tf.loadData(fm);
+//        binding.backBtn.setVisibility(View.INVISIBLE);
+//        binding.prevBtn.setVisibility(View.VISIBLE);
+    }
+
+
+    public void changeFragment(int i){
+        if(i == 0){
+            FragmentManager fmm = getSupportFragmentManager();
+            fmm.beginTransaction()
+                    .replace(R.id.frame, new SignUpFragment1())
+                    .commit();
+        }
+        else if(i == 1){
+            FragmentManager fmm = getSupportFragmentManager();
+            fmm.beginTransaction()
+                    .replace(R.id.frame, new SignUpFragment2())
+                    .commit();
+        }
     }
 }

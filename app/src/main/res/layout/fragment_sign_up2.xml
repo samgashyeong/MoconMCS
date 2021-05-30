@@ -7,6 +7,13 @@
         android:layout_height="match_parent"
         tools:context=".SignUP.SignUpFragment2">
 
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:layout_margin="10dp"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
