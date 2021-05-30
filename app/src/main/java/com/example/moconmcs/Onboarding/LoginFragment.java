@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
 
         view.findViewById(R.id.signupBut).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), SignupActivity.class));
+            requireActivity().finish();
         });
 
         view.findViewById(R.id.loginButton).setOnClickListener(v -> {
@@ -43,8 +44,7 @@ public class LoginFragment extends Fragment {
                     if(task.isSuccessful()) {
                         Toast.makeText(getContext(), "로그인 성공!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getContext(), MainActivity.class));
-                        if(getActivity() != null)
-                            getActivity().finish();
+                        requireActivity().finish();
                     }
                     else {
                         Toast.makeText(getContext(), "비밀번호랑 이메일을 확인하고 다시시도해주세요!", Toast.LENGTH_SHORT).show();
