@@ -84,6 +84,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_food_map, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.getMapAsync(this);
@@ -93,6 +94,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeRate = view.findViewById(R.id.map_rate);
         reviewLoading = view.findViewById(R.id.map_review_loading);
         writeReviewBtn = view.findViewById(R.id.write_review_btn);
+        writeReviewBtn.setVisibility(View.INVISIBLE);
 
         recyclerView = view.findViewById(R.id.reviews);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
@@ -282,6 +284,10 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+
         CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
         googleMap.animateCamera(center);
 
@@ -291,10 +297,19 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeTitle.setVisibility(View.VISIBLE);
         placeRate.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+        writeReviewBtn.setVisibility(View.VISIBLE);
         placeDesc.setText(marker.getSnippet());
         placeTitle.setText(marker.getTitle());
         placeRate.setRating(0);
         placeRate.setIsIndicator(true);
+
+        db.collection("Place").document(marker.getTitle()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                DocumentSnapshot placeDoc = task.getResult();
+                if(placeDoc.get(uid) != null) writeReviewBtn.setText("리뷰 수정");
+                else writeReviewBtn.setText("리뷰 작성");
+            }
+        });
 
         reviewLoading.setVisibility(View.VISIBLE);
 
