@@ -32,6 +32,9 @@ public class LoginFragment extends Fragment {
 
         view.findViewById(R.id.signupBut).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), SignupActivity.class));
+            if(getActivity()!=null){
+            getActivity().finish();
+            }
         });
 
         view.findViewById(R.id.loginButton).setOnClickListener(v -> {
