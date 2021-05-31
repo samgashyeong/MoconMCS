@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.*
 import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
@@ -17,17 +18,22 @@ import com.example.moconmcs.Main.SearchFood.BarCodeActivity
 import com.example.moconmcs.Main.SearchFood.FoodNumInput
 import com.example.moconmcs.Menu.HelpMenuActivity
 import com.example.moconmcs.Menu.ProfileActivity
+import com.example.moconmcs.Menu.ProfileViewModel
 import com.example.moconmcs.Menu.SettingActivity
 import com.example.moconmcs.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(),
     BottomSheetButtonClickListener {
     private lateinit var binding : ActivityMainBinding
+    private lateinit var viewModel: ProfileViewModel
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var curUserUid : String
+
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
-
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +41,27 @@ class MainActivity : AppCompatActivity(),
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
         )
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        Log.d("asedrf", "onCreate: ${firebaseAuth.currentUser!!.uid}")
+
+        if(firebaseAuth.currentUser != null){
+            curUserUid = firebaseAuth.currentUser!!.uid
+        }
+
+        Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}")
+        if(viewModel.userKind!!.value == null || viewModel.userKind!!.value == null){
+            firebaseFirestore.collection("User").document(curUserUid).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful){
+                        viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
+                            , it.result.data!!.getValue("userKind").toString())
+                    }
+                }
+        }
 
         setSupportActionBar(binding.toolbar)
 

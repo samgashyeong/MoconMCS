@@ -1,21 +1,68 @@
 package com.example.moconmcs.Menu
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.LoginActivity
+import com.example.moconmcs.Main.MainActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityProfileBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var viewModel: ProfileViewModel
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var curUserUid : String
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_profile
-        );
+        )
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+
+        if(firebaseAuth.currentUser != null){
+            curUserUid = firebaseAuth.currentUser!!.uid
+        }
+
+        Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}")
+        if(viewModel.userKind!!.value == null || viewModel.userKind!!.value == null){
+            firebaseFirestore.collection("User").document(curUserUid).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful){
+                        viewModel.userName!!.value = it.result.data!!.getValue("name").toString()
+                        viewModel.userKind!!.value = it.result.data!!.getValue("userKind").toString()
+                    }
+                }
+        }
+
+        viewModel.userName!!.observe(this, Observer {
+            binding.myNameTv.text = "유저 : ${viewModel.userName!!.value}"
+        })
+        viewModel.userKind!!.observe(this, Observer {
+            binding.myKindTv.text = "종류 : ${viewModel.userKind!!.value}"
+        })
+
+        binding.logoutBtn.setOnClickListener {
+            firebaseAuth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            ActivityCompat.finishAffinity(this)
+        }
 
         setSupportActionBar(binding.toolbar)
 
