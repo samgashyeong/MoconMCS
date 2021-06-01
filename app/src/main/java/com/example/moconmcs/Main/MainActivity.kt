@@ -13,6 +13,7 @@ import com.example.moconmcs.*
 import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
 import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
+import com.example.moconmcs.Main.FoodDiary.FoodDiaryViewModel
 import com.example.moconmcs.Main.FoodMap.FoodMapFragment
 import com.example.moconmcs.Main.SearchFood.BarCodeActivity
 import com.example.moconmcs.Main.SearchFood.FoodNumInput
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
         )

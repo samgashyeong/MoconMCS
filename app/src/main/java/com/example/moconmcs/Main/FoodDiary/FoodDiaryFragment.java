@@ -2,7 +2,9 @@ package com.example.moconmcs.Main.FoodDiary;
 
 import android.app.Dialog;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.moconmcs.R;
 
@@ -22,20 +23,27 @@ import java.util.ArrayList;
 
 public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnItemListener {
 
-    Button prevMonth, nextMonth, prevDay, nextDay;
+    Button prevMonth, nextMonth, prevDay, nextDay, toToday;
     TextView dateText, mainDateText;
     RecyclerView calenderRecyclerView;
     LocalDate currentDate; //다이얼로그 안에서 쓰일 날짜 인스턴스
-    LocalDate selectedDate; //다이어리를 보여줄 날짜
     Dialog dialog;
+    FoodDiaryViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_diary, container, false);
+        viewModel = new ViewModelProvider(requireActivity()).get(FoodDiaryViewModel.class);
 
         currentDate = LocalDate.now();
-        selectedDate = LocalDate.now();
+
+        if(viewModel.getSelectedDate() == null) {
+            viewModel.setSelectedDate(currentDate);
+        }
+        else {
+            currentDate = viewModel.getSelectedDate();
+        }
 
         mainDateText = view.findViewById(R.id.mainDateText);
         prevDay = view.findViewById(R.id.diaryPrevDay);
@@ -45,11 +53,11 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
 
         mainDateText.setOnClickListener(v -> openCalenderDialog());
         prevDay.setOnClickListener(v -> {
-            selectedDate = selectedDate.minusDays(1);
+            viewModel.setSelectedDate(viewModel.getSelectedDate().minusDays(1));
             updateMainDateText();
         });
         nextDay.setOnClickListener(v -> {
-            selectedDate = selectedDate.plusDays(1);
+            viewModel.setSelectedDate(viewModel.getSelectedDate().plusDays(1));
             updateMainDateText();
         });
 
@@ -57,12 +65,13 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
     }
 
     private void openCalenderDialog() {
-        currentDate = LocalDate.from(selectedDate);
+        currentDate = LocalDate.from(viewModel.getSelectedDate());
         dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.layout_custom_calender);
 
         prevMonth = dialog.findViewById(R.id.prevMonth);
         nextMonth = dialog.findViewById(R.id.nextMonth);
+        toToday = dialog.findViewById(R.id.toTodayDate);
         dateText = dialog.findViewById(R.id.curDateText);
         calenderRecyclerView = dialog.findViewById(R.id.calRecycler);
 
@@ -76,6 +85,11 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
             setCalenderView();
         });
 
+        toToday.setOnClickListener(v -> {
+            viewModel.setSelectedDate(currentDate = LocalDate.now());
+            setCalenderView();
+        });
+
         setCalenderView();
 
         dialog.show();
@@ -86,7 +100,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         updateMainDateText();
 
         ArrayList<LocalDate> daysInMonth = getDaysInMonth(currentDate);
-        CalenderAdapter calenderAdapter = new CalenderAdapter(selectedDate, daysInMonth, this);
+        CalenderAdapter calenderAdapter = new CalenderAdapter(viewModel.getSelectedDate(), daysInMonth, this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
                 requireActivity().getApplicationContext(), 7);
 
@@ -119,7 +133,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         if(!day.equals("")) {
             try {
                 int dayOfMonth = Integer.parseInt(day);
-                selectedDate = currentDate.withDayOfMonth(dayOfMonth);
+                viewModel.setSelectedDate(currentDate.withDayOfMonth(dayOfMonth));
                 updateMainDateText();
                 dialog.dismiss();
             }
@@ -128,6 +142,6 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
     }
 
     private void updateMainDateText() {
-        mainDateText.setText(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(selectedDate));
+        mainDateText.setText(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(viewModel.getSelectedDate()));
     }
 }
