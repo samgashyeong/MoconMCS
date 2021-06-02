@@ -1,4 +1,4 @@
-package com.example.moconmcs.Main.SearchFood
+package com.example.moconmcs.Main.SearchFood.NetWork
 
 import com.example.moconmcs.data.FoodNumberApi.BarCode
 import retrofit2.Call

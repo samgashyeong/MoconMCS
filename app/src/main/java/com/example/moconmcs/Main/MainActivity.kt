@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity(),
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
         )
+
+
+
+
+
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()

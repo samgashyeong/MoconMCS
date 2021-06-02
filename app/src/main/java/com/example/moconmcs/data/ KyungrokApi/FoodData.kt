@@ -1,7 +1,9 @@
 package com.example.moconmcs.data. KyungrokApi
 
-data class FoodResultData(
+data class FoodData(
+    val _id: String,
     val aquaProd: Int,
+    val count: Int,
     val disinfectant: Int,
     val foodAdditives: Int,
     val livestock: Int,
