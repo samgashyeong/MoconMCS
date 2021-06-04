@@ -21,7 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".FoodResultListActivity"></activity>
+        <activity android:name=".Main.SearchFood.FoodResultActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".Menu.HelpMenuActivity" />
         <activity android:name=".Menu.SettingActivity" />
         <activity android:name=".Menu.ProfileActivity" />

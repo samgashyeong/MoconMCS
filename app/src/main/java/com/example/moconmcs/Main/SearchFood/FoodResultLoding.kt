@@ -2,12 +2,13 @@ package com.example.moconmcs.Main.SearchFood
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
 import com.example.moconmcs.R
@@ -16,12 +17,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class FoodResultLoding : AppCompatActivity() {
     private lateinit var binding: ActivityFoodResultLodingBinding
+    private lateinit var viewModel: FoodViewModel
 //    val BASE_URL = "https://openapi.foodsafetykorea.go.kr/api/${serViceKey}/C005/json/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,13 @@ class FoodResultLoding : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_food_result_loding
         )
+        viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
 
+    val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(100, TimeUnit.SECONDS)
+        .readTimeout(100, TimeUnit.SECONDS)
+        .writeTimeout(100, TimeUnit.SECONDS)
+        .build()
         val Intent = intent
         val barCode = intent.getStringExtra("barcodenum")
 
@@ -111,6 +121,9 @@ class FoodResultLoding : AppCompatActivity() {
                         Log.d(TAG, "getFoodResult: ${isExecution?._id}" +
                                 ", ${isExecution?.prodName}" +
                                 ", ${isExecution?.materials}")
+                        viewModel.foodResult.value = isExecution
+                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java))
+
                         //나온다?
 //                        val foodName = isExecution!!.C005.row[0].PRDLST_NM
 //                        val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
