@@ -101,6 +101,7 @@ class BarCodeActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
             CAMERA_REQUEST_CODE ->{
                 if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){

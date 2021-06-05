@@ -41,11 +41,11 @@ class FoodResultLoding : AppCompatActivity() {
             .readTimeout(100, TimeUnit.SECONDS)
             .writeTimeout(100, TimeUnit.SECONDS)
             .build()
-        val Intent = intent
         val barcode: String?
         val foodNum: String?
-        if(intent.hasExtra("barcodnum")){
+        if(intent.hasExtra("barcodenum")){
             barcode = intent.getStringExtra("barcodenum").toString()
+            Toast.makeText(this, "${barcode}", Toast.LENGTH_SHORT).show()
             getFoodNum(barcode)
         }
         else{
@@ -75,10 +75,14 @@ class FoodResultLoding : AppCompatActivity() {
                     Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
                     if(isExecution?.C005?.total_count.equals("0")){
                         Log.d(TAG, "getFoodNum: 데이터를 불러오지못함.")
+                        startActivity(Intent(this@FoodResultLoding, FoodNumInput::class.java)
+                            .putExtra("barCodeFail", "바코드 인식에 실패하셨습니다. 품목보고번호를 입력해주세요."))
+                        finish()
                     }
                     else{ //나온다?
                         val foodName = isExecution!!.C005.row[0].PRDLST_NM
                         val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
+                        Log.d(TAG, "getFoodNum: ${isExecution}")
                         getFoodResult(foodNumber)
                     }
                 }
@@ -112,6 +116,7 @@ class FoodResultLoding : AppCompatActivity() {
                                 ", ${isExecution?.materials}")
                         startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
                             .putExtra("FoodResult", isExecution))
+                        finish()
                     }
                 }
             }

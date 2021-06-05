@@ -27,41 +27,6 @@
             app:layout_constraintTop_toBottomOf="@+id/prb"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/tvResult_dataSuccess"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="데이터를 불러오는데에 성공함"
-            android:textColor="#000"
-            android:textSize="15sp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvResult" />
-
-        <TextView
-            android:id="@+id/tvResut_foodName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="식품명"
-            android:textColor="#000"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvResult_dataSuccess"/>
-
-        <TextView
-            android:id="@+id/tvResut_foodNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="식품명"
-            android:textColor="#000"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvResut_foodName" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
