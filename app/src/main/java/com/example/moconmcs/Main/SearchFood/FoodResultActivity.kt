@@ -9,19 +9,19 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.moconmcs.FoodResultListActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
+import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityFoodResultBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FoodResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFoodResultBinding
-    private lateinit var viewModel: FoodViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var userKind: String
+    private lateinit var foodList : ArrayList<Material>
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,44 +29,52 @@ class FoodResultActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_food_result)
+
+        val intent = getIntent()
+        val foodResultData = intent.getSerializableExtra("FoodResult") as FoodData
 
         if(auth.currentUser != null){
             db.collection("User").document(auth.currentUser!!.uid).get()
                 .addOnCompleteListener {
                     if(it.isSuccessful){
-                        userKind = it.result.data!!.getValue("UserKind").toString()
+                        userKind = it.result.data!!.getValue("userKind").toString()
+                        checkIsBadResult(userKind)
                     }
                 }
         }
 
-        viewModel.foodResult.observe(this, Observer {
-            Log.d(TAG, "onCreate: ${it}")
-//            when(it.status){
-//                "normal" -> {
-//                    if(it.livestock != 0){
-//
-//                    }
-//                }
-//                "error" ->{
-//                }
-//                "not-found" ->{
-//
-//                }
-//
-//
-//            }
-            if(it.livestock > 0 || it.otherThanLivestock > 0 ){
-                badResult()
-            }
-            binding.notFoundProductTv.text = "검색되지않은 상품 : ${it.notFound}"
-            binding.button.setOnClickListener {
-                startActivity(Intent(this, FoodResultListActivity::class.java))
-            }
+        Log.d(TAG, "onCreate: ${foodResultData}")
 
-        })
+        if(foodResultData.livestock > 0){
+            badResult()
+        }
+//        checkIsBadResult(userKind)
+        binding.notFoundProductTv.text = "검색되지않은 상품 수 : ${ foodResultData.notFound}"
+        binding.foodProductTv.text = foodResultData.prodName
 
+        binding.button.setOnClickListener {
+            startActivity(Intent(this, FoodResultListActivity::class.java)
+                .putExtra("foodList", foodResultData.materials)
+                .putExtra("prodName", foodResultData.prodName))
+        }
+    }
+
+    fun checkIsBadResult(userKind : String){
+        when(userKind){
+            "비건"->{
+                //채소, 과일 아닌것만 판별
+            }
+            "락토"->{
+                //유제품, 꿀, 채소 과일 아닌것만 판별
+            }
+            "오보"->{
+                //채소, 과일, 꿀, 달걀 아닌것만 판별
+            }
+            "락토오보"->{
+                //채소, 과일, 꿀, 달걀, 유제품이 아닌것만 판별
+            }
+        }
     }
 
     fun badResult(){

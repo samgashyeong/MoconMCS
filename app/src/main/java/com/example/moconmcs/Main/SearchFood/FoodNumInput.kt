@@ -18,7 +18,7 @@ class FoodNumInput : AppCompatActivity() {
 
         binding.btn1.setOnClickListener {
             startActivity(Intent(this, FoodResultLoding::class.java)
-                .putExtra("Etname", binding.EtFoodNum.text.toString()))
+                .putExtra("foodNum", binding.EtFoodNum.text.toString()))
             finish()
         }
     }

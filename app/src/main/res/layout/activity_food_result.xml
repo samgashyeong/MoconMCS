@@ -8,12 +8,23 @@
         tools:context=".Main.SearchFood.FoodResultActivity">
 
         <TextView
+            android:id="@+id/foodProductTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상품명"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/resultIV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
             android:id="@+id/resultTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="좋음"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/resultIV"
+            app:layout_constraintBottom_toTopOf="@+id/foodProductTv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

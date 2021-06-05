@@ -1,5 +1,7 @@
 package com.example.moconmcs.data. KyungrokApi
 
+import java.io.Serializable
+
 data class FoodData(
     val _id: String,
     val aquaProd: Int,
@@ -7,7 +9,7 @@ data class FoodData(
     val disinfectant: Int,
     val foodAdditives: Int,
     val livestock: Int,
-    val materials: List<Material>,
+    val materials: ArrayList<Material>,
     val microbe: Int,
     val notFound: Int,
     val nutrient: Int,
@@ -17,4 +19,4 @@ data class FoodData(
     val prodNum: String,
     val starch: Int,
     val status: Any
-)
+) : Serializable

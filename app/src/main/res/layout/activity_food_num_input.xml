@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:ems="16"
             android:hint="식품품목번호를 입력해주세요"
+            android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/IvFoodNum" />

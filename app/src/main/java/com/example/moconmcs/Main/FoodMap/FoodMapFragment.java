@@ -420,7 +420,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private List<Placemark> getPlacemarkList() {
         LinkedList<Placemark> placemarks = new LinkedList<>();
         Gson gson = new Gson();
-        AssetManager assetManager = getResources().getAssets();
+        AssetManager assetManager = getActivity().getResources().getAssets();
         try {
             InputStream is = assetManager.open("places.json");
             StringBuilder builder = new StringBuilder();

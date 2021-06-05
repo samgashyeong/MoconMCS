@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 class FoodResultLoding : AppCompatActivity() {
     private lateinit var binding: ActivityFoodResultLodingBinding
     private lateinit var viewModel: FoodViewModel
-//    val BASE_URL = "https://openapi.foodsafetykorea.go.kr/api/${serViceKey}/C005/json/"
+    private lateinit var okHttpClient: OkHttpClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result_loding)
@@ -36,22 +36,21 @@ class FoodResultLoding : AppCompatActivity() {
         )
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
 
-    val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(100, TimeUnit.SECONDS)
-        .readTimeout(100, TimeUnit.SECONDS)
-        .writeTimeout(100, TimeUnit.SECONDS)
-        .build()
+        okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(100, TimeUnit.SECONDS)
+            .build()
         val Intent = intent
-        val barCode = intent.getStringExtra("barcodenum")
-
-        Toast.makeText(this, "로딩화면에서 뜸${barCode}", Toast.LENGTH_SHORT).show()
-
-        Log.d("asdf", "onCreate: ${barCode}") //바코드 번호가져오기
-        if (barCode != null) {
-            getFoodNum(barCode)
+        val barcode: String?
+        val foodNum: String?
+        if(intent.hasExtra("barcodnum")){
+            barcode = intent.getStringExtra("barcodenum").toString()
+            getFoodNum(barcode)
         }
-        if(Intent.getStringExtra("Etname")!=null){
-            getFoodResult(Intent.getStringExtra("Etname")!!)
+        else{
+            foodNum = intent.getStringExtra("foodNum").toString()
+            getFoodResult(foodNum)
         }
     }
 
@@ -72,8 +71,6 @@ class FoodResultLoding : AppCompatActivity() {
                 val isExecution = execution.body()
 
                 withContext(Dispatchers.Main){
-//                    val foodName = isExecution?.C005?.row?.get(0)!!.PRDLST_NM
-//                    val foodNum = isExecution.C005.row[0].PRDLST_REPORT_NO
 
                     Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
                     if(isExecution?.C005?.total_count.equals("0")){
@@ -82,15 +79,6 @@ class FoodResultLoding : AppCompatActivity() {
                     else{ //나온다?
                         val foodName = isExecution!!.C005.row[0].PRDLST_NM
                         val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
-//                        binding.tvResultDataSuccess.visibility = View.VISIBLE
-//                        binding.tvResultDataSuccess.text = "데이터를 불러오는데에 성공하였습니다."
-//                        binding.tvResutFoodName.visibility = View.VISIBLE
-//                        binding.tvResutFoodName.text = "식품명 : ${isExecution!!.C005.row[0].PRDLST_NM}"
-//                        binding.tvResutFoodNum.visibility = View.VISIBLE
-//                        binding.tvResutFoodNum.text = isExecution.C005.row[0].PRDLST_REPORT_NO
-//                        Log.d("asdf", "getData: ${isExecution.C005.row[0].PRDLST_REPORT_NO}\n" +
-//                                isExecution.C005.row[0].PRDLST_NM
-//                        )
                         getFoodResult(foodNumber)
                     }
                 }
@@ -101,6 +89,7 @@ class FoodResultLoding : AppCompatActivity() {
     fun getFoodResult(FoodNum : String){
         val api = Retrofit.Builder()
             .baseUrl(BASE_URL_KYUNGROK_API)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GetFoodResult::class.java)
@@ -121,22 +110,8 @@ class FoodResultLoding : AppCompatActivity() {
                         Log.d(TAG, "getFoodResult: ${isExecution?._id}" +
                                 ", ${isExecution?.prodName}" +
                                 ", ${isExecution?.materials}")
-                        viewModel.foodResult.value = isExecution
-                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java))
-
-                        //나온다?
-//                        val foodName = isExecution!!.C005.row[0].PRDLST_NM
-//                        val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
-//                        binding.tvResultDataSuccess.visibility = View.VISIBLE
-//                        binding.tvResultDataSuccess.text = "데이터를 불러오는데에 성공하였습니다."
-//                        binding.tvResutFoodName.visibility = View.VISIBLE
-//                        binding.tvResutFoodName.text = "식품명 : ${isExecution!!.C005.row[0].PRDLST_NM}"
-//                        binding.tvResutFoodNum.visibility = View.VISIBLE
-//                        binding.tvResutFoodNum.text = isExecution.C005.row[0].PRDLST_REPORT_NO
-//                        Log.d("asdf", "getData: ${isExecution.C005.row[0].PRDLST_REPORT_NO}\n" +
-//                                isExecution.C005.row[0].PRDLST_NM
-//                        )
-//                        getFoodResult(isExecution.C005.row[0].PRDLST_REPORT_NO)
+                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                            .putExtra("FoodResult", isExecution))
                     }
                 }
             }

@@ -29,40 +29,24 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        val intent = intent
+        val userName = intent.getStringExtra("userName")
+        val userKind = intent.getStringExtra("userKind")
+
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_profile
         )
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-
-        if(firebaseAuth.currentUser != null){
-            curUserUid = firebaseAuth.currentUser!!.uid
-        }
-
-        Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}")
-        if(viewModel.userKind!!.value == null || viewModel.userKind!!.value == null){
-            firebaseFirestore.collection("User").document(curUserUid).get()
-                .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        viewModel.userName!!.value = it.result.data!!.getValue("name").toString()
-                        viewModel.userKind!!.value = it.result.data!!.getValue("userKind").toString()
-                    }
-                }
-        }
-
-        viewModel.userName!!.observe(this, Observer {
-            binding.myNameTv.text = "유저 : ${viewModel.userName!!.value}"
-        })
-        viewModel.userKind!!.observe(this, Observer {
-            binding.myKindTv.text = "종류 : ${viewModel.userKind!!.value}"
-        })
 
         binding.logoutBtn.setOnClickListener {
             firebaseAuth.signOut()
             startActivity(Intent(this, LoginActivity::class.java))
             ActivityCompat.finishAffinity(this)
         }
+
+        binding.myNameTv.text = userName
+        binding.myKindTv.text = userKind
 
         setSupportActionBar(binding.toolbar)
 

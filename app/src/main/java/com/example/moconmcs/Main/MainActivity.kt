@@ -43,11 +43,6 @@ class MainActivity : AppCompatActivity(),
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
         )
-
-
-
-
-
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
@@ -122,7 +117,9 @@ class MainActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.profile ->{
-                startActivity(Intent(this, ProfileActivity::class.java))
+                startActivity(Intent(this, ProfileActivity::class.java)
+                    .putExtra("userName", viewModel.userName!!.value)
+                    .putExtra("userKind", viewModel.userKind!!.value))
             }
             R.id.setting ->{
                 startActivity(Intent(this, SettingActivity::class.java))
