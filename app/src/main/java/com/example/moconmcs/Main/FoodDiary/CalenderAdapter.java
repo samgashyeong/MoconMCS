@@ -43,13 +43,18 @@ public class CalenderAdapter extends RecyclerView.Adapter<CalenderAdapter.Calend
             return;
         }
         holder.dayOfMonth.setText(String.valueOf(days.get(position).getDayOfMonth()));
-        if(days.get(position).isEqual(selectedDate)) {
+        if(days.get(position).atTime(0, 0).isEqual(selectedDate.atTime(0, 0))) {
             holder.itemView.setBackgroundResource(R.drawable.selected_date);
         }
         else {
             int dayOfWeek = days.get(position).getDayOfWeek().getValue();
-            if(dayOfWeek == 6) holder.dayOfMonth.setTextColor(Color.parseColor("#3333ff"));
-            if(dayOfWeek == 7) holder.dayOfMonth.setTextColor(Color.parseColor("#ff3333"));
+            if(dayOfWeek == 6) holder.dayOfMonth.setTextColor(Color.parseColor("#3333ff")); //blue
+            if(dayOfWeek == 7) holder.dayOfMonth.setTextColor(Color.parseColor("#ff3333")); //red
+            if(days.get(position).atTime(0, 0)
+                    .isAfter(LocalDate.now().atTime(0, 0))) {
+                holder.dayOfMonth.setTextColor(Color.parseColor("#dddddd")); //gray
+                holder.canListenEvent = false;
+            }
         }
     }
 
@@ -60,9 +65,10 @@ public class CalenderAdapter extends RecyclerView.Adapter<CalenderAdapter.Calend
 
     public static class CalenderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected final TextView dayOfMonth;
-        protected final View itemView;
+        private final TextView dayOfMonth;
+        private final View itemView;
 
+        private boolean canListenEvent = true;
         private final OnItemListener itemListener;
 
         public CalenderViewHolder(@NonNull View itemView, OnItemListener itemListener) {
@@ -76,7 +82,8 @@ public class CalenderAdapter extends RecyclerView.Adapter<CalenderAdapter.Calend
 
         @Override
         public void onClick(View v) {
-            itemListener.onItemClick(getAdapterPosition(), dayOfMonth.getText().toString());
+            if(itemListener != null && canListenEvent)
+                itemListener.onItemClick(getAdapterPosition(), dayOfMonth.getText().toString());
         }
     }
 
