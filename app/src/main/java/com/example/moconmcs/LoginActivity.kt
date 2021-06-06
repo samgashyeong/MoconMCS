@@ -26,18 +26,23 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginButton.setOnClickListener {
-            Log.d("asdf", "onCreate: ${binding.emailLogin.text.toString()} ${binding.pwLogin.text}")
-            auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.pwLogin.text.toString())
-                .addOnCompleteListener{
-                    if(it.isSuccessful){
-                        Toast.makeText(this, "로그인이 되셨습니다.", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
+            if(binding.emailLogin.text.length <= 0 || binding.pwLogin.text.length<=0){
+                Toast.makeText(this, "아이디랑 비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Log.d("asdf", "onCreate: ${binding.emailLogin.text.toString()} ${binding.pwLogin.text}")
+                auth.signInWithEmailAndPassword(binding.emailLogin.text.toString(), binding.pwLogin.text.toString())
+                    .addOnCompleteListener{
+                        if(it.isSuccessful){
+                            Toast.makeText(this, "로그인이 되셨습니다.", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                        else{
+                            Toast.makeText(this, "비밀번호랑 이메일을 확인하여주세요.", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else{
-                        Toast.makeText(this, "비밀번호랑 이메일을 확인하여주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            }
         }
     }
 }

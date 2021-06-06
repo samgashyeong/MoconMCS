@@ -52,6 +52,9 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         AppDatabase db = AppDatabase.getInstance(requireContext().getApplicationContext());
         diaryDao = db.diaryDao();
 
+//        diaryDao.insertAll(new DiaryEntity(new Date(2020, 6, 1).getTime(), "우유", "우유2", "빠삐코"));
+//
+//        Log.d("asdf", "onCreateView: "+diaryDao.getAll());
         mainDateText = view.findViewById(R.id.mainDateText);
         prevDay = view.findViewById(R.id.diaryPrevDay);
         nextDay = view.findViewById(R.id.diaryNextDay);

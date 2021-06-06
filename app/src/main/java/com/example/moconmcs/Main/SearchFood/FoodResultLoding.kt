@@ -2,7 +2,9 @@ package com.example.moconmcs.Main.SearchFood
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +38,7 @@ class FoodResultLoding : AppCompatActivity() {
         )
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
 
+        //checkInternet()
         okHttpClient = OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
@@ -123,6 +126,10 @@ class FoodResultLoding : AppCompatActivity() {
         }
 
     }
+
+//    fun checkInternet(){
+//        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//    } 개발 예정
     companion object {
         const val serViceKey = "6a957af97bed49989b74"
         const val BASE_URL_BARCODE = "https://openapi.foodsafetykorea.go.kr/api/$serViceKey/C005/json/"
