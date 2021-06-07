@@ -3,20 +3,6 @@ package com.example.moconmcs.data. KyungrokApi
 import java.io.Serializable
 
 data class FoodData(
-    val _id: String,
-    val aquaProd: Int,
-    val count: Int,
-    val disinfectant: Int,
-    val foodAdditives: Int,
-    val livestock: Int,
-    val materials: ArrayList<Material>,
-    val microbe: Int,
-    val notFound: Int,
-    val nutrient: Int,
-    val otherThanLivestock: Int,
-    val plant: Int,
-    val prodName: String,
-    val prodNum: String,
-    val starch: Int,
-    val status: Any
+    val data_res: DataRes,
+    val err_msg: Any
 ) : Serializable

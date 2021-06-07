@@ -110,13 +110,15 @@ class FoodResultLoding : AppCompatActivity() {
                 withContext(Dispatchers.Main){
 
 //                    Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
-                    if(isExecution==null){
+                    if(isExecution?.err_msg != null){
                         Log.d(TAG, "getFoodResult: 내용이 없습니다.")
+                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                            .putExtra("barCodeFail", true))
                     }
                     else{
-                        Log.d(TAG, "getFoodResult: ${isExecution?._id}" +
-                                ", ${isExecution?.prodName}" +
-                                ", ${isExecution?.materials}")
+                        Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
+                                ", ${isExecution?.data_res?.prodName}" +
+                                ", ${isExecution?.data_res?.materials}")
                         startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
                             .putExtra("FoodResult", isExecution))
                         finish()

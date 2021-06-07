@@ -7,18 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityFoodResultListBinding
+import java.io.Serializable
 
 class FoodResultListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFoodResultListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result_list)
-        val intent:Intent = getIntent()
-        val foodList = intent.getSerializableExtra("foodList")
+        val foodList : Serializable? = intent.getSerializableExtra("foodList")
         val prodName = intent.getSerializableExtra("prodName")
 
         Log.d(TAG, "onCreate: ${foodList}, ${prodName}")
@@ -27,9 +26,10 @@ class FoodResultListActivity : AppCompatActivity() {
 
         binding.productTv.text = prodName.toString()
         val foodArrayList: ArrayList<Material>
-        foodArrayList = foodList as ArrayList<Material>
-
-        binding.recycler.adapter = FoodAdapter(foodArrayList)
+        if(foodList != null){
+            foodArrayList = foodList as ArrayList<Material>
+            binding.recycler.adapter = FoodAdapter(foodArrayList)
+        }
 
         setSupportActionBar(binding.toolbar)
 

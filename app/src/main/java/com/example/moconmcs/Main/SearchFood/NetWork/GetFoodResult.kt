@@ -1,6 +1,5 @@
 package com.example.moconmcs.Main.SearchFood.NetWork
 
-import com.example.moconmcs.data.FoodNumberApi.BarCode
 import com.example.moconmcs.data.KyungrokApi.FoodData
 import retrofit2.Call
 import retrofit2.http.GET

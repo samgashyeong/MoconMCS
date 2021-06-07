@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +14,10 @@ import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
 import com.example.moconmcs.data.KyungrokApi.Material
-import com.example.moconmcs.databinding.ActivityBarCodeBinding.inflate
 import com.example.moconmcs.databinding.ActivityFoodResultBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.Serializable
 
 
 class FoodResultActivity : AppCompatActivity() {
@@ -27,7 +26,7 @@ class FoodResultActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var userKind: String
     private lateinit var foodList : ArrayList<Material>
-    private lateinit var foodResultData:FoodData
+    private lateinit var foodResultData: FoodData
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,6 @@ class FoodResultActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_food_result)
 
-        val intent = getIntent()
         if(intent.hasExtra("barCodeFail")){
             failResult()
         }
@@ -52,38 +50,37 @@ class FoodResultActivity : AppCompatActivity() {
                         }
                     }
             }
-        }
+            Log.d(TAG, "onCreate: ${foodResultData}")
 
-        Log.d(TAG, "onCreate: ${foodResultData}")
-
-        if(foodResultData.livestock > 0){
-            badResult()
-        }
+            if(foodResultData?.data_res.livestock > 0){
+                badResult()
+            }
 //        checkIsBadResult(userKind)
-        binding.notFoundProductTv.text = "검색되지않은 상품 수 : ${ foodResultData.notFound}"
-        binding.foodProductTv.text = foodResultData.prodName
+            binding.notFoundProductTv.text = "검색되지않은 상품 수 : ${ foodResultData?.data_res.notFound}"
+            binding.foodProductTv.text = "상품명"/*foodResultData.data_res.prodName*/
 
-        binding.button.setOnClickListener {
-            startActivity(Intent(this, FoodResultListActivity::class.java)
-                .putExtra("foodList", foodResultData.materials)
-                .putExtra("prodName", foodResultData.prodName))
+            binding.button.setOnClickListener {
+                startActivity(Intent(this, FoodResultListActivity::class.java)
+                    .putExtra("foodList", foodResultData?.data_res?.materials as Serializable)
+                    .putExtra("prodName", "상품명"/*foodResultData.prodName*/))
+            }
         }
         binding.IsStrangeTV.setOnClickListener {
-//            floatingDialog()
+            floatingDialog()
         }
     }
 
-//    fun floatingDialog(){
-//        val dialog = Dialog(this)
-//        dialog.setContentView(R.layout.layout_review_write)
-//        dialog.show()
-//        val cancel =
-//            dialog.findViewById<Button>(R.id.cancelBtn)
-//        val check =
-//            dialog.findViewById<Button>(R.id.checkBtn)
-//        cancel.setOnClickListener { dialog.dismiss() }
-//        check.setOnClickListener { Toast.makeText(this@FoodResultActivity, "작업 중입니다.", Toast.LENGTH_SHORT).show() }
-//    }
+    fun floatingDialog(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_food_result_error)
+        dialog.show()
+        val cancel =
+            dialog.findViewById<Button>(R.id.cancelBtn)
+        val check =
+            dialog.findViewById<Button>(R.id.checkBtn)
+        cancel.setOnClickListener { dialog.dismiss() }
+        check.setOnClickListener { Toast.makeText(this@FoodResultActivity, "작업 중입니다.", Toast.LENGTH_SHORT).show() }
+    }
 
     fun checkIsBadResult(userKind : String){
         when(userKind){
