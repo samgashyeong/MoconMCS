@@ -35,7 +35,7 @@ class FoodResultLoding : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_food_result_loding
-        )
+        ) //커밋할끄니ㅏ깐
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
 
         //checkInternet()
