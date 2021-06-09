@@ -1,4 +1,4 @@
-package com.example.moconmcs.data. KyungrokApi
+package com.example.moconmcs.data.KyungrokApi
 
 import java.io.Serializable
 
@@ -7,6 +7,7 @@ data class DataRes(
     val aquaProd: Int,
     val count: Int,
     val disinfectant: Int,
+    val etc: Int,
     val foodAdditives: Int,
     val livestock: Int,
     val materials: ArrayList<Material>,
@@ -17,5 +18,6 @@ data class DataRes(
     val plant: Int,
     val prodName: Int,
     val prodNum: String,
-    val starch: Int
+    val starch: Int,
+    val status: String
 ) : Serializable

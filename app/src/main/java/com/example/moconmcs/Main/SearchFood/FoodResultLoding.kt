@@ -114,6 +114,7 @@ class FoodResultLoding : AppCompatActivity() {
                         Log.d(TAG, "getFoodResult: 내용이 없습니다.")
                         startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
                             .putExtra("barCodeFail", true))
+                        finish()
                     }
                     else{
                         Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
@@ -126,7 +127,6 @@ class FoodResultLoding : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 //    fun checkInternet(){

@@ -57,12 +57,12 @@ class FoodResultActivity : AppCompatActivity() {
             }
 //        checkIsBadResult(userKind)
             binding.notFoundProductTv.text = "검색되지않은 상품 수 : ${ foodResultData?.data_res.notFound}"
-            binding.foodProductTv.text = "상품명"/*foodResultData.data_res.prodName*/
+            binding.foodProductTv.text = foodResultData.data_res.prodName.toString()
 
             binding.button.setOnClickListener {
                 startActivity(Intent(this, FoodResultListActivity::class.java)
                     .putExtra("foodList", foodResultData?.data_res?.materials as Serializable)
-                    .putExtra("prodName", "상품명"/*foodResultData.prodName*/))
+                    .putExtra("prodName", foodResultData.data_res.prodName.toString()))
             }
         }
         binding.IsStrangeTV.setOnClickListener {
@@ -109,5 +109,6 @@ class FoodResultActivity : AppCompatActivity() {
         binding.notFoundProductTv.visibility = View.INVISIBLE
         binding.IsStrangeTV.text = "오류를 신고하시겠어요?"
         binding.button.visibility = View.INVISIBLE
+        binding.foodProductTv.visibility = View.INVISIBLE
     }
 }

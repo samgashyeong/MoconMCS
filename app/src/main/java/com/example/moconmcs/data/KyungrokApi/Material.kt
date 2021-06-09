@@ -1,4 +1,4 @@
-package com.example.moconmcs.data. KyungrokApi
+package com.example.moconmcs.data.KyungrokApi
 
 import java.io.Serializable
 
