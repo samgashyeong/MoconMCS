@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="16"
-            android:hint="식품품목번호를 입력해주세요"
+            android:hint="@string/inputSPN"
             android:inputType="number|phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

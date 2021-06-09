@@ -53,9 +53,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +67,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     private GoogleMap googleMap;
     private MapView mapView;
-    private static List<Placemark> placemarks;
+    private static List<Placemark> placemarkList;
     private Marker selectedMarker;
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
@@ -231,7 +228,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     private void addMarkers() {
-        for (Placemark placemark : placemarks) {
+        for (Placemark placemark : placemarkList) {
             addMarker(placemark);
         }
     }
@@ -384,7 +381,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
         this.googleMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
-        if (placemarks == null) placemarks = getPlacemarkList();
+        if (placemarkList == null) placemarkList = getPlacemarkList();
         addMarkers();
 
         LatLng curPos = new LatLng(37.56, 126.97);

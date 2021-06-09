@@ -7,11 +7,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,17 +28,26 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
 
 public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnItemListener {
 
-    Button prevMonth, nextMonth, prevDay, nextDay;
-    TextView dateText, mainDateText;
-    RecyclerView calenderRecyclerView;
-    LocalDate currentDate; //다이얼로그 안에서 쓰일 날짜 인스턴스
-    Dialog dialog;
-    DiaryDao diaryDao;
-    FoodDiaryViewModel viewModel; //다른 프래그먼트에 다녀와도 유지되게 할 날짜 인스턴스
+    private Button nextMonth;
+    private Button prevDay;
+    private Button nextDay;
+    private TextView dateText, mainDateText;
+    private final String[] foodTimeTexts = {"아침", "점심", "저녁"};
+    private final TextView[] timeTextViews = new TextView[3];
+    private EditText ateFoodLog;
+    private RecyclerView calenderRecyclerView;
+    private LocalDate currentDate; //다이얼로그 안에서 쓰일 날짜 인스턴스
+    private Dialog dialog;
+    private DiaryDao diaryDao;
+    private FoodDiaryViewModel viewModel; //다른 프래그먼트에 다녀와도 유지되게 할 날짜 인스턴스
+
+    int selectedFoodTime = 0; //0:아침 1:점심 2:저녁
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,22 +74,130 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         prevDay = view.findViewById(R.id.diaryPrevDay);
         nextDay = view.findViewById(R.id.diaryNextDay);
 
+        ateFoodLog = view.findViewById(R.id.logAteFood);
+        timeTextViews[0] = view.findViewById(R.id.diary_t1);
+        timeTextViews[1] = view.findViewById(R.id.diary_t2);
+        timeTextViews[2] = view.findViewById(R.id.diary_t3);
+
+        for(int i = 0; i < timeTextViews.length; i++) {
+            final int finalI = i;
+            timeTextViews[i].setOnClickListener(v -> {
+                uploadDiaryDatabase();
+                selectedFoodTime += finalI - 1;
+                if(selectedFoodTime < 0) selectedFoodTime = 0;
+                if(selectedFoodTime >= timeTextViews.length) selectedFoodTime = timeTextViews.length - 1;
+                updateFoodTime();
+                loadDiaryDatabase();
+            });
+        }
+
+        loadDiaryDatabase();
+        updateFoodTime();
         updateDateChangeBtn();
         updateMainDateText();
 
         mainDateText.setOnClickListener(v -> openCalenderDialog());
         prevDay.setOnClickListener(v -> {
+            uploadDiaryDatabase();
             viewModel.setSelectedDate(viewModel.getSelectedDate().minusDays(1));
+            loadDiaryDatabase();
             updateMainDateText();
             updateDateChangeBtn();
         });
         nextDay.setOnClickListener(v -> {
+            uploadDiaryDatabase();
             viewModel.setSelectedDate(viewModel.getSelectedDate().plusDays(1));
+            loadDiaryDatabase();
             updateMainDateText();
             updateDateChangeBtn();
         });
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        uploadDiaryDatabase();
+    }
+
+    private void uploadDiaryDatabase() {
+        String ateLog = ateFoodLog.getText().toString();
+        DiaryEntity foundEntity = null;
+        for(DiaryEntity diaryEntity : diaryDao.getAll()) {
+            if(diaryEntity.getDate() == DiaryEntity.toDate(
+                    viewModel.getSelectedDate().getYear(),
+                    viewModel.getSelectedDate().getMonthValue(),
+                    viewModel.getSelectedDate().getDayOfMonth())) {
+                foundEntity = diaryEntity;
+                diaryDao.delete(diaryEntity);
+            }
+        }
+        if(foundEntity != null) {
+            switch (selectedFoodTime) {
+                case 0:
+                    foundEntity.setBreakfast(ateLog);
+                    break;
+                case 1:
+                    foundEntity.setLunch(ateLog);
+                    break;
+                case 2:
+                    foundEntity.setDinner(ateLog);
+                    break;
+            }
+            diaryDao.insertAll(foundEntity);
+        }
+        else {
+            String[] diary = {"", "", ""};
+            diary[selectedFoodTime] = ateFoodLog.getText().toString();
+            DiaryEntity insertEntity = new DiaryEntity(DiaryEntity.toDate(
+                    viewModel.getSelectedDate().getYear(),
+                    viewModel.getSelectedDate().getMonthValue(),
+                    viewModel.getSelectedDate().getDayOfMonth()), diary[0], diary[1], diary[2]);
+            diaryDao.insertAll(insertEntity);
+        }
+    }
+
+    private void loadDiaryDatabase() {
+        for(DiaryEntity diaryEntity : diaryDao.getAll()) {
+            if(diaryEntity.getDate() == DiaryEntity.toDate(
+                    viewModel.getSelectedDate().getYear(),
+                    viewModel.getSelectedDate().getMonthValue(),
+                    viewModel.getSelectedDate().getDayOfMonth())) {
+
+                switch (selectedFoodTime) {
+                    case 0:
+                        ateFoodLog.setText(diaryEntity.getBreakfast());
+                        break;
+                    case 1:
+                        ateFoodLog.setText(diaryEntity.getLunch());
+                        break;
+                    case 2:
+                        ateFoodLog.setText(diaryEntity.getDinner());
+                        break;
+                    default:
+                        ateFoodLog.setText("");
+                }
+                return;
+            }
+        }
+        ateFoodLog.setText("");
+    }
+
+    private void updateFoodTime() {
+        for(int i = 0; i < timeTextViews.length; i++) {
+            int idx = selectedFoodTime + i - 1;
+            if(idx >= 0 && idx < timeTextViews.length) {
+                timeTextViews[i].setText(foodTimeTexts[idx]);
+                timeTextViews[i].setVisibility(View.VISIBLE);
+            }
+            else {
+                timeTextViews[i].setVisibility(View.INVISIBLE);
+            }
+        }
+        timeTextViews[1].setTextColor(0xffff0000);
+        ateFoodLog.setHint(foodTimeTexts[selectedFoodTime] + "에 먹은 것을 기록해보세요.");
     }
 
     private void updateDateChangeBtn() {
@@ -99,7 +222,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         dialog = new Dialog(requireActivity());
         dialog.setContentView(R.layout.layout_custom_calender);
 
-        prevMonth = dialog.findViewById(R.id.prevMonth);
+        Button prevMonth = dialog.findViewById(R.id.prevMonth);
         nextMonth = dialog.findViewById(R.id.nextMonth);
         dateText = dialog.findViewById(R.id.curDateText);
         calenderRecyclerView = dialog.findViewById(R.id.calRecycler);
@@ -121,6 +244,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         setCalenderView();
 
         dialog.setOnDismissListener(d -> {
+            uploadDiaryDatabase();
             updateDateChangeBtn();
         });
         dialog.show();
@@ -165,7 +289,9 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         if(!day.equals("")) {
             try {
                 int dayOfMonth = Integer.parseInt(day);
+                uploadDiaryDatabase();
                 viewModel.setSelectedDate(currentDate.withDayOfMonth(dayOfMonth));
+                loadDiaryDatabase();
                 updateMainDateText();
                 dialog.dismiss();
             }
