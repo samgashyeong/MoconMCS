@@ -1,10 +1,12 @@
 package com.example.moconmcs.Menu
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -15,6 +17,7 @@ import com.example.moconmcs.Main.MainActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityProfileBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -23,6 +26,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var curUser: FirebaseUser
     private lateinit var curUserUid : String
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,11 +43,37 @@ class ProfileActivity : AppCompatActivity() {
             R.layout.activity_profile
         )
 
+        if(firebaseAuth.currentUser != null){
+            curUser = firebaseAuth.currentUser!!
+            curUserUid = curUser.uid
+        }
+
+
+
         binding.logoutBtn.setOnClickListener {
             firebaseAuth.signOut()
             startActivity(Intent(this, LoginActivity::class.java))
             ActivityCompat.finishAffinity(this)
         }
+
+        binding.deleteUserBtn.setOnClickListener {
+            Log.d(TAG, "onCreate: $curUser")
+            curUser.delete()
+                .addOnCompleteListener {
+                    if(it.isSuccessful){
+                        firebaseFirestore.collection("User").document(curUserUid).delete()
+                            .addOnCompleteListener {
+                                if(!it.isSuccessful){
+                                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }
+                }
+        }
+
+
 
         binding.myNameTv.text = userName
         binding.myKindTv.text = userKind
