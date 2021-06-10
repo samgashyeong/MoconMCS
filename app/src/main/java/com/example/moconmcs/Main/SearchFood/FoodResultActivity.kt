@@ -113,6 +113,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
         binding.IsStrangeTV.text = "오류를 신고하시겠어요?"
         binding.button.visibility = View.INVISIBLE
         binding.foodProductTv.visibility = View.INVISIBLE
+        binding.IsStrangeTV.visibility = View.INVISIBLE
     }
 
     override fun onCheckBtnClick() {
