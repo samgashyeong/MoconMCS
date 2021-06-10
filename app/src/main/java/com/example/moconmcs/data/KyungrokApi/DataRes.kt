@@ -16,7 +16,7 @@ data class DataRes(
     val nutrient: Int,
     val otherThanLivestock: Int,
     val plant: Int,
-    val prodName: Int,
+    val prodName: String,
     val prodNum: String,
     val starch: Int,
     val status: String

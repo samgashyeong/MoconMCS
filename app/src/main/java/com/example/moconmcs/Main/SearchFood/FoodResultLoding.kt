@@ -2,18 +2,19 @@ package com.example.moconmcs.Main.SearchFood
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Dialog.ErrorDialog
+import com.example.moconmcs.Dialog.ErrorDialogInterface
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
 import com.example.moconmcs.R
+import com.example.moconmcs.data.KyungrokApi.FoodData
 import com.example.moconmcs.databinding.ActivityFoodResultLodingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,10 +26,12 @@ import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class FoodResultLoding : AppCompatActivity() {
+class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
     private lateinit var binding: ActivityFoodResultLodingBinding
     private lateinit var viewModel: FoodViewModel
     private lateinit var okHttpClient: OkHttpClient
+    private lateinit var errorDialog: ErrorDialog
+    private lateinit var data : FoodData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result_loding)
@@ -37,8 +40,9 @@ class FoodResultLoding : AppCompatActivity() {
             R.layout.activity_food_result_loding
         ) //커밋할끄니ㅏ깐
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
+        errorDialog = ErrorDialog(this, this, "신고된 식품", "사용자들로 부터 접수된 데이터가 불명확한 데이터입니다.\n그래도 결과를 보시겠습니까?")
 
-        //checkInternet()
+
         okHttpClient = OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
@@ -83,6 +87,7 @@ class FoodResultLoding : AppCompatActivity() {
                         finish()
                     }
                     else{ //나온다?
+                        binding.tvResult.text = "바코드가 인식되었습니다. 잠시 기달려주세요!"
                         val foodName = isExecution!!.C005.row[0].PRDLST_NM
                         val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
                         Log.d(TAG, "getFoodNum: ${isExecution}")
@@ -120,9 +125,15 @@ class FoodResultLoding : AppCompatActivity() {
                         Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
                                 ", ${isExecution?.data_res?.prodName}" +
                                 ", ${isExecution?.data_res?.materials}")
-                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
-                            .putExtra("FoodResult", isExecution))
-                        finish()
+                        if(isExecution?.data_res?.status == "Error"){
+                            data = isExecution
+                            errorDialog.show()
+                        }
+                        else{
+                            startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                                .putExtra("FoodResult", isExecution))
+                            finish()
+                        }
                     }
                 }
             }
@@ -136,5 +147,16 @@ class FoodResultLoding : AppCompatActivity() {
         const val serViceKey = "6a957af97bed49989b74"
         const val BASE_URL_BARCODE = "https://openapi.foodsafetykorea.go.kr/api/$serViceKey/C005/json/"
         const val BASE_URL_KYUNGROK_API = "https://vcheck-api.herokuapp.com/api/"
+    }
+
+    override fun onCheckBtnClick() {
+        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+            .putExtra("FoodResult", data))
+        errorDialog.dismiss()
+        finish()
+    }
+
+    override fun onCancleBtnClick() {
+        finish()
     }
 }
