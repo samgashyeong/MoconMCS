@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="my_array">
+        <item>락토오보(채소, 과일, 유제품, 달걀)</item>
+        <item>오보(채소, 과일, 달걀)</item>
+        <item>락토(채소, 과일, 유제품)</item>
+        <item>비건(채소, 과일)</item>
+    </string-array>
+</resources>

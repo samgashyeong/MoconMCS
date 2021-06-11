@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -44,53 +46,84 @@ class SignUpFragment2 : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
 
-
-        binding.btn1.visibility = View.INVISIBLE
         binding.backBtn.setOnClickListener {
             activity.changeFragment(0)
         }
-        binding.viganGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
-                R.id.vigan-> {userKind = "비건"
-                    binding.btn1.visibility = View.VISIBLE}
-                R.id.ovo -> {
-                    userKind = "오보"
-                    binding.btn1.visibility = View.VISIBLE
+        val items = resources.getStringArray(R.array.my_array)
+        val myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
+
+        binding.spinner.adapter = myAdapter
+
+        binding.spinner.setSelection(3)
+
+        binding.spinner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener,
+            AdapterView.OnItemClickListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+
+                //아이템이 클릭 되면 맨 위부터 position 0번부터 순서대로 동작하게 됩니다.
+                when (position) {
+                    0 -> {
+                        userKind = "락토오보"
+                    }
+                    1 -> {
+                        userKind = "오보"
+                    }
+                    2 ->{
+                        userKind = "락토"
+                    }
+                    3->{
+                        userKind = "비건"
+                    }
+                    else -> {
+                        userKind = "1"
+                    }
                 }
-                R.id.lacto -> {
-                    userKind = "락토"
-                    binding.btn1.visibility = View.VISIBLE
-                }
-                R.id.lactoOvo -> {
-                    userKind = "락토오보"
-                    binding.btn1.visibility = View.VISIBLE
-                }
+            }
+            override fun onItemClick(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
             }
         }
 
 
         binding.btn1.setOnClickListener {
-            firebaseAuth.createUserWithEmailAndPassword(viewModel.email.value.toString(), viewModel.pw.value.toString())
-                .addOnFailureListener {
-                    Toast.makeText(context, "실패하였습니다. 다시 시도 해주세요", Toast.LENGTH_SHORT).show()
-                }
-                .addOnCompleteListener{
-                    userUid= firebaseAuth.currentUser!!.uid
-                    if (it.isSuccessful){
-                        firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind))
-                            .addOnFailureListener {
-                                Toast.makeText(context, "유저등록에 실패하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()
-                            }
-                            .addOnSuccessListener {
-                                Log.d(TAG, "onCreateView: ${userUid}")
-                                Toast.makeText(context, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                                val intent: Intent = Intent(context, OnboardingActivity::class.java)
-                                intent.putExtra("isLoginBack", true);
-                                startActivity(intent)
-                                activity.finish()
-                            }
+            if(userKind == "1"){
+                Toast.makeText(requireContext(), "비건 단계를 선택해주세요", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                firebaseAuth.createUserWithEmailAndPassword(viewModel.email.value.toString(), viewModel.pw.value.toString())
+                    .addOnFailureListener {
+                        Toast.makeText(context, "실패하였습니다. 다시 시도 해주세요", Toast.LENGTH_SHORT).show()
                     }
-                }
+                    .addOnCompleteListener{
+                        userUid= firebaseAuth.currentUser!!.uid
+                        if (it.isSuccessful){
+                            firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind))
+                                .addOnFailureListener {
+                                    Toast.makeText(context, "유저등록에 실패하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "onCreateView: ${userUid}")
+                                    Toast.makeText(context, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                                    val intent: Intent = Intent(context, OnboardingActivity::class.java)
+                                    intent.putExtra("isLoginBack", true);
+                                    startActivity(intent)
+                                    activity.finish()
+                                }
+                        }
+                    }
+            }
         }
 
         return binding.root
