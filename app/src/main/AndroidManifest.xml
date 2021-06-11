@@ -31,7 +31,8 @@
         <activity android:name=".Menu.HelpMenuActivity" />
         <activity android:name=".Menu.SettingActivity" />
         <activity android:name=".Menu.ProfileActivity" />
-        <activity android:name=".Main.SearchFood.FoodNumInput" />
+        <activity android:name=".Main.SearchFood.FoodNumInput"
+            android:windowSoftInputMode="adjustResize"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

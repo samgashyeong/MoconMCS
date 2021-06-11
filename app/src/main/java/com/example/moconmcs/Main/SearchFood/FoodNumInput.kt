@@ -18,10 +18,8 @@ class FoodNumInput : AppCompatActivity() {
             R.layout.activity_food_num_input
         )
 
-        if(intent.hasExtra("barCodeFail")){
-            binding.bcFailTv.visibility = View.VISIBLE
-        }
-        binding.btn1.setOnClickListener {
+
+        binding.completeBtn.setOnClickListener {
             if(binding.EtFoodNum.text.isEmpty()){
                 Toast.makeText(this, "숫자를 입력하고 눌러주세요.", Toast.LENGTH_SHORT).show()
             }

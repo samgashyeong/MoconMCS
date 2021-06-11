@@ -7,15 +7,39 @@
         android:layout_height="match_parent"
         tools:context=".Main.SearchFood.FoodNumInput">
 
-        <ImageView
+        <TextView
             android:id="@+id/IvFoodNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/googleg_disabled_color_18"
+            android:fontFamily="@font/noto_sans_cj_kkr_medium"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="27sp"
+            android:textColor="#2b7214"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:layout_marginBottom="180dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="품목보고번호 입력" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_cj_kkr_medium"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:text="품목보고번호는 포장지 뒷면\n
+원재료명 함량이 적혀있는 표에 적혀있습니다."
+            android:layout_marginTop="10dp"
+            android:textColor="#2b7214"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/IvFoodNum" />
 
         <EditText
             android:id="@+id/EtFoodNum"
@@ -23,30 +47,33 @@
             android:layout_height="wrap_content"
             android:ems="16"
             android:hint="@string/inputSPN"
+            android:layout_marginTop="20dp"
             android:inputType="number|phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/IvFoodNum" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <TextView
-            android:id="@+id/bcFailTv"
-            android:layout_width="wrap_content"
+            android:id="@+id/completeBtn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="인식에 실패하였습니다. 품목보고번호를 입력해주세요."
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/EtFoodNum" />
+            android:background="#2b7214"
+            android:gravity="center"
+            android:paddingVertical="10dp"
+            android:text="완료"
+            android:textColor="#fff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <Button
-            android:id="@+id/btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="확인"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back_icon"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="17dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bcFailTv" />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

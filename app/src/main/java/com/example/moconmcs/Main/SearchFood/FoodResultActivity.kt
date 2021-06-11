@@ -59,18 +59,19 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
                     .addOnCompleteListener {
                         if(it.isSuccessful){
                             userKind = it.result.data!!.getValue("userKind").toString()
-                            checkIsBadResult(userKind)
+                            if(foodResultData?.data_res.livestock > 0 || foodResultData.data_res.livestock >0 || foodResultData.data_res.aquaProd>0){
+                                badResult()
+                            }
+                            else{
+                                checkIsBadResult(userKind)
+                            }
                         }
                     }
             }
             Log.d(TAG, "onCreate: ${foodResultData}")
 
-            if(foodResultData?.data_res.livestock > 0){
-                badResult()
-            }
+
 //        checkIsBadResult(userKind)
-            binding.notFoundProductTv.text = "검색되지않은 상품 수 : ${ foodResultData?.data_res.notFound}"
-            binding.foodProductTv.text = foodResultData.data_res.prodName.toString()
 
             binding.button.setOnClickListener {
                 startActivity(Intent(this, FoodResultListActivity::class.java)
@@ -82,35 +83,59 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
             errorDialog.show()
 
         }
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
     }
 
 
     fun checkIsBadResult(userKind : String){
         when(userKind){
             "비건"->{
-                //채소, 과일 아닌것만 판별
+                if(foodResultData.data_res.otherThanLivestock>0){
+                    eggResult()
+                }
+                else{
+                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
+                    binding.resultTV.text = "드실 수 있습니다."
+                    binding.foodProductTv.text = foodResultData.data_res.prodName
+                }
             }
             "락토"->{
                 //유제품, 꿀, 채소 과일 아닌것만 판별
+                if(foodResultData.data_res.otherThanLivestock>0){
+                    eggResult()
+                }
+                else{
+                    binding.resultIV.setImageResource(R.drawable.ic_locto_icon)
+                    binding.resultTV.text = "드실 수 있습니다."
+                    binding.foodProductTv.text = foodResultData.data_res.prodName
+                }
             }
             "오보"->{
-                //채소, 과일, 꿀, 달걀 아닌것만 판별
+                //추가예정
+                binding.resultIV.setImageResource(R.drawable.ic_ovo_icon)
+                binding.resultTV.text = "드실 수 있습니다."
+                binding.foodProductTv.text = foodResultData.data_res.prodName
             }
             "락토오보"->{
-                //채소, 과일, 꿀, 달걀, 유제품이 아닌것만 판별
+                //추가예정
+                binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
+                binding.resultTV.text = "드실 수 있습니다."
+                binding.foodProductTv.text = foodResultData.data_res.prodName
+
             }
         }
     }
 
     fun badResult(){
-        binding.resultTV.text = "안좋음"
-        binding.resultIV.setImageResource(R.drawable.undraw_memory_storage_reh01)
+        binding.resultTV.text = "드실 수 없습니다."
+        binding.foodProductTv.text = "동물성 성분이 포함되어있습니다."
+        binding.resultIV.setImageResource(R.drawable.ic_meat_icon)
     }
     fun failResult(){
         binding.resultTV.text = "검색 실패"
-        binding.resultIV.setImageResource(R.drawable.undraw_memory_storage_reh01)
-        binding.notFoundProductTv.visibility = View.INVISIBLE
-        binding.IsStrangeTV.text = "오류를 신고하시겠어요?"
+        binding.resultIV.setImageResource(R.drawable.ic_notsearch_icon)
         binding.button.visibility = View.INVISIBLE
         binding.foodProductTv.visibility = View.INVISIBLE
         binding.IsStrangeTV.visibility = View.INVISIBLE
@@ -142,5 +167,11 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
                 }
             }
         }
+    }
+
+    fun eggResult(){
+        binding.resultTV.text = "드실 수 없습니다."
+        binding.resultIV.setImageResource(R.drawable.ic_eggs_icon)
+        binding.foodProductTv.text = "계란이 포함되어 있습니다."
     }
 }
