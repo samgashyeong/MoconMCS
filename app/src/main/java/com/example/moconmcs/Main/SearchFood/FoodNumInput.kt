@@ -29,5 +29,8 @@ class FoodNumInput : AppCompatActivity() {
                 finish()
             }
         }
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
     }
 }

@@ -4,7 +4,7 @@
 
     </style>
     <item
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/ic_map2_icon"
         android:id="@+id/food_map"
         android:title="푸드맵">
     </item>
@@ -14,7 +14,7 @@
         android:title=""
         android:enabled="false"/>
     <item
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/ic_diary2_icon"
         android:id="@+id/setting"
         android:title="다이어리"/>
 </menu>

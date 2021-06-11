@@ -36,12 +36,10 @@ class ErrorDialog(
         findViewById<TextView>(R.id.messageTv).text = message
 
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        findViewById<Button>(R.id.checkBtn).setOnClickListener {
+        findViewById<TextView>(R.id.checkBtn).setOnClickListener {
             this.errorDialogInterface!!.onCheckBtnClick()
         }
 
-        findViewById<Button>(R.id.cancelBtn).setOnClickListener {
-            this.errorDialogInterface!!.onCancleBtnClick()
-        }
+
     }
 }

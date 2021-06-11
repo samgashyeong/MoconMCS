@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".Main.MainActivity"
         android:fitsSystemWindows="true"
-        android:background="#5FFF52"
+        android:background="#FFFFFF"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,9 +26,16 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:menu="@menu/toolbar_menu"
-                    app:title="응애"
-                    app:titleTextColor="#fff" />
+                    app:title=""
+                    android:background="#cbffb8"
+                    app:menu="@menu/toolbar_menu">
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="응애"
+                        style="@style/Toolbar.Title"/>
+                </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
             <FrameLayout
@@ -77,7 +84,7 @@
                         android:id="@+id/bottmnavview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#fff"
+                        android:background="#cbffb8"
                         app:menu="@menu/main_menu" />
                 </FrameLayout>
 
@@ -86,7 +93,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#187109"
-                    app:layout_anchor="@id/bottomBar" />
+                    app:layout_anchor="@id/bottomBar"
+                    app:tint="@android:color/white"
+                    android:src="@drawable/ic_search_icon" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

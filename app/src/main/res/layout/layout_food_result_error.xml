@@ -10,22 +10,25 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/food_list_item"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="#fff">
 
                 <TextView
                     android:id="@+id/mainMessageTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:includeFontPadding="false"
+                    android:textStyle="bold"
                     android:padding="10dp"
                     android:text="오류 신고"
-                    android:textColor="#000"
+                    android:textColor="#2b7214"
                     android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +42,7 @@
                     android:gravity="center"
                     android:padding="30dp"
                     android:text="식품의 오류점을 서버개발자한테 전달합니다.\n확인을 누르면 오류 정보를 개발자한테 보냅니다."
-                    android:textColor="#000"
+                    android:textColor="#8f8f8f"
                     app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -54,24 +57,29 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <Button
-                        android:id="@+id/cancelBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="취소" />
 
-                    <Button
+
+                    <TextView
                         android:id="@+id/checkBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="확인" />
+                        android:layout_height="wrap_content"
+                        android:text="확인"
+                        android:includeFontPadding="false"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                        android:textColor="#fff"
+                        android:gravity="center"
+                        android:paddingVertical="13dp"
+                        android:background="#2b7214"/>
+
+<!--                    <Button-->
+<!--                        android:id="@+id/checkBtn"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="확인" />-->
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
     </FrameLayout>
 </layout>

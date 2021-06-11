@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         setSupportActionBar(binding.toolbar)
-
+        supportActionBar!!.setDisplayShowTitleEnabled(false);
         binding.bottmnavview.run{
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction()
                             .replace(R.id.frame, fr)
                             .commit()
-        binding.toolbar.title = title
+        binding.title.text = title
     }
 
     override fun layoutClick(num: Int) {
