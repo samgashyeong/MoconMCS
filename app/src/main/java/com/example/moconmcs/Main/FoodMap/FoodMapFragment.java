@@ -4,14 +4,20 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +42,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -206,9 +213,26 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         markerOptions.snippet(snippet);
 
         if(isSelected)
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_1));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
+                    R.drawable.ic_checkedmarker_icon
+            )));
         else
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_0));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
+                    R.drawable.ic_marker_icon
+            )));
+    }
+
+    public Bitmap getBitmapFromVectorDrawable(int drawableId) {
+        Drawable drawable = AppCompatResources.getDrawable(requireActivity().getApplicationContext(), drawableId);
+        if(drawable == null) return null;
+        Log.d(TAG, "getBitmapFromVectorDrawable: " + drawable.getIntrinsicWidth() + " / " + drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     private void addMarker(Placemark placemark) {
@@ -378,7 +402,6 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         this.googleMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
         if (placemarkList == null) placemarkList = getPlacemarkList();
