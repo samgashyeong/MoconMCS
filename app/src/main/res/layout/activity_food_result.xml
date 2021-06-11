@@ -11,13 +11,14 @@
             android:id="@+id/foodProductTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:fontFamily="@font/noto_sans_cj_kkr_medium"
-            android:textStyle="normal"
-            android:textSize="15sp"
-            android:textColor="#2b7214"
+            android:includeFontPadding="false"
             android:lineSpacingExtra="18sp"
             android:text="nixw"
-            android:includeFontPadding="false"
+            android:textColor="#2b7214"
+            android:textSize="15sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/resultIV"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -40,25 +41,29 @@
 
         <ImageView
             android:id="@+id/resultIV"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_vegan_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.55" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/noto_sans_cj_kkr_medium"
             android:includeFontPadding="false"
-            android:text="내 상품성분 리스트보기"
             android:paddingLeft="30dp"
-            android:paddingRight="30dp"
             android:paddingTop="10dp"
+            android:paddingRight="30dp"
             android:paddingBottom="10dp"
+            android:text="내 상품성분 리스트보기"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/resultIV" />

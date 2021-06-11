@@ -46,7 +46,9 @@
             android:name=".SignUP.SignupActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Onboarding.OnboardingActivity" />
-        <activity android:name=".Main.MainActivity" />
+        <activity android:name=".Main.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
