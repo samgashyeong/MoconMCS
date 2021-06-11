@@ -58,19 +58,8 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.deleteUserBtn.setOnClickListener {
             Log.d(TAG, "onCreate: $curUser")
-            curUser.delete()
-                .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        firebaseFirestore.collection("User").document(curUserUid).delete()
-                            .addOnCompleteListener {
-                                if(!it.isSuccessful){
-                                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        finish()
-                    }
-                }
+            startActivity(Intent(this, DeleteUserActivity::class.java)
+                .putExtra("emailString", curUser.email.toString()))
         }
 
 
@@ -93,3 +82,5 @@ class ProfileActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
+
+

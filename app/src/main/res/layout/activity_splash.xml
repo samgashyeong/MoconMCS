@@ -5,26 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Splash"
-    android:background="#41FF71">
+    android:background="#FFFFFF">
 
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="280dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:layout_width="118.4dp"
+        android:layout_height="83.6dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/Stv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="V check"
-        android:textColor="#fff"
-        android:textSize="70sp"
+        android:fontFamily="@font/esamanru_medium"
+        android:lineSpacingExtra="4sp"
+        android:text="V-check"
+        android:textColor="#2b7214"
+        android:textSize="21sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />

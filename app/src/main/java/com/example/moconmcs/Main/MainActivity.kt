@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}")
-        if(viewModel.userKind!!.value == null || viewModel.userKind!!.value == null){
+        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null){
             firebaseFirestore.collection("User").document(curUserUid).get()
                 .addOnCompleteListener {
                     if(it.isSuccessful){
