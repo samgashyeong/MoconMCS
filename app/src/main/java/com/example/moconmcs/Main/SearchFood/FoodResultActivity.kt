@@ -47,7 +47,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
         errorDialog = ErrorDialog(this@FoodResultActivity
             , this
             , "오류 신고"
-            , "식품의 오류점을 서버개발자한테 전달합니다.\\n확인을 누르면 오류 정보를 개발자한테 보냅니다.")
+            , "식품의 오류점을 서버개발자한테 전달합니다.\n확인을 누르면 오류 정보를 개발자한테 보냅니다.")
 
         if(intent.hasExtra("barCodeFail")){
             failResult()
