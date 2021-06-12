@@ -7,19 +7,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.moconmcs.Main.AppDatabase;
 import com.example.moconmcs.R;
@@ -28,9 +22,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import static android.content.ContentValues.TAG;
 
 public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnItemListener {
 
@@ -41,7 +32,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
     private final String[] foodTimeTexts = {"아침", "점심", "저녁"};
     private final TextView[] timeTextViews = new TextView[3];
     private EditText ateFoodLog;
-    private RecyclerView calenderRecyclerView;
+    private GridView gridView;
     private LocalDate currentDate; //다이얼로그 안에서 쓰일 날짜 인스턴스
     private Dialog dialog;
     private DiaryDao diaryDao;
@@ -196,7 +187,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
                 timeTextViews[i].setVisibility(View.INVISIBLE);
             }
         }
-        timeTextViews[1].setTextColor(0xffff0000);
+        timeTextViews[1].setTextColor(0xff2b7214);
         ateFoodLog.setHint(foodTimeTexts[selectedFoodTime] + "에 먹은 것을 기록해보세요.");
     }
 
@@ -225,7 +216,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         Button prevMonth = dialog.findViewById(R.id.prevMonth);
         nextMonth = dialog.findViewById(R.id.nextMonth);
         dateText = dialog.findViewById(R.id.curDateText);
-        calenderRecyclerView = dialog.findViewById(R.id.calRecycler);
+        gridView = dialog.findViewById(R.id.calGrid);
 
         updateDateChangeBtn();
 
@@ -254,13 +245,13 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         dateText.setText(DateTimeFormatter.ofPattern("yyyy년 MM월").format(currentDate));
         updateMainDateText();
 
-        ArrayList<LocalDate> daysInMonth = getDaysInMonth(currentDate);
-        CalenderAdapter calenderAdapter = new CalenderAdapter(viewModel.getSelectedDate(), daysInMonth, this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
-                requireActivity().getApplicationContext(), 7);
-
-        calenderRecyclerView.setLayoutManager(layoutManager);
-        calenderRecyclerView.setAdapter(calenderAdapter);
+//        ArrayList<LocalDate> daysInMonth = getDaysInMonth(currentDate);
+//        CalenderAdapter calenderAdapter = new CalenderAdapter(viewModel.getSelectedDate(), daysInMonth, this);
+//        GridView.LayoutManager layoutManager = new GridLayoutManager(
+//                requireActivity().getApplicationContext(), 7);
+//
+//        gridView.setLayoutManager(layoutManager);
+//        gridView.setAdapter(calenderAdapter);
     }
 
     private ArrayList<LocalDate> getDaysInMonth(LocalDate localDate) {
