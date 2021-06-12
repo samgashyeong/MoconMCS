@@ -25,31 +25,36 @@
                 android:id="@+id/diaryNextDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#00AC03"
+                android:background="#00FFFFFF"
+                android:gravity="left|center_vertical"
                 android:text="@string/nextArrow"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/mainDateText"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/diaryPrevDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#00AC03"
+                android:background="#00FFFFFF"
+                android:gravity="right|center_vertical"
                 android:text="@string/prevArrow"
+                app:layout_constraintEnd_toStartOf="@+id/mainDateText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/mainDateText"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/exampleDateString"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/diaryNextDay"
-                app:layout_constraintStart_toEndOf="@+id/diaryPrevDay"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

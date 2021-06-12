@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    private float x1, x2;
+    private float touchX, touchY;
     private static final float MIN_SWIPE_DISTANCE = 150;
 
     private ImageView[] obProgressCircles;
@@ -84,22 +83,39 @@ public class OnboardingActivity extends AppCompatActivity {
         switch(event.getActionMasked())
         {
             case MotionEvent.ACTION_DOWN:
-                x1 = event.getX();
+                touchX = event.getX();
+                touchY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                float deltaX = x2 - x1;
+                float deltaX = event.getX() - touchX;
+                float deltaY = event.getY() - touchY;
                 if (deltaX > MIN_SWIPE_DISTANCE)
                 {
+                    //left to right scroll
                     prevPage();
                 }
                 else if (deltaX < -MIN_SWIPE_DISTANCE)
                 {
+                    //right to left scroll
+                    nextPage();
+                }
+                else if(Math.abs(deltaX) < MIN_SWIPE_DISTANCE * 0.5f
+                        && Math.abs(deltaY) < MIN_SWIPE_DISTANCE * 0.5f) {
+                    //normal touch
                     nextPage();
                 }
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(curPage > 0) {
+            prevPage();
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
