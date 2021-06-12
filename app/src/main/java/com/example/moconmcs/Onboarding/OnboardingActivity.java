@@ -110,10 +110,10 @@ public class OnboardingActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         //로그인 되어 있으면 메인 액티비티로
-        if(auth.getCurrentUser() != null){
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
+//        if(auth.getCurrentUser() != null){
+//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+//        }
 
         obProgressCircles = new ImageView[] {
                 findViewById(R.id.ob_prog_1),
@@ -139,7 +139,7 @@ public class OnboardingActivity extends AppCompatActivity {
         //온보딩 이미 봤으면 바로 로그인 화면으로
         SharedPreferences preferences = getSharedPreferences("FirstCheck", Activity.MODE_PRIVATE);
         boolean checkFirst = preferences.getBoolean("checkFirst", false);
-        if(checkFirst){
+        if(checkFirst || auth.getCurrentUser() != null){
             startActivity(new Intent(OnboardingActivity.this, LoginActivity.class));
             finish();
         }

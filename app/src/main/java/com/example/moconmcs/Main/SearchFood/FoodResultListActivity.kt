@@ -23,7 +23,7 @@ class FoodResultListActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_food_result_list)
 
-        binding.productTv.text = prodName.toString()
+        binding.title.text = prodName.toString()
         val foodArrayList: ArrayList<Material>
         if(foodList != null){
             foodArrayList = foodList as ArrayList<Material>
@@ -32,8 +32,9 @@ class FoodResultListActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back_icon_toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

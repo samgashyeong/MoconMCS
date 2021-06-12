@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/mainMessageTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/noto_sans_cj_kkr"
+                android:includeFontPadding="false"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:text="검색 취소"
+                android:textColor="#2b7214"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/messageTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="30dp"
+                android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                android:includeFontPadding="false"
+                android:text="검색을 취소하시겠습니까?"
+                android:textColor="#8f8f8f"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mainMessageTv" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+                <TextView
+                    android:id="@+id/cancleBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="취소"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                    android:textColor="#fff"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:paddingVertical="13dp"
+                    android:background="#2b7214"/>
+
+                <TextView
+                    android:id="@+id/checkBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="확인"
+                    android:layout_weight="1"
+                    android:layout_margin="2dp"
+                    android:includeFontPadding="false"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                    android:textColor="#fff"
+                    android:gravity="center"
+                    android:paddingVertical="13dp"
+                    android:background="#2b7214"/>
+
+                <!--                    <Button-->
+                <!--                        android:id="@+id/checkBtn"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:text="확인" />-->
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

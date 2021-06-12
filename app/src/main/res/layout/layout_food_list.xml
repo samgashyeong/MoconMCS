@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_margin="10dp"
+    android:padding="15dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="25dp"
     android:background="@drawable/food_list_item">
 
     <TextView
@@ -12,8 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="상품명"
-        android:textSize="30sp"
-        android:textColor="#000"
+        android:textSize="23sp"
+        android:textColor="#2b7214"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+        android:includeFontPadding="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,8 +25,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="식품종류: "
-        android:textColor="#000"
-        android:textSize="20sp"
+        android:textColor="#2b7214"
+        android:textSize="17sp"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+        android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productTv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

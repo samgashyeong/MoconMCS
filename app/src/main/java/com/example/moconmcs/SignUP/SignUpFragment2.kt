@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Dialog.LodingDialog
 import com.example.moconmcs.Onboarding.OnboardingActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.FirebaseDb.User
@@ -36,6 +37,7 @@ class SignUpFragment2 : Fragment() {
     private lateinit var userUid : String
     private lateinit var viewModel: SignUpViewModel
     private lateinit var activity: SignupActivity
+    private lateinit var dialog : LodingDialog
 
 
     override fun onCreateView(
@@ -45,6 +47,7 @@ class SignUpFragment2 : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up2, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
+        dialog = LodingDialog(requireContext(), "계정 만드는 중..")
 
         binding.backBtn.setOnClickListener {
             activity.changeFragment(0)
@@ -103,6 +106,7 @@ class SignUpFragment2 : Fragment() {
                 Toast.makeText(requireContext(), "비건 단계를 선택해주세요", Toast.LENGTH_SHORT).show()
             }
             else{
+                dialog.show()
                 firebaseAuth.createUserWithEmailAndPassword(viewModel.email.value.toString(), viewModel.pw.value.toString())
                     .addOnFailureListener {
                         Toast.makeText(context, "실패하였습니다. 다시 시도 해주세요", Toast.LENGTH_SHORT).show()
@@ -112,15 +116,16 @@ class SignUpFragment2 : Fragment() {
                         if (it.isSuccessful){
                             firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind))
                                 .addOnFailureListener {
+                                    dialog.dismiss()
                                     Toast.makeText(context, "유저등록에 실패하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnSuccessListener {
                                     Log.d(TAG, "onCreateView: ${userUid}")
-                                    Toast.makeText(context, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                                     val intent: Intent = Intent(context, OnboardingActivity::class.java)
                                     intent.putExtra("isLoginBack", true);
                                     startActivity(intent)
                                     activity.finish()
+                                    dialog.dismiss()
                                 }
                         }
                     }
@@ -142,7 +147,6 @@ class SignUpFragment2 : Fragment() {
 //        viewModel.name.observe(requireActivity(), Observer {
 //            this.name = viewModel.name.value.toString()
 //        })
-        Toast.makeText(context, viewModel.email.value.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onAttach(context: Context) {

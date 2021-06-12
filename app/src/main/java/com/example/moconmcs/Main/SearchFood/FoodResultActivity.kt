@@ -49,8 +49,11 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
             , "오류 신고"
             , "식품의 오류점을 서버개발자한테 전달합니다.\n확인을 누르면 오류 정보를 개발자한테 보냅니다.")
 
-        if(intent.hasExtra("barCodeFail")){
+        if(intent.hasExtra("ResultFail")){
             failResult()
+        }
+        else if(intent.hasExtra("barCodeFail")){
+            barCodeFailResult()
         }
         else{
             foodResultData = intent.getSerializableExtra("FoodResult") as FoodData
@@ -59,8 +62,14 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
                     .addOnCompleteListener {
                         if(it.isSuccessful){
                             userKind = it.result.data!!.getValue("userKind").toString()
-                            if(foodResultData?.data_res.livestock > 0 || foodResultData.data_res.livestock >0 || foodResultData.data_res.aquaProd>0){
+                            if(foodResultData!!.data_res.aquaProd > 0 && foodResultData!!.data_res.livestock > 0){
+                                badResultFishAndMeet()
+                            }
+                            else if(foodResultData?.data_res.livestock > 0){
                                 badResult()
+                            }
+                            else if(foodResultData?.data_res.aquaProd >0){
+                                badResultFromAqua()
                             }
                             else{
                                 checkIsBadResult(userKind)
@@ -141,13 +150,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
         binding.IsStrangeTV.visibility = View.INVISIBLE
     }
 
-    override fun onCheckBtnClick() {
-        errorResultToServer()
-    }
 
-    override fun onCancleBtnClick() {
-        errorDialog.dismiss()
-    }
 
     fun errorResultToServer(){
         val api = Retrofit.Builder()
@@ -173,5 +176,36 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
         binding.resultTV.text = "드실 수 없습니다."
         binding.resultIV.setImageResource(R.drawable.ic_eggs_icon)
         binding.foodProductTv.text = "계란이 포함되어 있습니다."
+    }
+
+    fun badResultFromAqua(){
+        binding.resultTV.text = "드실 수 없습니다."
+        binding.resultIV.setImageResource(R.drawable.ic_fish)
+        binding.foodProductTv.text = "해산물이 포함되어있습니다."
+   }
+
+    fun badResultFishAndMeet(){
+        binding.resultTV.text = "드실 수 없습니다."
+        binding.resultIV.setImageResource(R.drawable.ic_fish_meat)
+        binding.foodProductTv.text = "해산물이랑 고기가 포함되어있습니다."
+    }
+    fun barCodeFailResult(){
+        binding.resultTV.text = "검색 실패"
+        binding.resultIV.setImageResource(R.drawable.ic_notsearch_icon)
+        binding.foodProductTv.text = "바코드 인식에 실패하셨습니다."
+        binding.IsStrangeTV.visibility = View.INVISIBLE
+        binding.button.text = "품목보고번호 조회하러 가기"
+        binding.button.setOnClickListener {
+            startActivity(Intent(this@FoodResultActivity, FoodNumInput::class.java))
+            finish()
+        }
+    }
+
+    override fun onCheckBtnClick1() {
+        errorResultToServer()
+    }
+
+    override fun onCancleBtnClick1() {
+        errorDialog.dismiss()
     }
 }

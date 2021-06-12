@@ -24,6 +24,7 @@
         android:fontFamily="@font/esamanru_medium"
         android:lineSpacingExtra="4sp"
         android:text="V-check"
+        android:layout_marginTop="10dp"
         android:textColor="#2b7214"
         android:textSize="21sp"
         android:textStyle="normal"

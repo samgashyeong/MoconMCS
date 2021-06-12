@@ -8,5 +8,5 @@
       android:fillColor="#2b7214"/>
   <path
       android:pathData="M334.75,261.21L995.23,261.21A12,12 0,0 1,1007.23 273.21L1007.23,615.56A12,12 0,0 1,995.23 627.56L334.75,627.56A12,12 0,0 1,322.75 615.56L322.75,273.21A12,12 0,0 1,334.75 261.21z"
-      android:fillColor="#fff"/>
+      android:fillColor="#FFFFFF"/>
 </vector>

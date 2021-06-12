@@ -1,7 +1,7 @@
 package com.example.moconmcs.Dialog
 
 interface ErrorDialogInterface {
-    fun onCheckBtnClick()
+    fun onCheckBtnClick1()
 
-    fun onCancleBtnClick()
+    fun onCancleBtnClick1()
 }

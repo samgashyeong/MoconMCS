@@ -9,6 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Dialog.CommDialog
+import com.example.moconmcs.Dialog.CommDialogInterface
 import com.example.moconmcs.Dialog.ErrorDialog
 import com.example.moconmcs.Dialog.ErrorDialogInterface
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
@@ -26,12 +28,14 @@ import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
+class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogInterface{
     private lateinit var binding: ActivityFoodResultLodingBinding
     private lateinit var viewModel: FoodViewModel
     private lateinit var okHttpClient: OkHttpClient
     private lateinit var errorDialog: ErrorDialog
+    private lateinit var commDialog: CommDialog
     private lateinit var data : FoodData
+    private var ActivityOn = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result_loding)
@@ -41,7 +45,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
         ) //커밋할끄니ㅏ깐
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
         errorDialog = ErrorDialog(this, this, "신고된 식품", "사용자들로 부터 접수된 데이터가 불명확한 데이터입니다.\n그래도 결과를 보시겠습니까?")
-
+        commDialog = CommDialog(this, this, "검색 취소", "검색을 종료하시겠습니까?")
 
         okHttpClient = OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
@@ -58,6 +62,9 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
         else{
             foodNum = intent.getStringExtra("foodNum").toString()
             getFoodResult(foodNum)
+        }
+        binding.backBtn.setOnClickListener {
+            commDialog.show()
         }
     }
 
@@ -82,7 +89,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
                     Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
                     if(isExecution?.C005?.total_count.equals("0")){
                         Log.d(TAG, "getFoodNum: 데이터를 불러오지못함.")
-                        startActivity(Intent(this@FoodResultLoding, FoodNumInput::class.java)
+                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
                             .putExtra("barCodeFail", "바코드 인식에 실패하셨습니다. 품목보고번호를 입력해주세요."))
                         finish()
                     }
@@ -110,29 +117,37 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
             val execution = api.isExecutionCode(FoodNum).awaitResponse()
             Log.d("response", "response :${execution}")
             if(execution.isSuccessful){
-                val isExecution = execution.body()
+                if(ActivityOn){
+                    val isExecution = execution.body()
 
-                withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main){
 
 //                    Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
-                    if(isExecution?.err_msg != null){
-                        Log.d(TAG, "getFoodResult: 내용이 없습니다.")
-                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
-                            .putExtra("barCodeFail", true))
-                        finish()
-                    }
-                    else{
-                        Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
-                                ", ${isExecution?.data_res?.prodName}" +
-                                ", ${isExecution?.data_res?.materials}")
-                        if(isExecution?.data_res?.status == "Error"){
-                            data = isExecution
-                            errorDialog.show()
+                        if(isExecution?.err_msg != null){
+                            Log.d(TAG, "getFoodResult: 내용이 없습니다.")
+                            if(commDialog.isShowing){
+                                commDialog.dismiss()
+                            }
+                            startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                                .putExtra("ResultFail", true))
+                            finish()
                         }
                         else{
-                            startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
-                                .putExtra("FoodResult", isExecution))
-                            finish()
+                            Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
+                                    ", ${isExecution?.data_res?.prodName}" +
+                                    ", ${isExecution?.data_res?.materials}")
+                            if(commDialog.isShowing){
+                                commDialog.dismiss()
+                            }
+                            if(isExecution?.data_res?.status == "Error"){
+                                data = isExecution
+                                errorDialog.show()
+                            }
+                            else{
+                                startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                                    .putExtra("FoodResult", isExecution))
+                                finish()
+                            }
                         }
                     }
                 }
@@ -150,13 +165,27 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface {
     }
 
     override fun onCheckBtnClick() {
+        commDialog.dismiss()
+        ActivityOn = false
+        finish()
+    }
+
+    override fun onCancleBtnClick() {
+        commDialog.dismiss()
+    }
+
+    override fun onCheckBtnClick1() {
         startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
             .putExtra("FoodResult", data))
         errorDialog.dismiss()
         finish()
     }
 
-    override fun onCancleBtnClick() {
+    override fun onCancleBtnClick1() {
         finish()
+    }
+
+    override fun onBackPressed() {
+        commDialog.show()
     }
 }

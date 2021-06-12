@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.*
+import com.example.moconmcs.Dialog.CommDialog
+import com.example.moconmcs.Dialog.CommDialogInterface
 import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
 import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
@@ -26,7 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(),
-    BottomSheetButtonClickListener {
+    BottomSheetButtonClickListener, CommDialogInterface{
     private lateinit var binding : ActivityMainBinding
     private lateinit var viewModel: ProfileViewModel
     private lateinit var firebaseFirestore: FirebaseFirestore
@@ -35,10 +37,13 @@ class MainActivity : AppCompatActivity(),
 
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
+    private lateinit var commDialog: CommDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        commDialog = CommDialog(this, this, "앱 종료", "앱을 종료하시겠습니까?")
 
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
@@ -130,5 +135,17 @@ class MainActivity : AppCompatActivity(),
         }
         return super.onOptionsItemSelected(item)
 
+    }
+
+    override fun onBackPressed() {
+        commDialog.show()
+    }
+
+    override fun onCheckBtnClick() {
+        finish()
+    }
+
+    override fun onCancleBtnClick() {
+        commDialog.dismiss()
     }
 }

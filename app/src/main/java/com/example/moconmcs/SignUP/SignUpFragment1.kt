@@ -59,8 +59,16 @@ class SignUpFragment1 : Fragment() {
                 activity.changeFragment(1)
                 Log.d(TAG, "onCreateView: ${binding.emailLogin.text}, ${binding.pwLogin.text}, ${binding.nameEt.text}")
             }
-            else{
-                Toast.makeText(context, "빈칸을 채워주세요.", Toast.LENGTH_SHORT).show()
+            else if(binding.emailLogin.text.isEmpty()
+                or binding.pwLogin.text.isEmpty()
+                or binding.pwLogin2.text.isEmpty()
+                or binding.nameEt.text.isEmpty()){
+                binding.errorTv.visibility = View.VISIBLE
+                binding.errorTv.text = "빈칸을 채워주세요."
+            }
+            else if(binding.pwLogin2.text != binding.pwLogin.text){
+                binding.errorTv.visibility = View.VISIBLE
+                binding.errorTv.text = "비밀번호가 일치하지않습니다."
             }
         }
         return binding.root
@@ -88,7 +96,6 @@ class SignUpFragment1 : Fragment() {
         userViewModel.name.observe(requireActivity(), Observer {
             binding.nameEt.setText(userViewModel.name.value)
         })
-        Toast.makeText(context, "다시넘어옴 ${userViewModel.email.value}", Toast.LENGTH_SHORT).show()
     }
     override fun onDetach() {
         super.onDetach()

@@ -13,7 +13,7 @@
     <!-- Bottom 2dp Shadow -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#BDBDBD" />
+            <solid android:color="#DBDBDB" />
         </shape>
     </item>
 
