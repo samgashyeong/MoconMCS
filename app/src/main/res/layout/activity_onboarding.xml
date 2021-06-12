@@ -4,22 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="#656565"
+    tools:background="#FFFFFF"
     tools:context=".Onboarding.OnboardingActivity">
-
-    <Button
-        android:id="@+id/obsuccess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:background="#00FFFFFF"
-        android:text="완료"
-        android:textSize="24sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/obframe"
@@ -33,5 +19,67 @@
         app:layout_constraintVertical_bias="0.0">
 
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8">
+
+        <ImageView
+            android:id="@+id/ob_prog_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dp"
+            app:srcCompat="@drawable/circle_green" />
+
+        <ImageView
+            android:id="@+id/ob_prog_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dp"
+            app:srcCompat="@drawable/circle_green_stroke" />
+
+        <ImageView
+            android:id="@+id/ob_prog_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dp"
+            app:srcCompat="@drawable/circle_green_stroke" />
+
+        <ImageView
+            android:id="@+id/ob_prog_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dp"
+            app:srcCompat="@drawable/circle_green_stroke" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/obsuccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:includeFontPadding="false"
+        android:text="완료"
+        android:textColor="#2b7214"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
