@@ -50,7 +50,8 @@ class SignUpFragment2 : Fragment() {
             activity.changeFragment(0)
         }
         val items = resources.getStringArray(R.array.my_array)
-        val myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
+        val myAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.my_array, R.layout.spinner_layout)
+        myAdapter.setDropDownViewResource(R.layout.spinner_layout)
 
         binding.spinner.adapter = myAdapter
 
