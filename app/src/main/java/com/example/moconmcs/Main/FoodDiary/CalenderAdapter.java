@@ -48,11 +48,9 @@ public class CalenderAdapter extends RecyclerView.Adapter<CalenderAdapter.Calend
         }
         else {
             int dayOfWeek = days.get(position).getDayOfWeek().getValue();
-            if(dayOfWeek == 6) holder.dayOfMonth.setTextColor(Color.parseColor("#3333ff")); //blue
-            if(dayOfWeek == 7) holder.dayOfMonth.setTextColor(Color.parseColor("#ff3333")); //red
             if(days.get(position).atTime(0, 0)
                     .isAfter(LocalDate.now().atTime(0, 0))) {
-                holder.dayOfMonth.setTextColor(Color.parseColor("#dddddd")); //gray
+                holder.dayOfMonth.setTextColor(Color.parseColor("#e4e4e4")); //gray
                 holder.canListenEvent = false;
             }
         }

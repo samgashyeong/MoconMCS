@@ -10,42 +10,56 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dateContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#7FFF8F"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/diaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/diaryNextDay"
-                android:layout_width="wrap_content"
+                android:id="@+id/diaryPrevDay"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#00AC03"
-                android:text="@string/nextArrow"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:background="#00FFFFFF"
+                android:gravity="right|center_vertical"
+                android:text="@string/prevArrow"
+                android:textColor="#2b7214"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/mainDateText"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/diaryPrevDay"
-                android:layout_width="wrap_content"
+                android:id="@+id/diaryNextDay"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#00AC03"
-                android:text="@string/prevArrow"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="#00FFFFFF"
+                android:gravity="left|center_vertical"
+                android:text="@string/nextArrow"
+                android:textColor="#2b7214"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/mainDateText"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/mainDateText"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/exampleDateString"
-                android:textColor="#000000"
+                android:textColor="#2b7214"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/diaryNextDay"
                 app:layout_constraintStart_toEndOf="@+id/diaryPrevDay"
@@ -57,7 +71,10 @@
             android:id="@+id/diaryContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#B5FFB3"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,10 +94,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
-                    android:textColor="#878787"
+                    android:textColor="#BFBFBF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:text="아침" />
 
                 <TextView
@@ -88,10 +108,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
-                    android:textColor="#878787"
+                    android:textColor="#BFBFBF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:text="점심" />
 
                 <TextView
@@ -99,10 +122,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
-                    android:textColor="#878787"
+                    android:textColor="#BFBFBF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:text="저녁" />
             </LinearLayout>
 
@@ -110,19 +136,18 @@
                 android:id="@+id/logAteFood"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="#FFFFFF"
-                android:ems="10"
                 android:gravity="start|top"
                 android:hint="아침에 먹은 것을 기록해보세요."
+                android:textColor="#2b7214"
                 android:inputType="textMultiLine"
+                android:padding="8dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
