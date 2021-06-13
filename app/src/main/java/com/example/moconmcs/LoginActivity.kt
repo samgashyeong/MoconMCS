@@ -26,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.signupBut.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
-            finish()
         }
         if(auth.currentUser != null){
             startActivity(Intent(this, MainActivity::class.java))

@@ -1,5 +1,6 @@
 package com.example.moconmcs.Main
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -59,13 +60,13 @@ class MainActivity : AppCompatActivity(),
             curUserUid = firebaseAuth.currentUser!!.uid
         }
 
-        Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}")
-        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null){
+        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null || viewModel.userEmail!!.value == null){
             firebaseFirestore.collection("User").document(curUserUid).get()
                 .addOnCompleteListener {
                     if(it.isSuccessful){
                         viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
-                            , it.result.data!!.getValue("userKind").toString())
+                            , it.result.data!!.getValue("userKind").toString()
+                        , firebaseAuth.currentUser!!.email.toString())
                     }
                 }
         }
@@ -122,9 +123,11 @@ class MainActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.profile ->{
+                Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}\n이메일 : ${viewModel.userEmail!!.value}")
                 startActivity(Intent(this, ProfileActivity::class.java)
                     .putExtra("userName", viewModel.userName!!.value)
-                    .putExtra("userKind", viewModel.userKind!!.value))
+                    .putExtra("userKind", viewModel.userKind!!.value)
+                    .putExtra("userEmail", viewModel.userEmail!!.value))
             }
             R.id.setting ->{
                 startActivity(Intent(this, SettingActivity::class.java))

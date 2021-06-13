@@ -36,6 +36,7 @@ class ProfileActivity : AppCompatActivity() {
         val intent = intent
         val userName = intent.getStringExtra("userName")
         val userKind = intent.getStringExtra("userKind")
+        val userEmail = intent.getStringExtra("userEmail")
 
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
@@ -50,11 +51,11 @@ class ProfileActivity : AppCompatActivity() {
 
 
 
-        binding.logoutBtn.setOnClickListener {
-            firebaseAuth.signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            ActivityCompat.finishAffinity(this)
-        }
+//        binding.logoutBtn.setOnClickListener {
+//            firebaseAuth.signOut()
+//            startActivity(Intent(this, LoginActivity::class.java))
+//            ActivityCompat.finishAffinity(this)
+//        }
 
         binding.deleteUserBtn.setOnClickListener {
             Log.d(TAG, "onCreate: $curUser")
@@ -62,15 +63,23 @@ class ProfileActivity : AppCompatActivity() {
                 .putExtra("emailString", curUser.email.toString()))
         }
 
+        binding.button2.setOnClickListener {
+            startActivity(Intent(this, UserInfoChangeActivity::class.java)
+                .putExtra("myName", userName)
+                .putExtra("myKind", userKind))
+        }
+
 
 
         binding.myNameTv.text = userName
         binding.myKindTv.text = userKind
+        binding.myEmailTv.text = userEmail
 
         setSupportActionBar(binding.toolbar)
 
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_241)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back_icon_toolbar)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {

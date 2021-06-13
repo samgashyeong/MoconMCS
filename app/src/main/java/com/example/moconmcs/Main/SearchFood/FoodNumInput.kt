@@ -1,15 +1,16 @@
 package com.example.moconmcs.Main.SearchFood
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Dialog.CommDialog
 import com.example.moconmcs.Dialog.CommDialogInterface
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityFoodNumInputBinding
+
 
 class FoodNumInput : AppCompatActivity(), CommDialogInterface{
     private lateinit var binding: ActivityFoodNumInputBinding
@@ -40,7 +41,12 @@ class FoodNumInput : AppCompatActivity(), CommDialogInterface{
 
 
     override fun onBackPressed() {
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+
         dialog.show()
+        dialog.window!!.attributes = lp
     }
 
     override fun onCheckBtnClick() {

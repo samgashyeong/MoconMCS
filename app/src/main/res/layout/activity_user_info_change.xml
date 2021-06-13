@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Menu.ProfileActivity">
+        tools:context=".Menu.UserInfoChangeActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -27,7 +27,7 @@
                     style="@style/Toolbar.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="프로필" />
+                    android:text="유저정보 변경" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,12 +52,12 @@
                 app:layout_constraintVertical_bias="0.0">
 
 
-                <TextView
+                <EditText
                     android:id="@+id/myEmailTv"
                     android:layout_width="240dp"
                     android:layout_height="41dp"
                     android:background="@drawable/shadow"
-                    android:text="email@gmail.com"
+                    android:hint="이름을 입력하세요"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:textColor="#2b7214"
@@ -66,35 +66,79 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <EditText
                     android:id="@+id/myKindTv"
                     android:layout_width="240dp"
                     android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/shadow"
                     android:gravity="center_vertical"
-                    android:text="비건"
+                    android:inputType="textPassword"
                     android:paddingLeft="10dp"
+                    android:hint="현재 비밀번호를 입력하세요."
                     android:textColor="#2b7214"
                     android:textColorHint="#a7bea0"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/myNameTv" />
 
-                <TextView
+                <Spinner
                     android:id="@+id/myNameTv"
                     android:layout_width="240dp"
                     android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/shadow"
                     android:gravity="center_vertical"
-                    android:text="엄준식"
                     android:paddingLeft="10dp"
                     android:textColor="#2b7214"
                     android:textColorHint="#a7bea0"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/myEmailTv" />
+
+                <EditText
+                    android:id="@+id/myNewPwEt"
+                    android:layout_width="240dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shadow"
+                    android:gravity="center_vertical"
+                    android:hint="새로운 비밀번호를 입력하세요."
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="#2b7214"
+                    android:textColorHint="#a7bea0"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myKindTv" />
+
+                <EditText
+                    android:id="@+id/myAgainPwEt"
+                    android:layout_width="240dp"
+                    android:layout_height="41dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/shadow"
+                    android:gravity="center_vertical"
+                    android:hint="새로운 비밀번호를 입력하세요."
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:textColor="#2b7214"
+                    android:textColorHint="#a7bea0"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myNewPwEt" />
+
+                <TextView
+                    android:id="@+id/errorTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="응애"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#ff3737"
+                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                    android:includeFontPadding="false"
+                    app:layout_constraintTop_toBottomOf="@+id/myAgainPwEt" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -116,10 +160,10 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:fontFamily="@font/noto_sans_cj_kkr"
                     android:lineSpacingExtra="7sp"
-                    android:text="이름"
+                    android:text="비건 단계"
                     android:textColor="#2b7214"
                     android:textSize="15sp"
                     android:textStyle="normal"
@@ -133,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans_cj_kkr"
                     android:lineSpacingExtra="7sp"
-                    android:text="이메일"
+                    android:text="이름"
                     android:textColor="#2b7214"
                     android:textSize="15sp"
                     android:textStyle="normal"
@@ -145,51 +189,67 @@
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:fontFamily="@font/noto_sans_cj_kkr"
-                    android:lineSpacingExtra="7sp"
-                    android:text="비건 단계"
+                    android:text="현재\n비밀번호"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
                     android:textColor="#2b7214"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="새로운\n비밀번호"
+                    android:textColor="#2b7214"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="비밀번호\n확인"
+                    android:textColor="#2b7214"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="변경하기"
+            android:text="변경사항 저장"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:layout_constraintVertical_bias="0.6"
             app:layout_constraintWidth_percent="0.6" />
 
-        <TextView
-            android:id="@+id/deleteUserBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_cj_kkr"
-            android:gravity="center_horizontal"
-            android:text="회원 탈퇴하기"
-            android:textColor="#8f8f8f"
-            android:textSize="15sp"
-            android:includeFontPadding="false"
-            android:textStyle="normal"
-            app:layout_constraintTop_toBottomOf="@+id/button2"
-            tools:layout_editor_absoluteX="0dp" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

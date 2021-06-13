@@ -49,7 +49,18 @@ class SignUpFragment1 : Fragment() {
         userViewModel = ViewModelProvider(requireActivity()).get(SignUpViewModel::class.java)
 
         binding.btn1.setOnClickListener {
-            if(binding.emailLogin.text.isNotEmpty()
+                 if(binding.emailLogin.text.isEmpty()
+                or binding.pwLogin.text.isEmpty()
+                or binding.pwLogin2.text.isEmpty()
+                or binding.nameEt.text.isEmpty()){
+                binding.errorTv.visibility = View.VISIBLE
+                binding.errorTv.text = "빈칸을 채워주세요."
+            }
+                 else if(binding.pwLogin2.text.toString() != binding.pwLogin.text.toString()){
+                     binding.errorTv.visibility = View.VISIBLE
+                     binding.errorTv.text = "비밀번호가 일치하지않습니다."
+                 }
+            else if(binding.emailLogin.text.isNotEmpty()
                 and binding.pwLogin.text.isNotEmpty()
                 and binding.pwLogin2.text.isNotEmpty()
                 and binding.nameEt.text.isNotEmpty()){
@@ -58,17 +69,6 @@ class SignUpFragment1 : Fragment() {
                     , binding.nameEt.text.toString())
                 activity.changeFragment(1)
                 Log.d(TAG, "onCreateView: ${binding.emailLogin.text}, ${binding.pwLogin.text}, ${binding.nameEt.text}")
-            }
-            else if(binding.emailLogin.text.isEmpty()
-                or binding.pwLogin.text.isEmpty()
-                or binding.pwLogin2.text.isEmpty()
-                or binding.nameEt.text.isEmpty()){
-                binding.errorTv.visibility = View.VISIBLE
-                binding.errorTv.text = "빈칸을 채워주세요."
-            }
-            else if(binding.pwLogin2.text != binding.pwLogin.text){
-                binding.errorTv.visibility = View.VISIBLE
-                binding.errorTv.text = "비밀번호가 일치하지않습니다."
             }
         }
         return binding.root

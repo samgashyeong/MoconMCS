@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.Dialog.LodingDialog
 import com.example.moconmcs.Onboarding.OnboardingActivity
@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class SignUpFragment2 : Fragment() {
+class SignUpFragment2 : Fragment(){
 
     private lateinit var binding: FragmentSignUp2Binding
 //    private lateinit var email : String
@@ -122,9 +122,10 @@ class SignUpFragment2 : Fragment() {
                                 .addOnSuccessListener {
                                     Log.d(TAG, "onCreateView: ${userUid}")
                                     val intent: Intent = Intent(context, OnboardingActivity::class.java)
-                                    intent.putExtra("isLoginBack", true);
+                                    intent.putExtra("isLoginBack", true)
                                     startActivity(intent)
                                     activity.finish()
+                                    activity.changeFragment(3)
                                     dialog.dismiss()
                                 }
                         }
@@ -160,9 +161,11 @@ class SignUpFragment2 : Fragment() {
         activity.onDetachedFromWindow()
     }
 
+
 //    fun loadData(fm : SignUpFragment1){
 //        fm.saveData(email, pw, name)
 //    }
+
 
 }
 

@@ -7,27 +7,32 @@
     tools:context=".ThankYouActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_icon"
-        android:layout_marginBottom="24.4dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        android:id="@+id/imageView15"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_logo"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="310.9dp"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
         android:gravity="center_horizontal"
-        android:lineSpacingExtra="13sp"
+        android:includeFontPadding="false"
+        android:text="V-check를\n이용해주셔서 감사합니다!"
         android:textColor="#2b7214"
-        android:textSize="27sp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="V-check를\n이용해주셔서 감사합니다!" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView15" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

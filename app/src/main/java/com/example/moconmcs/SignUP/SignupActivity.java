@@ -1,6 +1,7 @@
 package com.example.moconmcs.SignUP;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -104,6 +105,9 @@ public class SignupActivity extends AppCompatActivity {
             fmm.beginTransaction()
                     .replace(R.id.frame, new SignUpFragment2())
                     .commit();
+        }
+        else if(i == 3){
+            ActivityCompat.finishAffinity(this);
         }
     }
 }

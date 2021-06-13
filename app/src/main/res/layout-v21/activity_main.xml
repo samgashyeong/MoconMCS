@@ -27,7 +27,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#cbffb8"
-                    app:menu="@menu/toolbar_menu">
+                    app:menu="@menu/toolbar_menu"
+                    style="@style/MyItemFont">
 
                     <TextView
                         android:id="@+id/title"
