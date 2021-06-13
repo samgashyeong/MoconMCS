@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -23,7 +25,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnItemListener {
+public class FoodDiaryFragment extends Fragment {
 
     private Button nextMonth;
     private Button prevDay;
@@ -58,9 +60,6 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         AppDatabase db = AppDatabase.getInstance(requireContext().getApplicationContext());
         diaryDao = db.diaryDao();
 
-//        diaryDao.insertAll(new DiaryEntity(new Date(2020, 6, 1).getTime(), "우유", "우유2", "빠삐코"));
-//
-//        Log.d("asdf", "onCreateView: "+diaryDao.getAll());
         mainDateText = view.findViewById(R.id.mainDateText);
         prevDay = view.findViewById(R.id.diaryPrevDay);
         nextDay = view.findViewById(R.id.diaryNextDay);
@@ -238,20 +237,39 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
             uploadDiaryDatabase();
             updateDateChangeBtn();
         });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
         dialog.show();
+        dialog.getWindow().setAttributes(lp);
     }
 
     private void setCalenderView() {
-        dateText.setText(DateTimeFormatter.ofPattern("yyyy년 MM월").format(currentDate));
+        dateText.setText(DateTimeFormatter.ofPattern("yyyy.MM").format(currentDate));
         updateMainDateText();
 
-//        ArrayList<LocalDate> daysInMonth = getDaysInMonth(currentDate);
-//        CalenderAdapter calenderAdapter = new CalenderAdapter(viewModel.getSelectedDate(), daysInMonth, this);
-//        GridView.LayoutManager layoutManager = new GridLayoutManager(
-//                requireActivity().getApplicationContext(), 7);
-//
-//        gridView.setLayoutManager(layoutManager);
-//        gridView.setAdapter(calenderAdapter);
+        ArrayList<LocalDate> daysInMonth = getDaysInMonth(currentDate);
+        CalenderAdapter calenderAdapter = new CalenderAdapter(viewModel.getSelectedDate(), daysInMonth);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(calenderAdapter.isCanClick(position)) {
+                    try {
+                        int dayOfMonth = Integer.parseInt(((TextView)view.findViewById(R.id.cell_text)).getText().toString());
+                        uploadDiaryDatabase();
+                        viewModel.setSelectedDate(currentDate.withDayOfMonth(dayOfMonth));
+                        loadDiaryDatabase();
+                        updateMainDateText();
+                        dialog.dismiss();
+                    }
+                    catch (NumberFormatException ignored) {}
+                }
+                updateDateChangeBtn();
+            }
+        });
+        gridView.setAdapter(calenderAdapter);
     }
 
     private ArrayList<LocalDate> getDaysInMonth(LocalDate localDate) {
@@ -275,23 +293,7 @@ public class FoodDiaryFragment extends Fragment implements CalenderAdapter.OnIte
         return days;
     }
 
-    @Override
-    public void onItemClick(int pos, String day) {
-        if(!day.equals("")) {
-            try {
-                int dayOfMonth = Integer.parseInt(day);
-                uploadDiaryDatabase();
-                viewModel.setSelectedDate(currentDate.withDayOfMonth(dayOfMonth));
-                loadDiaryDatabase();
-                updateMainDateText();
-                dialog.dismiss();
-            }
-            catch (NumberFormatException ignored) {}
-        }
-        updateDateChangeBtn();
-    }
-
     private void updateMainDateText() {
-        mainDateText.setText(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(viewModel.getSelectedDate()));
+        mainDateText.setText(DateTimeFormatter.ofPattern("yyyy.MM.dd").format(viewModel.getSelectedDate()));
     }
 }
