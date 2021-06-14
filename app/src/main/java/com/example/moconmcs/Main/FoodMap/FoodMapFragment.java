@@ -40,6 +40,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -79,6 +80,8 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
     private Button writeReviewBtn;
+
+    private BitmapDescriptor recycleMarker, recycleSelectedMarker;
 
     private final ArrayList<ReviewInfo> arrayList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -168,17 +171,15 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapView.onLowMemory();
+    public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mapView != null) {
-            mapView.onCreate(savedInstanceState);
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onLowMemory();
     }
 
     private Location getLastKnownLocation() {
@@ -212,14 +213,19 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         markerOptions.position(pos);
         markerOptions.snippet(snippet);
 
-        if(isSelected)
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
-                    R.drawable.ic_checkedmarker_icon
-            )));
-        else
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
+        if(recycleMarker == null)
+            recycleMarker = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
                     R.drawable.ic_marker_icon
-            )));
+            ));
+        if(recycleSelectedMarker == null)
+            recycleSelectedMarker = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(
+                    R.drawable.ic_checkedmarker_icon
+            ));
+
+        if(isSelected)
+            markerOptions.icon(recycleSelectedMarker);
+        else
+            markerOptions.icon(recycleMarker);
     }
 
     public Bitmap getBitmapFromVectorDrawable(int drawableId) {
