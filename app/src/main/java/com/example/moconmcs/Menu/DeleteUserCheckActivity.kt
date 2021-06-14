@@ -3,21 +3,23 @@ package com.example.moconmcs.Menu
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Dialog.LodingDialog
 import com.example.moconmcs.Hash.sha
+import com.example.moconmcs.Main.AppDatabase
+import com.example.moconmcs.Main.FoodDiary.DiaryEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.ThankYouActivity
 import com.example.moconmcs.databinding.ActivityDeletUserCheckBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
 import java.math.BigInteger
+import java.util.*
 
 class DeleteUserCheckActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeletUserCheckBinding
@@ -41,6 +43,16 @@ class DeleteUserCheckActivity : AppCompatActivity() {
         val curUid = auth.currentUser!!.uid
         val userHash = intent.getStringExtra("userHash")
 
+        val room = AppDatabase.getInstance(this.applicationContext)
+        val diaryDao = room.diaryDao()
+
+        val deleteEntities = LinkedList<DiaryEntity>()
+        for (diaryEntity in diaryDao.all) {
+            if (diaryEntity.uid.equals(curUid, ignoreCase = true)) deleteEntities.add(diaryEntity)
+        }
+        for (diaryEntity in deleteEntities) {
+            diaryDao.delete(diaryEntity)
+        }
 
         binding.button3.setOnClickListener {
             Log.d(TAG, "onCreate: fewfew${userHash}")
