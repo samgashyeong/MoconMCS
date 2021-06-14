@@ -19,13 +19,21 @@ import android.widget.TextView;
 
 import com.example.moconmcs.Main.AppDatabase;
 import com.example.moconmcs.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Objects;
 
 public class FoodDiaryFragment extends Fragment {
+
+
+    private FirebaseAuth auth;
+    private String uid;
 
     private Button nextMonth;
     private Button prevDay;
@@ -47,6 +55,9 @@ public class FoodDiaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_diary, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(FoodDiaryViewModel.class);
+
+        auth = FirebaseAuth.getInstance();
+        uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
         currentDate = LocalDate.now();
 
@@ -113,6 +124,7 @@ public class FoodDiaryFragment extends Fragment {
     }
 
     private void uploadDiaryDatabase() {
+
         String ateLog = ateFoodLog.getText().toString();
         DiaryEntity foundEntity = null;
         for(DiaryEntity diaryEntity : diaryDao.getAll()) {
@@ -141,7 +153,7 @@ public class FoodDiaryFragment extends Fragment {
         else {
             String[] diary = {"", "", ""};
             diary[selectedFoodTime] = ateFoodLog.getText().toString();
-            DiaryEntity insertEntity = new DiaryEntity(DiaryEntity.toDate(
+            DiaryEntity insertEntity = new DiaryEntity(uid, DiaryEntity.toDate(
                     viewModel.getSelectedDate().getYear(),
                     viewModel.getSelectedDate().getMonthValue(),
                     viewModel.getSelectedDate().getDayOfMonth()), diary[0], diary[1], diary[2]);
@@ -154,7 +166,8 @@ public class FoodDiaryFragment extends Fragment {
             if(diaryEntity.getDate() == DiaryEntity.toDate(
                     viewModel.getSelectedDate().getYear(),
                     viewModel.getSelectedDate().getMonthValue(),
-                    viewModel.getSelectedDate().getDayOfMonth())) {
+                    viewModel.getSelectedDate().getDayOfMonth())
+                    && diaryEntity.getUid().equals(uid)) {
 
                 switch (selectedFoodTime) {
                     case 0:

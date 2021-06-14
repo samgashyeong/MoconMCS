@@ -14,11 +14,15 @@ import java.util.GregorianCalendar;
 public class DiaryEntity {
 
     @PrimaryKey
-    private long date;
+    private final long date;
 
-    private String breakfast, lunch, dinner;
+    private String breakfast;
+    private String lunch;
+    private String dinner;
+    private final String uid;
 
-    public DiaryEntity(long date, String breakfast, String lunch, String dinner) {
+    public DiaryEntity(String uid, long date, String breakfast, String lunch, String dinner) {
+        this.uid = uid;
         this.date = date;
         this.breakfast = breakfast;
         this.lunch = lunch;
@@ -35,10 +39,6 @@ public class DiaryEntity {
 
     public long getDate() {
         return date;
-    }
-
-    public void setDate(long date) {
-        this.date = date;
     }
 
     public String getBreakfast() {
@@ -74,5 +74,9 @@ public class DiaryEntity {
                 ", lunch='" + lunch + '\'' +
                 ", dinner='" + dinner + '\'' +
                 '}';
+    }
+
+    public String getUid() {
+        return uid;
     }
 }

@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.moconmcs.Main.FoodDiary.DiaryDao;
 import com.example.moconmcs.Main.FoodDiary.DiaryEntity;
 
-@Database(entities = {DiaryEntity.class}, version = 2)
+@Database(entities = {DiaryEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DiaryDao diaryDao();
