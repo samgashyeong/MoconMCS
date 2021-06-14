@@ -154,7 +154,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
 
     fun errorResultToServer(){
         val api = Retrofit.Builder()
-            .baseUrl(FoodResultLoding.BASE_URL_KYUNGROK_API)
+            .baseUrl(FoodResultLoading.BASE_URL_KYUNGROK_API)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GetFoodResult::class.java)

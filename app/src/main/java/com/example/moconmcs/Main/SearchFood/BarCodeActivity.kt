@@ -51,7 +51,7 @@ class BarCodeActivity : AppCompatActivity() {
                 runOnUiThread{
                     if(!isIntent){
                         isIntent = true
-                        startActivity(Intent(this@BarCodeActivity, FoodResultLoding::class.java)
+                        startActivity(Intent(this@BarCodeActivity, FoodResultLoading::class.java)
                             .putExtra("barcodenum", it.text))
                         finish()
                     }

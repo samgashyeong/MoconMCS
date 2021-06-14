@@ -15,7 +15,7 @@ import com.example.moconmcs.databinding.ActivityDeletUserCheckBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class DeletUserCheckActivity : AppCompatActivity() {
+class DeleteUserCheckActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeletUserCheckBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var db : FirebaseFirestore

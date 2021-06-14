@@ -29,7 +29,7 @@ class FoodNumInput : AppCompatActivity(), CommDialogInterface{
                 Toast.makeText(this, "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
             else{
-                startActivity(Intent(this, FoodResultLoding::class.java)
+                startActivity(Intent(this, FoodResultLoading::class.java)
                     .putExtra("foodNum", binding.EtFoodNum.text.toString()))
                 finish()
             }

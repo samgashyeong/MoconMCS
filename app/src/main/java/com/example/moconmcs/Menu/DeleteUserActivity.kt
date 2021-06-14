@@ -30,7 +30,7 @@ class DeleteUserActivity : AppCompatActivity() {
         }
 
         binding.deleteUserBtn.setOnClickListener {
-            startActivity(Intent(this, DeletUserCheckActivity::class.java)
+            startActivity(Intent(this, DeleteUserCheckActivity::class.java)
                 .putExtra("emailString", curEmail))
             finish()
         }

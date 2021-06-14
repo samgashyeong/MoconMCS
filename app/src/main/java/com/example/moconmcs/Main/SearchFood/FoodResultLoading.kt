@@ -28,7 +28,7 @@ import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogInterface{
+class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogInterface{
     private lateinit var binding: ActivityFoodResultLodingBinding
     private lateinit var viewModel: FoodViewModel
     private lateinit var okHttpClient: OkHttpClient
@@ -89,7 +89,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogIn
                     Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
                     if(isExecution?.C005?.total_count.equals("0")){
                         Log.d(TAG, "getFoodNum: 데이터를 불러오지못함.")
-                        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                        startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
                             .putExtra("barCodeFail", "바코드 인식에 실패하셨습니다. 품목보고번호를 입력해주세요."))
                         finish()
                     }
@@ -128,7 +128,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogIn
                             if(commDialog.isShowing){
                                 commDialog.dismiss()
                             }
-                            startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                            startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
                                 .putExtra("ResultFail", true))
                             finish()
                         }
@@ -144,7 +144,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogIn
                                 errorDialog.show()
                             }
                             else{
-                                startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+                                startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
                                     .putExtra("FoodResult", isExecution))
                                 finish()
                             }
@@ -175,7 +175,7 @@ class FoodResultLoding : AppCompatActivity(), ErrorDialogInterface, CommDialogIn
     }
 
     override fun onCheckBtnClick1() {
-        startActivity(Intent(this@FoodResultLoding, FoodResultActivity::class.java)
+        startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
             .putExtra("FoodResult", data))
         errorDialog.dismiss()
         finish()

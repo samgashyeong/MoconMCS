@@ -23,8 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Menu.UserInfoChangeActivity"></activity>
-        <activity android:name=".Menu.DeletUserCheckActivity" />
+        <activity android:name=".Menu.UserInfoChangeActivity" />
+        <activity android:name=".Menu.DeleteUserCheckActivity" />
         <activity android:name=".ThankYouActivity" />
         <activity android:name=".Menu.DeleteUserActivity" />
         <activity android:name=".Main.SearchFood.FoodResultListActivity" />
@@ -42,7 +42,7 @@
             android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
         <activity
-            android:name=".Main.SearchFood.FoodResultLoding"
+            android:name=".Main.SearchFood.FoodResultLoading"
             android:label="@string/title_activity_food_result_loding" />
         <activity android:name=".Main.SearchFood.BarCodeActivity" />
         <activity
