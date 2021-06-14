@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.moconmcs.Dialog.CommDialog;
+import com.example.moconmcs.Dialog.CommDialogInterface;
 import com.example.moconmcs.R;
 import com.example.moconmcs.databinding.ActivitySignupBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,15 +19,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements CommDialogInterface {
     private ActivitySignupBinding binding;
 
+    private CommDialog commDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
+        commDialog = new CommDialog(this, this, "회원가입 취소", "회원가입을 취소하시겠습니까?");
 
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
@@ -109,5 +113,20 @@ public class SignupActivity extends AppCompatActivity {
         else if(i == 3){
             ActivityCompat.finishAffinity(this);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        commDialog.show();
+    }
+
+    @Override
+    public void onCheckBtnClick() {
+        finish();
+    }
+
+    @Override
+    public void onCancleBtnClick() {
+        commDialog.dismiss();
     }
 }
