@@ -171,7 +171,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
-    public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mapView.onCreate(savedInstanceState);
     }
