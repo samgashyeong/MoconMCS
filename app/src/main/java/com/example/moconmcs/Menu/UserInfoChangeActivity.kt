@@ -1,19 +1,18 @@
 package com.example.moconmcs.Menu
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.R
 import com.example.moconmcs.data.FirebaseDb.User
 import com.example.moconmcs.databinding.ActivityUserInfoChangeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlin.properties.Delegates
 
 class UserInfoChangeActivity : AppCompatActivity() {
@@ -37,7 +36,7 @@ class UserInfoChangeActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back_icon_toolbar)
 
         val curUser = auth.currentUser
-        var curName = intent.getStringExtra("myName")
+        val curName = intent.getStringExtra("myName")
         var curKind = intent.getStringExtra("myKind")
 
         val items = resources.getStringArray(R.array.my_array)
@@ -96,8 +95,11 @@ class UserInfoChangeActivity : AppCompatActivity() {
         }
 
 
+
+
         binding.btn.setOnClickListener {
-            db.collection("User").document(curUser!!.uid).set(User(binding.myEmailTv.text.toString(), curKind!!))
+            db.collection("User").document(curUser!!.uid).update("name", binding.myEmailTv.text.toString()
+            , "userKind", curKind!!)
                 .addOnCompleteListener {
                     if(it.isSuccessful){
                         curUser.updatePassword(binding.myNewPwEt.text.toString())
@@ -108,12 +110,12 @@ class UserInfoChangeActivity : AppCompatActivity() {
                                 }
                                 else{
                                     binding.errorTv.visibility = View.VISIBLE
-                                    binding.errorTv.text = "오류가 발생하였습니다. 다시 시도 해주세요."
+                                    binding.errorTv.text = "오류가 발생하였습니다.1"
                                 }
                             }
                     }
                     else{
-                        binding.errorTv.text = "오류가 발생하였습니다. 다시 시도 해주세요."
+                        binding.errorTv.text = "오류가 발생하였습니다."
                     }
                 }
         }

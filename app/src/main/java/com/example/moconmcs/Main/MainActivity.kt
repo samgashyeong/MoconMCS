@@ -60,13 +60,15 @@ class MainActivity : AppCompatActivity(),
             curUserUid = firebaseAuth.currentUser!!.uid
         }
 
-        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null || viewModel.userEmail!!.value == null){
+        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null || viewModel.userEmail!!.value == null || viewModel.userHash!!.value == null){
             firebaseFirestore.collection("User").document(curUserUid).get()
                 .addOnCompleteListener {
                     if(it.isSuccessful){
                         viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
                             , it.result.data!!.getValue("userKind").toString()
-                        , firebaseAuth.currentUser!!.email.toString())
+                        , firebaseAuth.currentUser!!.email.toString()
+                        ,it.result.data!!.getValue("pw").toString())
+                        Log.d(TAG, "onCreate: ${viewModel.userHash!!.value.toString()}")
                     }
                 }
         }
@@ -123,11 +125,12 @@ class MainActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.profile ->{
-                Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}\n이메일 : ${viewModel.userEmail!!.value}")
+                Log.d("asdf", "onCreate: 유저명 : ${viewModel.userName!!.value}\n이메일 : ${viewModel.userEmail!!.value}\n비밀번호 : ${viewModel.userHash!!.value}")
                 startActivity(Intent(this, ProfileActivity::class.java)
                     .putExtra("userName", viewModel.userName!!.value)
                     .putExtra("userKind", viewModel.userKind!!.value)
-                    .putExtra("userEmail", viewModel.userEmail!!.value))
+                    .putExtra("userEmail", viewModel.userEmail!!.value)
+                    .putExtra("userHash", viewModel.userHash!!.value))
             }
             R.id.setting ->{
                 startActivity(Intent(this, SettingActivity::class.java))

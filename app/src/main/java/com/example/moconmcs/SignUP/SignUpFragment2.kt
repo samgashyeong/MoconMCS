@@ -114,7 +114,7 @@ class SignUpFragment2 : Fragment(){
                     .addOnCompleteListener{
                         userUid= firebaseAuth.currentUser!!.uid
                         if (it.isSuccessful){
-                            firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind))
+                            firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind, viewModel.hash.value.toString()))
                                 .addOnFailureListener {
                                     dialog.dismiss()
                                     Toast.makeText(context, "유저등록에 실패하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()

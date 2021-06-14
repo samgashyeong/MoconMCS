@@ -1,6 +1,7 @@
 package com.example.moconmcs.Menu
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,11 +10,14 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Dialog.LodingDialog
+import com.example.moconmcs.Hash.sha
 import com.example.moconmcs.R
 import com.example.moconmcs.ThankYouActivity
 import com.example.moconmcs.databinding.ActivityDeletUserCheckBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.Exception
+import java.math.BigInteger
 
 class DeleteUserCheckActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeletUserCheckBinding
@@ -35,40 +39,52 @@ class DeleteUserCheckActivity : AppCompatActivity() {
 
         val curEmail = intent.getStringExtra("emailString")
         val curUid = auth.currentUser!!.uid
+        val userHash = intent.getStringExtra("userHash")
+
 
         binding.button3.setOnClickListener {
+            Log.d(TAG, "onCreate: fewfew${userHash}")
+            val input : ByteArray = binding.passwordEt.text.toString().toByteArray()
+            var output : ByteArray = input
+            try{
+                output = sha.encryptSHA(output, "SHA-256")
+            }catch (e: Exception){
+                Log.d(ContentValues.TAG, "onCreateView: ${e}")
+            }
+            val data = BigInteger(1, output)
             lodingDialog.show()
             if(binding.passwordEt.text.toString().isEmpty()){
                 Toast.makeText(this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                 lodingDialog.dismiss()
             }
+            else if(userHash!! != data.toString(16)){
+                Log.d(TAG, "onCreate: else if문 실행됨")
+                Log.d(TAG, "onCreate: $userHash")
+                Log.d(TAG, "onCreate: ${data.toString(16)}")
+                Toast.makeText(this, "비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                lodingDialog.dismiss()
+            }
             else{
-                auth.signOut()
-                Log.d(ContentValues.TAG, "onCreate: ${curEmail}")
-                auth.signInWithEmailAndPassword(curEmail.toString(), binding.passwordEt.text.toString())
-                    .addOnCompleteListener{
+                Log.d(TAG, "onCreate: else문 실행됨")
+                db.collection("User").document(curUid).delete()
+                    .addOnCompleteListener {
                         if(it.isSuccessful){
-                            val user = auth.currentUser
-                            user!!.delete()
-                                .addOnCompleteListener {
-                                    if(it.isSuccessful){
-                                        db.collection("User").document(curUid).delete()
-                                            .addOnCompleteListener {
-                                                startActivity(Intent(this, ThankYouActivity::class.java))
-                                                lodingDialog.dismiss()
-                                                ActivityCompat.finishAffinity(this)
-                                                finish()
-                                            }
-                                    }
-                                    else{
-                                        lodingDialog.dismiss()
-                                        Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                                    }
+                            auth.currentUser?.delete()?.addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    startActivity(Intent(this, ThankYouActivity::class.java))
+                                    lodingDialog.dismiss()
+                                    ActivityCompat.finishAffinity(this)
+                                    finish()
                                 }
+                                else{
+                                    Toast.makeText(this, "오류가 발생하였습니다2.", Toast.LENGTH_SHORT).show()
+                                    lodingDialog.dismiss()
+                                }
+                            }
                         }
                         else{
+                            Toast.makeText(this, "오류가 발생하였습니다.1", Toast.LENGTH_SHORT).show()
                             lodingDialog.dismiss()
-                            Toast.makeText(this, "비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
             }

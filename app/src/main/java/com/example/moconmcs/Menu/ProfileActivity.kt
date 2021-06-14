@@ -33,10 +33,12 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val intent = intent
+
         val userName = intent.getStringExtra("userName")
         val userKind = intent.getStringExtra("userKind")
         val userEmail = intent.getStringExtra("userEmail")
+        val userHash = intent.getStringExtra("userHash")
+        Log.d(TAG, "onCreate: dwqdwq$userHash")
 
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
@@ -60,13 +62,15 @@ class ProfileActivity : AppCompatActivity() {
         binding.deleteUserBtn.setOnClickListener {
             Log.d(TAG, "onCreate: $curUser")
             startActivity(Intent(this, DeleteUserActivity::class.java)
-                .putExtra("emailString", curUser.email.toString()))
+                .putExtra("emailString", curUser.email.toString())
+                .putExtra("userHash", userHash))
         }
 
         binding.button2.setOnClickListener {
             startActivity(Intent(this, UserInfoChangeActivity::class.java)
                 .putExtra("myName", userName)
-                .putExtra("myKind", userKind))
+                .putExtra("myKind", userKind)
+                .putExtra("userHash", userHash))
         }
 
 

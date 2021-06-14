@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Hash.sha
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.FragmentSignUp1Binding
+import java.lang.Exception
+import java.math.BigInteger
 
 class SignUpFragment1 : Fragment() {
 
@@ -64,11 +66,22 @@ class SignUpFragment1 : Fragment() {
                 and binding.pwLogin.text.isNotEmpty()
                 and binding.pwLogin2.text.isNotEmpty()
                 and binding.nameEt.text.isNotEmpty()){
+
+                     val input : ByteArray = binding.pwLogin2.text.toString().toByteArray()
+                     var output : ByteArray = input
+                     try{
+                         output = sha.encryptSHA(output, "SHA-256")
+                     }catch (e: Exception){
+                         Log.d(TAG, "onCreateView: ${e}")
+                     }
+                     val data = BigInteger(1, output)
                 userViewModel.setSignUser(binding.emailLogin.text.toString()
                     , binding.pwLogin.text.toString()
-                    , binding.nameEt.text.toString())
+                    , binding.nameEt.text.toString()
+                ,data.toString(16))
+                     Log.d(TAG, "onCreateView: ${userViewModel.hash.value}")
                 activity.changeFragment(1)
-                Log.d(TAG, "onCreateView: ${binding.emailLogin.text}, ${binding.pwLogin.text}, ${binding.nameEt.text}")
+                Log.d(TAG, "onCreateView: ${binding.emailLogin.text}, ${binding.pwLogin.text}, \n  ${binding.nameEt.text}")
             }
         }
         return binding.root
@@ -95,6 +108,8 @@ class SignUpFragment1 : Fragment() {
         })
         userViewModel.name.observe(requireActivity(), Observer {
             binding.nameEt.setText(userViewModel.name.value)
+
+
         })
     }
     override fun onDetach() {

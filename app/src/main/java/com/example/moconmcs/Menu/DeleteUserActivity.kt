@@ -1,8 +1,10 @@
 package com.example.moconmcs.Menu
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityDeleteUserBinding
@@ -24,6 +26,7 @@ class DeleteUserActivity : AppCompatActivity() {
 
         val curEmail = intent.getStringExtra("emailString")
         val curUid = auth.currentUser!!.uid
+        val userHash = intent.getStringExtra("userHash")
 
         binding.cancelBtn.setOnClickListener {
             finish()
@@ -31,7 +34,8 @@ class DeleteUserActivity : AppCompatActivity() {
 
         binding.deleteUserBtn.setOnClickListener {
             startActivity(Intent(this, DeleteUserCheckActivity::class.java)
-                .putExtra("emailString", curEmail))
+                .putExtra("emailString", curEmail)
+                .putExtra("userHash", userHash))
             finish()
         }
 
