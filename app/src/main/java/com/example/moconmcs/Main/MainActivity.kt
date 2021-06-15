@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.*
 import com.example.moconmcs.Dialog.CommDialog
 import com.example.moconmcs.Dialog.CommDialogInterface
+import com.example.moconmcs.Dialog.LogoutDialog
+import com.example.moconmcs.Dialog.LogoutDialogInterface
 import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
 import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
@@ -29,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(),
-    BottomSheetButtonClickListener, CommDialogInterface{
+    BottomSheetButtonClickListener, CommDialogInterface, LogoutDialogInterface{
     private lateinit var binding : ActivityMainBinding
     private lateinit var viewModel: ProfileViewModel
     private lateinit var firebaseFirestore: FirebaseFirestore
@@ -39,12 +41,14 @@ class MainActivity : AppCompatActivity(),
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
     private lateinit var commDialog: CommDialog
+    private lateinit var logoutDialog : LogoutDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         commDialog = CommDialog(this, this, "앱 종료", "앱을 종료하시겠습니까?")
+        logoutDialog = LogoutDialog(this, this, "로그아웃", "로그아웃을 하시겠습니까?")
 
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
@@ -56,22 +60,17 @@ class MainActivity : AppCompatActivity(),
         firebaseAuth = FirebaseAuth.getInstance()
 
 
-        if(firebaseAuth.currentUser != null){
-            curUserUid = firebaseAuth.currentUser!!.uid
-        }
-
-        if(viewModel.userKind!!.value == null || viewModel.userName!!.value == null || viewModel.userEmail!!.value == null || viewModel.userHash!!.value == null){
-            firebaseFirestore.collection("User").document(curUserUid).get()
-                .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
-                            , it.result.data!!.getValue("userKind").toString()
+        curUserUid = firebaseAuth.currentUser!!.uid.toString()
+        firebaseFirestore.collection("User").document(curUserUid).get()
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
+                        , it.result.data!!.getValue("userKind").toString()
                         , firebaseAuth.currentUser!!.email.toString()
                         ,it.result.data!!.getValue("pw").toString())
-                        Log.d(TAG, "onCreate: ${viewModel.userHash!!.value.toString()}")
-                    }
+                    Log.d(TAG, "onCreate: ${viewModel.userHash!!.value.toString()}")
                 }
-        }
+            }
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false);
@@ -133,7 +132,7 @@ class MainActivity : AppCompatActivity(),
                     .putExtra("userHash", viewModel.userHash!!.value))
             }
             R.id.setting ->{
-                startActivity(Intent(this, SettingActivity::class.java))
+                logoutDialog.show()
             }
             R.id.helpMenu ->{
                 startActivity(Intent(this, HelpMenuActivity::class.java))
@@ -153,5 +152,15 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCancleBtnClick() {
         commDialog.dismiss()
+    }
+
+    override fun onCheckLogout() {
+        firebaseAuth.signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
+
+    override fun onLogoutCancel() {
+        logoutDialog.dismiss()
     }
 }

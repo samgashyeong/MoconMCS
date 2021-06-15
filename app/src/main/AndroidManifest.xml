@@ -23,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Menu.QnaActivity"></activity>
+        <activity android:name=".Menu.ProfileInfoActivity" />
         <activity android:name=".Menu.UserInfoChangeActivity" />
         <activity android:name=".Menu.DeleteUserCheckActivity" />
         <activity android:name=".ThankYouActivity" />

@@ -1,6 +1,11 @@
 package com.example.moconmcs.Menu
 
+import android.app.Activity
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -8,11 +13,15 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.example.moconmcs.Dialog.LodingDialog
+import com.example.moconmcs.Hash.sha
 import com.example.moconmcs.R
 import com.example.moconmcs.data.FirebaseDb.User
 import com.example.moconmcs.databinding.ActivityUserInfoChangeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.Exception
+import java.math.BigInteger
 import kotlin.properties.Delegates
 
 class UserInfoChangeActivity : AppCompatActivity() {
@@ -20,6 +29,7 @@ class UserInfoChangeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db : FirebaseFirestore
     private var curSelect by Delegates.notNull<Int>()
+    private lateinit var lodingDialog:LodingDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info_change)
@@ -29,6 +39,7 @@ class UserInfoChangeActivity : AppCompatActivity() {
         )
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        lodingDialog = LodingDialog(this, "비밀번호 변경 중...")
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
@@ -38,86 +49,84 @@ class UserInfoChangeActivity : AppCompatActivity() {
         val curUser = auth.currentUser
         val curName = intent.getStringExtra("myName")
         var curKind = intent.getStringExtra("myKind")
-
-        val items = resources.getStringArray(R.array.my_array)
-        val myAdapter = ArrayAdapter.createFromResource(this, R.array.my_array, R.layout.spinner_layout)
-        myAdapter.setDropDownViewResource(R.layout.spinner_layout)
-
-
-        //사실이름칸임 ㅈㅅ
-        binding.myEmailTv.setText(curName)
-
-        when(curKind){
-            "비건"-> curSelect = 3
-            "락토"-> curSelect = 2
-            "오보"-> curSelect = 1
-            "락토오보"->curSelect = 0
-        }
-        //myNameTv는 스피너임
-        binding.myNameTv.adapter = myAdapter
-        binding.myNameTv.setSelection(curSelect)
-
-        binding.myNameTv.onItemSelectedListener= object : AdapterView.OnItemSelectedListener,
-            AdapterView.OnItemClickListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-
-                //아이템이 클릭 되면 맨 위부터 position 0번부터 순서대로 동작하게 됩니다.
-                when (position) {
-                    0 -> {
-                        curKind = "락토오보"
-                    }
-                    1 -> {
-                        curKind = "오보"
-                    }
-                    2 ->{
-                        curKind = "락토"
-                    }
-                    3->{
-                        curKind = "비건"
-                    }
-                }
-            }
-            override fun onItemClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-            }
-        }
-
-
+        var curHash = intent.getStringExtra("userHash")
+        val curEmail = intent.getStringExtra("emailString")
+        var data : BigInteger
+        var data1 : BigInteger
 
 
         binding.btn.setOnClickListener {
-            db.collection("User").document(curUser!!.uid).update("name", binding.myEmailTv.text.toString()
-            , "userKind", curKind!!)
-                .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        curUser.updatePassword(binding.myNewPwEt.text.toString())
-                            .addOnCompleteListener {
-                                if(it.isSuccessful){
-                                    Toast.makeText(this, "정보변경에 성공", Toast.LENGTH_SHORT).show()
-                                    finish()
+            lodingDialog.show()
+            val input : ByteArray = binding.myNewPwEt.text.toString().toByteArray()
+            var output : ByteArray = input
+            try{
+                output = sha.encryptSHA(output, "SHA-256")
+            }catch (e: Exception){
+                Log.d(ContentValues.TAG, "onCreateView: ${e}")
+            }
+            data = BigInteger(1, output)
+            val input1 : ByteArray = binding.curPassEt.text.toString().toByteArray()
+            var output1 : ByteArray = input1
+            try{
+                output1 = sha.encryptSHA(output1, "SHA-256")
+            }catch (e: Exception){
+                Log.d(ContentValues.TAG, "onCreateView: ${e}")
+            }
+            data1 = BigInteger(1, output1)
+            Log.d(TAG, "onCreate: ${data.toString(16)}\n${data1.toString(16)}")
+            if(binding.curPassEt.text.isEmpty()
+                || binding.myNewPwEt.text.isEmpty()
+                || binding.myAgainPwEt.text.isEmpty()) {
+                Toast.makeText(this, "빈칸을 채워주세요", Toast.LENGTH_SHORT).show()
+                lodingDialog.dismiss()
+            }
+            else if(binding.myNewPwEt.text.toString() != binding.myAgainPwEt.text.toString()){
+                Toast.makeText(this, "비밀번호가 서로 맞지않습니다.", Toast.LENGTH_SHORT).show()
+                lodingDialog.dismiss()
+            }
+            else if(data1.toString(16) != curHash){
+                Toast.makeText(this, "현재 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onCreate: ${data1.toString(16)}\n${curHash}")
+                lodingDialog.dismiss()
+            }
+            else{
+                auth.signOut()
+                auth.signInWithEmailAndPassword(curEmail.toString(),binding.curPassEt.text.toString())
+                    .addOnCompleteListener {
+                        if(it.isSuccessful){
+                            curUser!!.updatePassword(binding.myNewPwEt.text.toString())
+                                .addOnCompleteListener {
+                                    if(it.isSuccessful){
+                                        db.collection("User").document(curUser.uid).update("pw", data.toString(16))
+                                            .addOnCompleteListener {
+                                                if(it.isSuccessful){
+                                                    Toast.makeText(this, "비밀번호 변경에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+                                                    Log.d(TAG, "onCreate: ${data.toString(16)}")
+                                                    lodingDialog.dismiss()
+                                                    setResult(Activity.RESULT_OK, Intent().putExtra("curHash", data.toString(16)))
+                                                    finish()
+                                                }
+                                                else{
+                                                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.101", Toast.LENGTH_SHORT).show()
+                                                    Log.d(TAG, "onCreate: ${it.result}")
+                                                    lodingDialog.dismiss()
+                                                }
+                                            }
+                                    }
+                                    else{
+                                        Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.102", Toast.LENGTH_SHORT).show()
+                                        Log.d(TAG, "onCreate: ${it}")
+                                        lodingDialog.dismiss()
+                                    }
                                 }
-                                else{
-                                    binding.errorTv.visibility = View.VISIBLE
-                                    binding.errorTv.text = "오류가 발생하였습니다.1"
-                                }
-                            }
+                        }
+                        else{
+                            Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.103", Toast.LENGTH_SHORT).show()
+                            Log.d(TAG, "onCreate: ${it}")
+                            lodingDialog.dismiss()
+                        }
                     }
-                    else{
-                        binding.errorTv.text = "오류가 발생하였습니다."
-                    }
-                }
+            }
         }
 
     }

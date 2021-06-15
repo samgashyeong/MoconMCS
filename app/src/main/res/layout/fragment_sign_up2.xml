@@ -48,11 +48,13 @@
 
             <TextView
                 android:id="@+id/loginText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans_cj_kkr_medium"
                 android:textStyle="normal"
-                android:textSize="28sp"
+                android:textSize="25sp"
+                android:gravity="center"
                 android:textColor="#2b7214"
                 android:includeFontPadding="false"
                 android:layout_marginTop="60dp"
@@ -139,9 +141,11 @@
 
             <Button
                 android:id="@+id/btn1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.7"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="130dp"
+                android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                android:includeFontPadding="false"
                 android:text="회원가입"
                 android:layout_marginTop="90dp"
                 app:layout_constraintBottom_toBottomOf="parent"

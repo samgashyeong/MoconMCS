@@ -421,7 +421,6 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 double longitude = location.getLongitude();
                 curPos = new LatLng(latitude, longitude);
             } else {
-                Toast.makeText(getActivity().getApplicationContext(), "위치 정보를 가져오는 데에 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

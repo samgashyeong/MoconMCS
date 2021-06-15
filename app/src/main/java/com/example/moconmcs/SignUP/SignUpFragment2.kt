@@ -110,10 +110,12 @@ class SignUpFragment2 : Fragment(){
                 firebaseAuth.createUserWithEmailAndPassword(viewModel.email.value.toString(), viewModel.pw.value.toString())
                     .addOnFailureListener {
                         Toast.makeText(context, "실패하였습니다. 다시 시도 해주세요", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "onCreateView: ${it}")
+                        dialog.dismiss()
                     }
                     .addOnCompleteListener{
-                        userUid= firebaseAuth.currentUser!!.uid
                         if (it.isSuccessful){
+                            userUid = firebaseAuth.currentUser!!.uid
                             firebaseFirestore.collection("User").document(userUid).set(User(viewModel.name.value.toString(), userKind, viewModel.hash.value.toString()))
                                 .addOnFailureListener {
                                     dialog.dismiss()

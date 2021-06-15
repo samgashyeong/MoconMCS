@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Menu.UserInfoChangeActivity">
+        tools:context=".Menu.ProfileInfoActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -27,7 +27,7 @@
                     style="@style/Toolbar.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="유저정보 변경" />
+                    android:text="기본정보" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,14 +52,13 @@
                 app:layout_constraintVertical_bias="0.0">
 
 
-                <EditText
-                    android:id="@+id/curPassEt"
+                <TextView
+                    android:id="@+id/myEmailTv"
                     android:layout_width="240dp"
                     android:layout_height="41dp"
                     android:background="@drawable/shadow"
+                    android:text="email@gmail.com"
                     android:gravity="center_vertical"
-                    android:hint="현재 비밀번호를 입력하세요."
-                    android:inputType="textPassword"
                     android:paddingLeft="10dp"
                     android:textColor="#2b7214"
                     android:textColorHint="#a7bea0"
@@ -67,49 +66,35 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
-                    android:id="@+id/myNewPwEt"
+                <TextView
+                    android:id="@+id/myKindTv"
                     android:layout_width="240dp"
                     android:layout_height="41dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/shadow"
                     android:gravity="center_vertical"
-                    android:hint="새로운 비밀번호를 입력하세요."
-                    android:inputType="textPassword"
-                    android:paddingLeft="10dp"
-                    android:layout_marginTop="35dp"
-                    android:textColor="#2b7214"
-                    android:textColorHint="#a7bea0"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/curPassEt" />
-
-                <EditText
-                    android:id="@+id/myAgainPwEt"
-                    android:layout_width="240dp"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="35dp"
-                    android:background="@drawable/shadow"
-                    android:gravity="center_vertical"
-                    android:hint="새로운 비밀번호를 입력하세요."
-                    android:inputType="textPassword"
+                    android:text="비건"
                     android:paddingLeft="10dp"
                     android:textColor="#2b7214"
                     android:textColorHint="#a7bea0"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/myNewPwEt" />
+                    app:layout_constraintTop_toBottomOf="@+id/myNameTv" />
 
                 <TextView
-                    android:id="@+id/errorTv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="응애"
-                    android:visibility="gone"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#ff3737"
-                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
-                    android:includeFontPadding="false"
-                    app:layout_constraintTop_toBottomOf="@+id/myAgainPwEt" />
+                    android:id="@+id/myNameTv"
+                    android:layout_width="240dp"
+                    android:layout_height="41dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/shadow"
+                    android:gravity="center_vertical"
+                    android:text="엄준식"
+                    android:paddingLeft="10dp"
+                    android:textColor="#2b7214"
+                    android:textColorHint="#a7bea0"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myEmailTv" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -117,7 +102,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/tvCont"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/inputCont"
@@ -128,70 +113,55 @@
 
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="41dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:lineSpacingExtra="7sp"
+                    android:text="이름"
+                    android:gravity="center"
+                    android:textColor="#2b7214"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+                <TextView
+                    android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="41dp"
                     android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:lineSpacingExtra="7sp"
+                    android:text="이메일"
                     android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="현재\n비밀번호"
                     android:textColor="#2b7214"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="41dp"
-                    android:layout_marginTop="35dp"
-                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
+                    android:lineSpacingExtra="7sp"
+                    android:text="비건 단계"
                     android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="새로운\n비밀번호"
                     android:textColor="#2b7214"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="35dp"
-                    android:fontFamily="@font/noto_sans_cj_kkr"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="비밀번호\n확인"
-                    android:textColor="#2b7214"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="변경사항 저장"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:layout_constraintWidth_percent="0.6" />
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

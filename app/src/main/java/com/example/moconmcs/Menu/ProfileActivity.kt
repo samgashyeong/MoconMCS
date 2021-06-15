@@ -33,18 +33,25 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-
-        val userName = intent.getStringExtra("userName")
-        val userKind = intent.getStringExtra("userKind")
-        val userEmail = intent.getStringExtra("userEmail")
-        val userHash = intent.getStringExtra("userHash")
-        Log.d(TAG, "onCreate: dwqdwq$userHash")
-
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_profile
         )
+
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+
+        curUserUid = firebaseAuth.currentUser!!.uid
+        firebaseFirestore.collection("User").document(curUserUid).get()
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
+                        , it.result.data!!.getValue("userKind").toString()
+                        , firebaseAuth.currentUser!!.email.toString()
+                        ,it.result.data!!.getValue("pw").toString())
+                    Log.d(TAG, "onCreate: ${viewModel.userHash!!.value.toString()}")
+                }
+            }
 
         if(firebaseAuth.currentUser != null){
             curUser = firebaseAuth.currentUser!!
@@ -59,25 +66,26 @@ class ProfileActivity : AppCompatActivity() {
 //            ActivityCompat.finishAffinity(this)
 //        }
 
+        binding.profileInfoBtn.setOnClickListener {
+            startActivity(Intent(this, ProfileInfoActivity::class.java)
+                .putExtra("myName", viewModel.userName!!.value)
+                .putExtra("myKind", viewModel.userKind!!.value)
+                .putExtra("myEmail", firebaseAuth.currentUser?.email))
+        }
+
         binding.deleteUserBtn.setOnClickListener {
             Log.d(TAG, "onCreate: $curUser")
             startActivity(Intent(this, DeleteUserActivity::class.java)
                 .putExtra("emailString", curUser.email.toString())
-                .putExtra("userHash", userHash))
+                .putExtra("userHash", viewModel.userHash!!.value))
         }
 
-        binding.button2.setOnClickListener {
-            startActivity(Intent(this, UserInfoChangeActivity::class.java)
-                .putExtra("myName", userName)
-                .putExtra("myKind", userKind)
-                .putExtra("userHash", userHash))
+        binding.changePwBtn.setOnClickListener {
+            startActivityForResult(Intent(this, UserInfoChangeActivity::class.java)
+                .putExtra("userHash", viewModel.userHash!!.value)
+                .putExtra("emailString", curUser.email.toString()), 100)
         }
 
-
-
-        binding.myNameTv.text = userName
-        binding.myKindTv.text = userKind
-        binding.myEmailTv.text = userEmail
 
         setSupportActionBar(binding.toolbar)
 
@@ -93,6 +101,22 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                data!!.getStringExtra("writeData")
+                Log.d("asdf", "onActivityResult: " + data.getStringExtra("curHash"))
+                viewModel.userHash!!.value = data.getStringExtra("curHash")
+                Log.d("데이터 뷰모델", "onActivityResult: ${viewModel.userHash!!.value}")
+            }
+            else{
+                Toast.makeText(this, "수신실패", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
 

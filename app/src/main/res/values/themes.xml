@@ -28,6 +28,7 @@
 
     <style name="CustomTextMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">#2B7214</item>
+        <item name="android:actionMenuTextColor">#2B7214</item>
         <item name="android:fontFamily">@font/noto_sans_cj_kkr_medium</item>
     </style>
 </resources>
