@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Menu.ProfileInfoActivity">
+        tools:context=".Menu.ProfileInfo.ProfileInfoActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -32,136 +32,15 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <FrameLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/inputCont"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="3"
-                app:layout_constraintStart_toEndOf="@+id/tvCont"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
-
-
-                <TextView
-                    android:id="@+id/myEmailTv"
-                    android:layout_width="240dp"
-                    android:layout_height="41dp"
-                    android:background="@drawable/shadow"
-                    android:text="email@gmail.com"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textColor="#2b7214"
-                    android:textColorHint="#a7bea0"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/myKindTv"
-                    android:layout_width="240dp"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/shadow"
-                    android:gravity="center_vertical"
-                    android:text="비건"
-                    android:paddingLeft="10dp"
-                    android:textColor="#2b7214"
-                    android:textColorHint="#a7bea0"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/myNameTv" />
-
-                <TextView
-                    android:id="@+id/myNameTv"
-                    android:layout_width="240dp"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/shadow"
-                    android:gravity="center_vertical"
-                    android:text="엄준식"
-                    android:paddingLeft="10dp"
-                    android:textColor="#2b7214"
-                    android:textColorHint="#a7bea0"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/myEmailTv" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tvCont"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/inputCont"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
-
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/noto_sans_cj_kkr"
-                    android:lineSpacingExtra="7sp"
-                    android:text="이름"
-                    android:gravity="center"
-                    android:textColor="#2b7214"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="41dp"
-                    android:fontFamily="@font/noto_sans_cj_kkr"
-                    android:lineSpacingExtra="7sp"
-                    android:text="이메일"
-                    android:gravity="center"
-                    android:textColor="#2b7214"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="41dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/noto_sans_cj_kkr_medium"
-                    android:lineSpacingExtra="7sp"
-                    android:text="비건 단계"
-                    android:gravity="center"
-                    android:textColor="#2b7214"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

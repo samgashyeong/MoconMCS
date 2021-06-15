@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="my_array_change">
+        <item>락토오보</item>
+        <item>오보</item>
+        <item>락토</item>
+        <item>비건</item>
+    </string-array>
+</resources>

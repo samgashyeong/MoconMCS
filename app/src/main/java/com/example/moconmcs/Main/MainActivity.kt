@@ -18,14 +18,12 @@ import com.example.moconmcs.Dialog.LogoutDialogInterface
 import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
 import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
-import com.example.moconmcs.Main.FoodDiary.FoodDiaryViewModel
 import com.example.moconmcs.Main.FoodMap.FoodMapFragment
 import com.example.moconmcs.Main.SearchFood.BarCodeActivity
 import com.example.moconmcs.Main.SearchFood.FoodNumInput
-import com.example.moconmcs.Menu.HelpMenuActivity
+import com.example.moconmcs.Menu.HelpMenu.HelpMenuActivity
 import com.example.moconmcs.Menu.ProfileActivity
 import com.example.moconmcs.Menu.ProfileViewModel
-import com.example.moconmcs.Menu.SettingActivity
 import com.example.moconmcs.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

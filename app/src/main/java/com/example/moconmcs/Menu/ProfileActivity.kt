@@ -8,12 +8,11 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.moconmcs.LoginActivity
-import com.example.moconmcs.Main.MainActivity
+import com.example.moconmcs.Menu.ChangePw.UserInfoChangeActivity
+import com.example.moconmcs.Menu.DeletUser.DeleteUserActivity
+import com.example.moconmcs.Menu.ProfileInfo.ProfileInfoActivity
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityProfileBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +40,7 @@ class ProfileActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
+        curUser = firebaseAuth.currentUser!!
         curUserUid = firebaseAuth.currentUser!!.uid
         firebaseFirestore.collection("User").document(curUserUid).get()
             .addOnCompleteListener {
@@ -53,11 +53,6 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
 
-        if(firebaseAuth.currentUser != null){
-            curUser = firebaseAuth.currentUser!!
-            curUserUid = curUser.uid
-        }
-
 
 
 //        binding.logoutBtn.setOnClickListener {
@@ -67,10 +62,11 @@ class ProfileActivity : AppCompatActivity() {
 //        }
 
         binding.profileInfoBtn.setOnClickListener {
-            startActivity(Intent(this, ProfileInfoActivity::class.java)
+            startActivityForResult(Intent(this, ProfileInfoActivity::class.java)
                 .putExtra("myName", viewModel.userName!!.value)
                 .putExtra("myKind", viewModel.userKind!!.value)
-                .putExtra("myEmail", firebaseAuth.currentUser?.email))
+                .putExtra("myEmail", firebaseAuth.currentUser?.email),
+            200)
         }
 
         binding.deleteUserBtn.setOnClickListener {
@@ -113,9 +109,19 @@ class ProfileActivity : AppCompatActivity() {
                 viewModel.userHash!!.value = data.getStringExtra("curHash")
                 Log.d("데이터 뷰모델", "onActivityResult: ${viewModel.userHash!!.value}")
             }
-            else{
-                Toast.makeText(this, "수신실패", Toast.LENGTH_SHORT).show()
-            }
+        }
+        if(requestCode == 200){
+            curUserUid = firebaseAuth.currentUser!!.uid
+            firebaseFirestore.collection("User").document(curUserUid).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful){
+                        viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
+                            , it.result.data!!.getValue("userKind").toString()
+                            , firebaseAuth.currentUser!!.email.toString()
+                            ,it.result.data!!.getValue("pw").toString())
+                        Log.d(TAG, "onCreate: ${viewModel.userHash!!.value.toString()}")
+                    }
+                }
         }
     }
 }

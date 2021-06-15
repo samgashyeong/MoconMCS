@@ -1,4 +1,4 @@
-package com.example.moconmcs.Menu
+package com.example.moconmcs.Menu.ChangePw
 
 import android.app.Activity
 import android.content.ContentValues
@@ -7,16 +7,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Dialog.LodingDialog
 import com.example.moconmcs.Hash.sha
 import com.example.moconmcs.R
-import com.example.moconmcs.data.FirebaseDb.User
 import com.example.moconmcs.databinding.ActivityUserInfoChangeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

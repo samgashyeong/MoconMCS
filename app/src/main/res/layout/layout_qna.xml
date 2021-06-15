@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="20dp"
+    android:paddingHorizontal="40dp">
+
+    <TextView
+        android:id="@+id/QTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+        android:includeFontPadding="false"
+        android:text="Q1. 다이어리에 쓴 내용을 수정하고 싶어요."
+        android:textColor="#2b7214"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ATV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+        android:includeFontPadding="false"
+        android:layout_marginTop="11dp"
+        android:text="A1. 다이어리 영역을 누르면 수정이 가능합니다."
+        android:textColor="#2b7214"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/QTV" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

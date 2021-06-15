@@ -1,4 +1,4 @@
-package com.example.moconmcs.Menu
+package com.example.moconmcs.Menu.DeletUser
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
