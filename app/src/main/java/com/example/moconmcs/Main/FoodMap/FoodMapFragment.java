@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -280,29 +281,25 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
         db.collection("User").document(uid).get().addOnCompleteListener(userTask -> {
-           if(userTask.isSuccessful()) {
-               DocumentSnapshot userDoc = userTask.getResult();
-               if(userDoc.get("name") != null) {
-                   String name = userDoc.get("name") + "";
-                   DocumentReference docRef = db.collection("Place").document(selectedMarker.getTitle());
-                   docRef.get().addOnCompleteListener(task -> {
-                       reviewLoading.setVisibility(View.GONE);
-                       if(task.isSuccessful()) {
-                           DocumentSnapshot placeDoc = task.getResult();
-                           if(placeDoc.getData() == null) {
-                               Map<String, Object> datas = new HashMap<>();
-                               Map<String, ReviewInfo> reviewers = new HashMap<>();
-                               datas.put("reviewers", reviewers);
-                               docRef.set(datas);
-                           }
-                           else {
-                               docRef.update("reviewers." + uid,
-                                       new ReviewInfo(rate, content, name, Calendar.getInstance().getTimeInMillis()));
-                               updateReviewList(selectedMarker.getTitle());
-                           }
+           if(userTask.isSuccessful() && selectedMarker.getTitle() != null) {
+               DocumentReference docRef = db.collection("Place").document(selectedMarker.getTitle());
+               docRef.get().addOnCompleteListener(task -> {
+                   reviewLoading.setVisibility(View.GONE);
+                   if(task.isSuccessful()) {
+                       DocumentSnapshot placeDoc = task.getResult();
+                       if(placeDoc.getData() == null) {
+                           Map<String, Object> dataset = new HashMap<>();
+                           Map<String, ReviewInfo> reviewers = new HashMap<>();
+                           dataset.put("reviewers", reviewers);
+                           docRef.set(dataset);
                        }
-                   });
-               }
+                       else {
+                           docRef.update("reviewers." + uid,
+                                   new FirebaseReview(rate, content, Calendar.getInstance().getTimeInMillis()));
+                           updateReviewList(selectedMarker.getTitle());
+                       }
+                   }
+               });
            }
         });
 
@@ -353,43 +350,53 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
         DocumentReference docRef = db.collection("Place").document(title);
-        docRef.get().addOnCompleteListener(task -> {
+        CollectionReference userRef = db.collection("User");
+        userRef.get().addOnCompleteListener(userTask -> {
             reviewLoading.setVisibility(View.GONE);
-            if(task.isSuccessful()) {
-                int reviewerCount = 0;
-                float averRate = 0;
-                DocumentSnapshot document = task.getResult();
-                if(document.getData() == null) {
-                    Map<String, Object> datas = new HashMap<>();
-                    Map<String, ReviewInfo> reviewers = new HashMap<>();
-                    datas.put("reviewers", reviewers);
-                    docRef.set(datas);
+            if(userTask.isSuccessful()) {
+                HashMap<String, String> nameMap = new HashMap<>();
+                for(DocumentSnapshot documentSnapshot : userTask.getResult().getDocuments()) {
+                    nameMap.put(documentSnapshot.getId(), documentSnapshot.getString("name"));
                 }
-                else {
-                    Map<String, HashMap<String, Object>> reviews =
-                            (Map<String, HashMap<String, Object>>) document.get("reviewers");
-                    if (reviews != null) {
-                        for(HashMap<String, Object> rv : reviews.values()) {
-                            float rate = Float.parseFloat(rv.get("rate") + "");
-                            String reviewText = rv.get("review") + "";
-                            String name = rv.get("name") + "";
-                            long timeStamp = Long.parseLong(rv.get("timestamp") + "");
-                            arrayList.add(new ReviewInfo(rate, reviewText, name, timeStamp));
-                            arrayList.sort((o1, o2) -> {
-                                long dif = o2.getTimestamp() - o1.getTimestamp();
-                                if (dif == 0) return 0;
-                                if (dif > 0) return 1;
-                                return -1;
-                            });
-                            adapter.notifyDataSetChanged();
-
-                            reviewerCount++;
-                            averRate += rate;
+                docRef.get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        int reviewerCount = 0;
+                        float averRate = 0;
+                        DocumentSnapshot document = task.getResult();
+                        if(document.getData() == null) {
+                            Map<String, Object> datas = new HashMap<>();
+                            Map<String, ReviewInfo> reviewers = new HashMap<>();
+                            datas.put("reviewers", reviewers);
+                            docRef.set(datas);
                         }
+                        else {
+                            Map<String, HashMap<String, Object>> reviews =
+                                    (Map<String, HashMap<String, Object>>) document.get("reviewers");
+                            if (reviews != null) {
+                                for(Map.Entry<String, HashMap<String, Object>> entry : reviews.entrySet()) {
+                                    HashMap<String, Object> rv = entry.getValue();
+                                    String rvUid = entry.getKey();
+                                    float rate = Float.parseFloat(rv.get("rate") + "");
+                                    String reviewText = rv.get("review") + "";
+                                    String name = nameMap.get(rvUid); //어댑터 선에서 name이 null이면 탈퇴한 유저라고 뜨게 함
+                                    long timeStamp = Long.parseLong(rv.get("timestamp") + "");
+                                    arrayList.add(new ReviewInfo(rate, reviewText, name, timeStamp));
+                                    arrayList.sort((o1, o2) -> {
+                                        long dif = o2.getTimestamp() - o1.getTimestamp();
+                                        if (dif == 0) return 0;
+                                        if (dif > 0) return 1;
+                                        return -1;
+                                    });
+                                    adapter.notifyDataSetChanged();
+                                    reviewerCount++;
+                                    averRate += rate;
+                                }
+                            }
+                        }
+                        averRate /= reviewerCount;
+                        placeRate.setRating(averRate);
                     }
-                }
-                averRate /= reviewerCount;
-                placeRate.setRating(averRate);
+                });
             }
         });
     }

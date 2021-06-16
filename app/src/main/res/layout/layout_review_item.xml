@@ -31,12 +31,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="name"
             android:textColor="#2b7214"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/review_personal_rate"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="이름의 예시입니다." />
 
         <TextView
             android:id="@+id/review_timestamp"
@@ -44,8 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="2021-05-30 21:05"
-            android:textColor="#2b7214"
+            android:singleLine="true"
+            tools:text="2021-05-30 21:05"
+            android:textColor="#989898"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/review_personal_rate"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="TextView"
+            tools:text="TextView"
             android:textColor="#2b7214"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"

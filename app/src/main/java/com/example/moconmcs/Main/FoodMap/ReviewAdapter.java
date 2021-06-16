@@ -33,7 +33,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
 
     @Override
     public void onBindViewHolder(@NonNull final ReviewAdapter.CustomViewHolder holder, int position) {
-        holder.name.setText(arrayList.get(position).getName());
+        String name = arrayList.get(position).getName();
+        if(name == null) {
+            name = "탈퇴된 유저입니다.";
+            holder.name.setTextColor(0xffaaaaaa);
+        }
+        holder.name.setText(name);
         holder.rate.setRating(arrayList.get(position).getRate());
         holder.timeStamp.setText(SimpleDateFormat.getDateTimeInstance()
                 .format(new Date(arrayList.get(position).getTimestamp())));
