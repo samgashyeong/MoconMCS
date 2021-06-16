@@ -2,6 +2,8 @@ package com.example.moconmcs.Main.FoodMap;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -9,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -502,8 +506,11 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         if (requestCode == 1002) {
 
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행이됩니다.", Toast.LENGTH_SHORT).show();
-                setPermisson();
+                Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행됩니다. 수동으로 허용해주세요.", Toast.LENGTH_SHORT).show();
+                Context context = requireActivity().getApplicationContext();
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:" + context.getPackageName()));
+                startActivity(intent);
+                requireActivity().finish();
             }
             updateCameraToCurrentLocation();
         }
