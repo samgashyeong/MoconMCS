@@ -38,6 +38,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
             name = "탈퇴된 유저입니다.";
             holder.name.setTextColor(0xffaaaaaa);
         }
+        else
+            holder.name.setTextColor(0xff2b7214);
         holder.name.setText(name);
         holder.rate.setRating(arrayList.get(position).getRate());
         holder.timeStamp.setText(SimpleDateFormat.getDateTimeInstance()

@@ -64,7 +64,7 @@ class SignUpFragment1 : Fragment() {
                      binding.errorTv.text = "이메일 형식을 지켜주세요."
                  }
                  else if(!binding.pwLogin.text.toString()
-                         .matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&_]).{8,12}.\$".toRegex())){
+                         .matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&_])?.{8,}\$".toRegex())){
                      Log.d(TAG, "onCreateView: 비밀번호 형식이 틀림")
                      binding.errorTv.visibility = View.VISIBLE
                      binding.errorTv.text = "비밀번호 형식을 지켜주세요"
