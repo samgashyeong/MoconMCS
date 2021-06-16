@@ -64,7 +64,7 @@ class SignUpFragment1 : Fragment() {
                      binding.errorTv.text = "이메일 형식을 지켜주세요."
                  }
                  else if(!binding.pwLogin.text.toString()
-                         .matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@\$!^%*#?&]).{8,12}.\$".toRegex())){
+                         .matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&_]).{8,12}.\$".toRegex())){
                      Log.d(TAG, "onCreateView: 비밀번호 형식이 틀림")
                      binding.errorTv.visibility = View.VISIBLE
                      binding.errorTv.text = "비밀번호 형식을 지켜주세요"
@@ -92,8 +92,6 @@ class SignUpFragment1 : Fragment() {
                     , binding.nameEt.text.toString()
                 ,data.toString(16))
                      Log.d(TAG, "onCreateView: ${userViewModel.hash.value}")
-
-
                 activity.changeFragment(1)
                 Log.d(TAG, "onCreateView: ${binding.emailLogin.text}, ${binding.pwLogin.text}, \n  ${binding.nameEt.text}")
             }
@@ -122,6 +120,8 @@ class SignUpFragment1 : Fragment() {
         })
         userViewModel.name.observe(requireActivity(), Observer {
             binding.nameEt.setText(userViewModel.name.value)
+
+
         })
     }
     override fun onDetach() {
