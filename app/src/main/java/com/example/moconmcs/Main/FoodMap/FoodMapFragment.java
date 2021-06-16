@@ -345,6 +345,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @SuppressWarnings("unchecked")
     private void updateReviewList(String title) {
         arrayList.clear();
+        adapter.notifyDataSetChanged();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
