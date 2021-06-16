@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity(),
         firebaseFirestore.collection("User").document(curUserUid).get()
             .addOnCompleteListener {
                 if(it.isSuccessful){
-                    viewModel.setUserProfile(it.result.data!!.getValue("name").toString()
+                    viewModel.setUserProfile(
+                        it.result.data!!.getValue("name").toString()
                         , it.result.data!!.getValue("userKind").toString()
                         , firebaseAuth.currentUser!!.email.toString()
                         ,it.result.data!!.getValue("pw").toString())

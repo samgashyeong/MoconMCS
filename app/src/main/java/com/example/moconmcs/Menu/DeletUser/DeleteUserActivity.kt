@@ -25,6 +25,8 @@ class DeleteUserActivity : AppCompatActivity() {
         val curEmail = intent.getStringExtra("emailString")
         val curUid = auth.currentUser!!.uid
         val userHash = intent.getStringExtra("userHash")
+        val userName = intent.getStringExtra("userName")
+        val userKind = intent.getStringExtra("userKind")
 
         binding.cancelBtn.setOnClickListener {
             finish()
@@ -33,7 +35,9 @@ class DeleteUserActivity : AppCompatActivity() {
         binding.deleteUserBtn.setOnClickListener {
             startActivity(Intent(this, DeleteUserCheckActivity::class.java)
                 .putExtra("emailString", curEmail)
-                .putExtra("userHash", userHash))
+                .putExtra("userHash", userHash)
+                .putExtra("userName", userName)
+                .putExtra("userKind", userKind))
             finish()
         }
 

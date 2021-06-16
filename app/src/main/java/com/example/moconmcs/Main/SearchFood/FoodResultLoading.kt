@@ -56,7 +56,6 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
         val foodNum: String?
         if(intent.hasExtra("barcodenum")){
             barcode = intent.getStringExtra("barcodenum").toString()
-            Toast.makeText(this, "${barcode}", Toast.LENGTH_SHORT).show()
             getFoodNum(barcode)
         }
         else{

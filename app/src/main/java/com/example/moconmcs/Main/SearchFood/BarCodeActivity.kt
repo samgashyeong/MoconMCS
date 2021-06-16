@@ -1,19 +1,18 @@
 package com.example.moconmcs.Main.SearchFood
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import com.budiyev.android.codescanner.*
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityBarCodeBinding
 
@@ -105,7 +104,14 @@ class BarCodeActivity : AppCompatActivity() {
         when(requestCode){
             CAMERA_REQUEST_CODE ->{
                 if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "카메라 퍼미션을 켜주십쇼", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "카메라 권한을 켜주세요.", Toast.LENGTH_SHORT).show()
+                    val context: Context = applicationContext
+                    val intent =
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
+                            Uri.parse("package:" + context.packageName)
+                        )
+                    startActivity(intent)
+                    finish()
                 }
                 else{
                     Log.d("ㅁㄴㅇㄹ", "onRequestPermissionsResult: 성공")

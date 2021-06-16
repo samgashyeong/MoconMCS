@@ -83,6 +83,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/curPassEt" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:includeFontPadding="false"
+                    android:text="*띄어쓰기 없는 영문, 숫자 8자리 이상 "
+                    android:textColor="#2b7214"
+                    android:textSize="9sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myNewPwEt" />
+
                 <EditText
                     android:id="@+id/myAgainPwEt"
                     android:layout_width="240dp"

@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Dialog.ErrorDialog
 import com.example.moconmcs.Dialog.ErrorDialogInterface
+import com.example.moconmcs.Dialog.WhyDialog
+import com.example.moconmcs.Dialog.WhyDialogInterface
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
@@ -28,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
 
 
-class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
+class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogInterface {
     private lateinit var binding: ActivityFoodResultBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -36,6 +38,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
     private lateinit var foodList : ArrayList<Material>
     private lateinit var foodResultData: FoodData
     private lateinit var errorDialog : ErrorDialog
+    private lateinit var whyDialog: WhyDialog
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,10 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
             , this
             , "오류 신고"
             , "식품의 오류점을 서버개발자한테 전달합니다.\n확인을 누르면 오류 정보를 개발자한테 보냅니다.")
+        whyDialog = WhyDialog(this
+        ,this
+        , "왜 이러나요?"
+        , "식품에 대한 데이터가 없는 관계로 해당식품에 대한 검색결과를 낼 수가 없습니다.\n원활한 서비스 이용을 할 수 있게 노력하겠습니다.")
 
         if(intent.hasExtra("ResultFail")){
             failResult()
@@ -94,6 +101,10 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
         }
         binding.backBtn.setOnClickListener {
             finish()
+        }
+
+        binding.WhatTv.setOnClickListener {
+            whyDialog.show()
         }
     }
 
@@ -144,10 +155,11 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
     }
     fun failResult(){
         binding.resultTV.text = "검색 실패"
+        binding.foodProductTv.text = "상품에 대한 데이터가 없습니다."
         binding.resultIV.setImageResource(R.drawable.ic_notsearch_icon)
-        binding.button.visibility = View.INVISIBLE
-        binding.foodProductTv.visibility = View.INVISIBLE
+        binding.button.visibility = View.GONE
         binding.IsStrangeTV.visibility = View.INVISIBLE
+        binding.WhatTv.visibility = View.VISIBLE
     }
 
 
@@ -207,5 +219,9 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface {
 
     override fun onCancleBtnClick1() {
         errorDialog.dismiss()
+    }
+
+    override fun onCheckIsWhy() {
+        whyDialog.dismiss()
     }
 }

@@ -73,6 +73,8 @@
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:includeFontPadding="false"
+        android:fontFamily="@font/noto_sans_cj_kkr_medium"
+
         android:text="완료"
         android:textColor="#2b7214"
         android:textSize="24sp"

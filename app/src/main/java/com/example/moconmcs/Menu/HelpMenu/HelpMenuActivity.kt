@@ -28,6 +28,7 @@ class HelpMenuActivity : AppCompatActivity() {
         QnAArray.add(QnA("Q4. 다이어리에 쓴 내용을 수정하고 싶어요.", "A4. 다이어리 영역을 누르면 수정가능합니다."))
         QnAArray.add(QnA("Q5. 비건 단계를 변경하고 싶어요.", "A5. 메인화면 맨 위 상단에 프로필 아이콘->프로필->기본정보->변경하기를 선택하시면 변경가능합니다."))
         QnAArray.add(QnA("Q6. 회원탈퇴는 어디서 할 수 있나요?", "A6. 메인화면 맨 위 상단에 프로필 아이콘->프로필->회원탈퇴를 선택하시면 회원탈퇴를 진행합니다."))
+        QnAArray.add(QnA("Q7. 회원탈퇴 또는 비밀번호 변경이 안돼요..", "A7. 메인화면 맨 위 상단에 프로필 아이콘->로그아웃->로그인을 진행하고 비밀번호 설정 또는 회원탈퇴를 진행해주세요."))
 
         binding.recycler.adapter = HelpMenuAdapter(QnAArray)
 

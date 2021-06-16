@@ -73,7 +73,9 @@ class ProfileActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: $curUser")
             startActivity(Intent(this, DeleteUserActivity::class.java)
                 .putExtra("emailString", curUser.email.toString())
-                .putExtra("userHash", viewModel.userHash!!.value))
+                .putExtra("userHash", viewModel.userHash!!.value)
+                .putExtra("userName", viewModel.userName!!.value)
+                .putExtra("userKind", viewModel.userKind!!.value))
         }
 
         binding.changePwBtn.setOnClickListener {

@@ -506,7 +506,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         if (requestCode == 1002) {
 
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "허용을 해주셔야지만 앱이 정상적으로 실행됩니다. 수동으로 허용해주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "위치 권한을 허용해주셔야지만 앱이 정상적으로 실행됩니다.\n수동으로 허용해주세요.", Toast.LENGTH_SHORT).show();
                 Context context = requireActivity().getApplicationContext();
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:" + context.getPackageName()));
                 startActivity(intent);

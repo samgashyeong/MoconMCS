@@ -85,6 +85,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button"/>
 
+        <TextView
+            android:id="@+id/WhatTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_cj_kkr_medium"
+            android:textStyle="normal"
+            android:textSize="13sp"
+            android:textColor="#2b7214"
+            android:lineSpacingExtra="17sp"
+            android:text="왜 결과가 안나오나요?"
+            android:visibility="invisible"
+            android:includeFontPadding="false"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button"/>
+
         <ImageView
             android:id="@+id/backBtn"
             android:layout_width="40dp"

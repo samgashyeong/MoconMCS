@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -85,6 +86,12 @@ class UserInfoChangeActivity : AppCompatActivity() {
                 Log.d(TAG, "onCreate: ${data1.toString(16)}\n${curHash}")
                 lodingDialog.dismiss()
             }
+            else if(!binding.myNewPwEt.text.toString()
+                    .matches("^(?=.*[A-Za-z])(?=.*[0-9]).{8,}$".toRegex())){
+                Log.d(TAG, "onCreateView: 비밀번호 형식이 틀림")
+                Toast.makeText(this, "비밀번호 형식을 지켜주세요.", Toast.LENGTH_SHORT).show()
+                lodingDialog.dismiss()
+            }
             else{
                 auth.signOut()
                 auth.signInWithEmailAndPassword(curEmail.toString(),binding.curPassEt.text.toString())
@@ -124,7 +131,6 @@ class UserInfoChangeActivity : AppCompatActivity() {
                     }
             }
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

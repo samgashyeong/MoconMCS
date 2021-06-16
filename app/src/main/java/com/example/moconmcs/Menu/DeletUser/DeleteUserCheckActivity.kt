@@ -18,6 +18,7 @@ import com.example.moconmcs.ThankYouActivity
 import com.example.moconmcs.databinding.ActivityDeletUserCheckBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import java.math.BigInteger
 import java.util.*
 
@@ -42,6 +43,8 @@ class DeleteUserCheckActivity : AppCompatActivity() {
         val curEmail = intent.getStringExtra("emailString")
         val curUid = auth.currentUser!!.uid
         val userHash = intent.getStringExtra("userHash")
+        val userName = intent.getStringExtra("userName")
+        val userKind = intent.getStringExtra("userKind")
 
         val room = AppDatabase.getInstance(this.applicationContext)
         val diaryDao = room.diaryDao()
@@ -78,6 +81,7 @@ class DeleteUserCheckActivity : AppCompatActivity() {
             }
             else{
                 Log.d(TAG, "onCreate: else문 실행됨")
+
                 db.collection("User").document(curUid).delete()
                     .addOnCompleteListener {
                         if(it.isSuccessful){
@@ -89,13 +93,14 @@ class DeleteUserCheckActivity : AppCompatActivity() {
                                     finish()
                                 }
                                 else{
-                                    Toast.makeText(this, "오류가 발생하였습니다2.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "오류가 발생하였습니다.104", Toast.LENGTH_SHORT).show()
+                                    db.collection("User").document(curUid).set(com.example.moconmcs.data.FirebaseDb.User(userName.toString(), userKind.toString(), userHash))
                                     lodingDialog.dismiss()
                                 }
                             }
                         }
                         else{
-                            Toast.makeText(this, "오류가 발생하였습니다.1", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "오류가 발생하였습니다.105", Toast.LENGTH_SHORT).show()
                             lodingDialog.dismiss()
                         }
                     }
