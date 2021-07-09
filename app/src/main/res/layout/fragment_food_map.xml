@@ -7,128 +7,136 @@
     android:background="#fff"
     tools:context=".Main.FoodMap.FoodMapFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/titleWrap"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_green"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mapView">
-
-            <Button
-                android:id="@+id/write_review_btn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:background="#000000"
-                android:text="리뷰 작성"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RatingBar
-                android:id="@+id/map_rate"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:numStars="5"
-                android:progressBackgroundTint="#2b7214"
-                android:progressTint="#2b7214"
-                android:secondaryProgressTint="#2b7214"
-                android:rating="0"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/write_review_btn"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/map_title"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:rating="2.5"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/map_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/noto_sans_cj_kkr"
-                android:maxLength="9"
-                android:textColor="#2b7214"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="맛있는 식당"
-                tools:visibility="visible" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        app:umanoDragView="@id/dragView"
+        app:umanoScrollableView="@id/reviews"
+        app:umanoPanelHeight="70dp"
+        app:umanoOverlay="false"
+        app:umanoShadowHeight="10dp"
+        >
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/map_desc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_green"
-            android:maxLines="6"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:textColor="#2b7214"
-            android:textSize="12sp"
-            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleWrap"
-            tools:text="This is a\nDescription"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reviews"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="24dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/map_desc"
-            app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.93"
+            >
 
-        <ProgressBar
-            android:id="@+id/map_review_loading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminateDrawable="@drawable/pgb_design"
-            app:layout_constraintBottom_toBottomOf="@+id/reviews"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/reviews"
-            tools:visibility="visible" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/titleWrap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_green"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/write_review_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="#000000"
+                    android:text="리뷰 작성"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RatingBar
+                    android:id="@+id/map_rate"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:numStars="5"
+                    android:progressBackgroundTint="#2b7214"
+                    android:progressTint="#2b7214"
+                    android:rating="0"
+                    android:secondaryProgressTint="#2b7214"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/write_review_btn"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/map_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:rating="2.5"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/map_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/noto_sans_cj_kkr"
+                    android:maxLength="9"
+                    android:textColor="#2b7214"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="맛있는 식당" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/map_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_green"
+                android:maxLines="6"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="#2b7214"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleWrap"
+                tools:text="This is a\nDescription" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviews"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="24dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map_desc"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ProgressBar
+                android:id="@+id/map_review_loading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateDrawable="@drawable/pgb_design"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/reviews"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/reviews" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </FrameLayout>

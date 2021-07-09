@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+
 public class Placemark {
     private final String name;
     private final String desc;

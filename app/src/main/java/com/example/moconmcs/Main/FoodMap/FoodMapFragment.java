@@ -18,6 +18,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -81,9 +82,11 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private GoogleMap googleMap;
     private MapView mapView;
     private static List<Placemark> placemarkList;
+    private final List<Marker> markers = new LinkedList<>();
     private Marker selectedMarker;
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
+    private ConstraintLayout titleWrap;
     private Button writeReviewBtn;
 
     private BitmapDescriptor recycleMarker, recycleSelectedMarker;
@@ -104,6 +107,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeTitle = view.findViewById(R.id.map_title);
         placeDesc = view.findViewById(R.id.map_desc);
         placeRate = view.findViewById(R.id.map_rate);
+        titleWrap = view.findViewById(R.id.titleWrap);
         reviewLoading = view.findViewById(R.id.map_review_loading);
         writeReviewBtn = view.findViewById(R.id.write_review_btn);
         writeReviewBtn.setVisibility(View.INVISIBLE);
@@ -251,7 +255,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         MarkerOptions markerOptions = new MarkerOptions();
         modifyMarkerOptions(markerOptions, placemark.getName(), position, placemark.getDesc(), false);
 
-        googleMap.addMarker(markerOptions);
+        markers.add(googleMap.addMarker(markerOptions));
     }
 
     private Marker changeMarker(Marker origin, boolean isSelected) {
@@ -321,9 +325,10 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
         changeSelectedMarker(marker);
 
-        placeDesc.setVisibility(View.VISIBLE);
+        titleWrap.setVisibility(View.VISIBLE);
         placeTitle.setVisibility(View.VISIBLE);
         placeRate.setVisibility(View.VISIBLE);
+        placeDesc.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         writeReviewBtn.setVisibility(View.VISIBLE);
         placeDesc.setText(marker.getSnippet());

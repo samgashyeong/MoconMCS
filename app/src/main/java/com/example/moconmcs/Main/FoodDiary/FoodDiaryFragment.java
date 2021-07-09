@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.moconmcs.Main.AppDatabase;
@@ -37,6 +38,7 @@ public class FoodDiaryFragment extends Fragment {
 
     private Button nextMonth;
     private Button prevDay;
+    private ImageView openCalImage;
     private Button nextDay;
     private TextView dateText, mainDateText;
     private final String[] foodTimeTexts = {"아침", "점심", "저녁"};
@@ -72,6 +74,7 @@ public class FoodDiaryFragment extends Fragment {
         diaryDao = db.diaryDao();
 
         mainDateText = view.findViewById(R.id.mainDateText);
+        openCalImage = view.findViewById(R.id.openCal);
         prevDay = view.findViewById(R.id.diaryPrevDay);
         nextDay = view.findViewById(R.id.diaryNextDay);
 
@@ -97,7 +100,9 @@ public class FoodDiaryFragment extends Fragment {
         updateDateChangeBtn();
         updateMainDateText();
 
-        mainDateText.setOnClickListener(v -> openCalenderDialog());
+        View.OnClickListener calListener = v -> openCalenderDialog();
+        mainDateText.setOnClickListener(calListener);
+        openCalImage.setOnClickListener(calListener);
         prevDay.setOnClickListener(v -> {
             uploadDiaryDatabase();
             viewModel.setSelectedDate(viewModel.getSelectedDate().minusDays(1));
