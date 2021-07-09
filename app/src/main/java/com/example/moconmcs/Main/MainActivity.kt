@@ -21,9 +21,12 @@ import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
 import com.example.moconmcs.Main.FoodMap.FoodMapFragment
 import com.example.moconmcs.Main.SearchFood.BarCodeActivity
 import com.example.moconmcs.Main.SearchFood.FoodNumInput
+import com.example.moconmcs.Main.SearchFood.PrevResultActivity
+import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.Menu.HelpMenu.HelpMenuActivity
 import com.example.moconmcs.Menu.ProfileActivity
 import com.example.moconmcs.Menu.ProfileViewModel
+import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,11 +38,12 @@ class MainActivity : AppCompatActivity(),
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var curUserUid : String
-
+    private lateinit var db : AppDatabase
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
     private lateinit var commDialog: CommDialog
     private lateinit var logoutDialog : LogoutDialog
+    private lateinit var foodResultList : ArrayList<FoodListEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +61,11 @@ class MainActivity : AppCompatActivity(),
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-
+        db = AppDatabase.getInstance(this)
+//        db.foodListDao().insert(FoodListEntity("123", "군만두", "안좋음"))
+//        db.foodListDao().insert(FoodListEntity("12345", "채식만두", "좋음"))
+        foodResultList = (db.foodListDao().getAll() as ArrayList<FoodListEntity>?)!!
+        Log.d(TAG, "onCreate: ${foodResultList}")
         curUserUid = firebaseAuth.currentUser!!.uid.toString()
         firebaseFirestore.collection("User").document(curUserUid).get()
             .addOnCompleteListener {
@@ -109,6 +117,11 @@ class MainActivity : AppCompatActivity(),
             }
             2->{
                 startActivity(Intent(this, FoodNumInput::class.java))
+                bottomSheetDialog.dismiss()
+            }
+            3->{
+                startActivity(Intent(this, PrevResultActivity::class.java)
+                    .putExtra("foodlist", foodResultList))
                 bottomSheetDialog.dismiss()
             }
         }
@@ -163,3 +176,5 @@ class MainActivity : AppCompatActivity(),
         logoutDialog.dismiss()
     }
 }
+
+

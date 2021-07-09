@@ -18,6 +18,8 @@ import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
 import com.example.moconmcs.databinding.ActivityFoodResultLodingBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,6 +37,8 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
     private lateinit var errorDialog: ErrorDialog
     private lateinit var commDialog: CommDialog
     private lateinit var data : FoodData
+    private lateinit var auth : FirebaseAuth
+    private lateinit var Fdb : FirebaseFirestore
     private var ActivityOn = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,9 +147,13 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                                 errorDialog.show()
                             }
                             else{
-                                startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
-                                    .putExtra("FoodResult", isExecution))
-                                finish()
+                                if (isExecution != null) {
+                                    IsEat(isExecution)
+                                    binding.tvResult.text = "거의 다 되었어요!"
+                                }
+//                                startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
+//                                    .putExtra("FoodResult", isExecution))
+//                                finish()
                             }
                         }
                     }
@@ -154,7 +162,74 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
         }
     }
 
-//    fun checkInternet(){
+    private fun IsEat(excution : FoodData) {
+        var userKind = ""
+        auth = FirebaseAuth.getInstance()
+        Fdb = FirebaseFirestore.getInstance()
+        Fdb.collection("User").document(auth.currentUser!!.uid).get()
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    userKind = it.result.data!!.getValue("userKind").toString()
+                    if(excution!!.data_res.aquaProd > 0 && excution!!.data_res.livestock > 0){
+                        resultIntent("0", "bad_meatAndFish", userKind, excution)
+                    }
+                    else if(excution?.data_res.livestock > 0){
+                        resultIntent("0", "bad_meat", userKind, excution)
+                    }
+                    else if(excution?.data_res.aquaProd >0){
+                        resultIntent("0", "bad_fish", userKind, excution)
+                    }
+                    else{
+                        checkIsBadResult(userKind, excution)
+                    }
+                }
+            }
+
+    }
+
+    private fun checkIsBadResult(userKind: String, excution: FoodData) {
+        when(userKind){
+            "비건"->{
+                if(excution.data_res.otherThanLivestock>0){
+                    resultIntent("0", "bad_egg", userKind, excution)
+                }
+                else{
+                    resultIntent("1", "eat", userKind, excution)
+//                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
+//                    binding.resultTV.text = "드실 수 있습니다."
+//                    binding.foodProductTv.text = foodResultData.data_res.prodName
+                }
+            }
+            "락토"->{
+                //유제품, 꿀, 채소 과일 아닌것만 판별
+                if(excution.data_res.otherThanLivestock>0){
+                    resultIntent("0", "bad_egg", userKind, excution)
+
+                }
+                else{
+                    resultIntent("1", "eat", userKind, excution)
+                }
+            }
+            "오보"->{
+                //추가예정
+                resultIntent("1", "eat", userKind, excution)
+            }
+            "락토오보"->{
+                resultIntent("1", "eat", userKind, excution)
+            }
+        }
+    }
+
+    private fun resultIntent(s: String, s1: String, userKind: String,excution: FoodData) {
+        startActivity(Intent(this, FoodResultActivity::class.java)
+            .putExtra("FoodResult", excution)
+            .putExtra("IsEat", s)
+            .putExtra("cause", s1)
+            .putExtra("userKind", userKind))
+    }
+
+
+    //    fun checkInternet(){
 //        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 //    } 개발 예정
     companion object {

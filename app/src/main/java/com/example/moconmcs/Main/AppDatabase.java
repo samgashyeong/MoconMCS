@@ -8,11 +8,14 @@ import androidx.room.RoomDatabase;
 
 import com.example.moconmcs.Main.FoodDiary.DiaryDao;
 import com.example.moconmcs.Main.FoodDiary.DiaryEntity;
+import com.example.moconmcs.Main.SearchFood.db.FoodListDao;
+import com.example.moconmcs.Main.SearchFood.db.FoodListEntity;
 
-@Database(entities = {DiaryEntity.class}, version = 1)
+@Database(entities = {DiaryEntity.class, FoodListEntity.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DiaryDao diaryDao();
+    public abstract FoodListDao foodListDao();
 
     private static AppDatabase instance = null;
 

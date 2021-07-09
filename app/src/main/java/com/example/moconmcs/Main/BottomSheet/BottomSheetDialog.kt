@@ -41,5 +41,8 @@ class BottomSheetDialog: BottomSheetDialogFragment() {
         binding.NumClick.setOnClickListener {
             bottomSheetDialogListener.layoutClick(2)
         }
+        binding.prevResultTv.setOnClickListener {
+            bottomSheetDialogListener.layoutClick(3)
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -13,7 +14,9 @@ import com.example.moconmcs.Dialog.ErrorDialog
 import com.example.moconmcs.Dialog.ErrorDialogInterface
 import com.example.moconmcs.Dialog.WhyDialog
 import com.example.moconmcs.Dialog.WhyDialogInterface
+import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
+import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
 import com.example.moconmcs.data.KyungrokApi.Material
@@ -39,11 +42,13 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     private lateinit var foodResultData: FoodData
     private lateinit var errorDialog : ErrorDialog
     private lateinit var whyDialog: WhyDialog
+    private lateinit var rDb : AppDatabase
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_result)
 
+        rDb = AppDatabase.getInstance(this)
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_food_result)
@@ -62,39 +67,32 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
         else if(intent.hasExtra("barCodeFail")){
             barCodeFailResult()
         }
-        else{
-            foodResultData = intent.getSerializableExtra("FoodResult") as FoodData
-            if(auth.currentUser != null){
-                db.collection("User").document(auth.currentUser!!.uid).get()
-                    .addOnCompleteListener {
-                        if(it.isSuccessful){
-                            userKind = it.result.data!!.getValue("userKind").toString()
-                            if(foodResultData!!.data_res.aquaProd > 0 && foodResultData!!.data_res.livestock > 0){
-                                badResultFishAndMeet()
-                            }
-                            else if(foodResultData?.data_res.livestock > 0){
-                                badResult()
-                            }
-                            else if(foodResultData?.data_res.aquaProd >0){
-                                badResultFromAqua()
-                            }
-                            else{
-                                checkIsBadResult(userKind)
-                            }
+        //코드 더러움 주의
+        else if(intent.hasExtra("FoodResult")){
+            when(intent.getStringExtra("IsEat")){
+                "0"->{
+                    when(intent.getStringExtra("cause")){
+                        "bad_egg"->{
+
+                        }
+                        "bad_meatAndFish"->{
+
+                        }
+                        "bad_fish"->{
+
+                        }
+                        "bad_meat"->{
+
                         }
                     }
-            }
-            Log.d(TAG, "onCreate: ${foodResultData}")
-
-
-//        checkIsBadResult(userKind)
-
-            binding.button.setOnClickListener {
-                startActivity(Intent(this, FoodResultListActivity::class.java)
-                    .putExtra("foodList", foodResultData?.data_res?.materials as Serializable)
-                    .putExtra("prodName", foodResultData.data_res.prodName.toString()))
+                }
             }
         }
+//        binding.button.setOnClickListener {
+//            startActivity(Intent(this, FoodResultListActivity::class.java)
+//                .putExtra("foodList", foodResultData?.data_res?.materials as Serializable)
+//                .putExtra("prodName", foodResultData.data_res.prodName.toString()))
+//        }
         binding.IsStrangeTV.setOnClickListener {
             errorDialog.show()
 
@@ -116,6 +114,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                     eggResult()
                 }
                 else{
+                    eatable(1)
                     binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
                     binding.resultTV.text = "드실 수 있습니다."
                     binding.foodProductTv.text = foodResultData.data_res.prodName
@@ -139,13 +138,36 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                 binding.foodProductTv.text = foodResultData.data_res.prodName
             }
             "락토오보"->{
-                //추가예정
                 binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
                 binding.resultTV.text = "드실 수 있습니다."
                 binding.foodProductTv.text = foodResultData.data_res.prodName
 
             }
         }
+    }
+
+    private fun eatable(a : Int) {
+        when(a){
+            1->{
+                binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
+            }
+            2->{
+                binding.resultIV.setImageResource(R.drawable.ic_locto_icon)
+            }
+            3->{
+                binding.resultIV.setImageResource(R.drawable.ic_ovo_icon)
+            }
+            4->{
+                binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
+            }
+        }
+        binding.resultTV.text = "드실 수 있습니다."
+        binding.foodProductTv.text = foodResultData.data_res.prodName
+        rDb.foodListDao().insert(
+            FoodListEntity(foodResultData.data_res.prodNum
+                , foodResultData.data_res.prodName
+                , "success")
+        )
     }
 
     fun badResult(){

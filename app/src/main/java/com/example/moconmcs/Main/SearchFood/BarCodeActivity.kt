@@ -118,6 +118,5 @@ class BarCodeActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 }

@@ -23,56 +23,70 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Main.SearchFood.PrevResultActivity"></activity>
         <activity
             android:name=".Menu.QnaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Menu.ProfileInfo.ProfileInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Menu.ChangePw.UserInfoChangeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Menu.DeletUser.DeleteUserCheckActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ThankYouActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Menu.DeletUser.DeleteUserActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Main.SearchFood.FoodResultListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Main.SearchFood.FoodResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Menu.HelpMenu.HelpMenuActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Menu.ProfileActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Menu.ProfileInfo.ProfileInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.ChangePw.UserInfoChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.DeletUser.DeleteUserCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ThankYouActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.DeletUser.DeleteUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main.SearchFood.FoodResultListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main.SearchFood.FoodResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.HelpMenu.HelpMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu.ProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Main.SearchFood.FoodNumInput"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:value="AIzaSyCiiKYEGAbrCsQPikljdpW6Ek7HPFgPE3c" />
 
         <activity
             android:name=".Main.SearchFood.FoodResultLoading"
             android:label="@string/title_activity_food_result_loding"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Main.SearchFood.BarCodeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main.SearchFood.BarCodeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SignUP.SignupActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Onboarding.OnboardingActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Onboarding.OnboardingActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Main.MainActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Splash"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
