@@ -46,6 +46,4 @@ class FoodResultListActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }

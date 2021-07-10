@@ -194,6 +194,4 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     override fun onCheckIsWhy() {
         whyDialog.dismiss()
     }
-
-
 }

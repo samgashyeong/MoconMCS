@@ -142,6 +142,4 @@ class UserInfoChangeActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }
