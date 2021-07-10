@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,16 +88,17 @@ public class FoodDiaryFragment extends Fragment {
             final int finalI = i;
             timeTextViews[i].setOnClickListener(v -> {
                 uploadDiaryDatabase();
-                selectedFoodTime += finalI - 1;
+                int axis = finalI - 1;
+                selectedFoodTime += axis;
                 if(selectedFoodTime < 0) selectedFoodTime = 0;
                 if(selectedFoodTime >= timeTextViews.length) selectedFoodTime = timeTextViews.length - 1;
-                updateFoodTime();
+                updateFoodTime(-axis);
                 loadDiaryDatabase();
             });
         }
 
         loadDiaryDatabase();
-        updateFoodTime();
+        updateFoodTime(0);
         updateDateChangeBtn();
         updateMainDateText();
 
@@ -193,11 +195,15 @@ public class FoodDiaryFragment extends Fragment {
         ateFoodLog.setText("");
     }
 
-    private void updateFoodTime() {
+    private void updateFoodTime(int axis) {
         for(int i = 0; i < timeTextViews.length; i++) {
             int idx = selectedFoodTime + i - 1;
             if(idx >= 0 && idx < timeTextViews.length) {
                 timeTextViews[i].setText(foodTimeTexts[idx]);
+                if(axis > 0)
+                    timeTextViews[i].startAnimation(AnimationUtils.loadAnimation(requireActivity().getApplicationContext(), R.anim.time_right));
+                if(axis < 0)
+                    timeTextViews[i].startAnimation(AnimationUtils.loadAnimation(requireActivity().getApplicationContext(), R.anim.time_left));
                 timeTextViews[i].setVisibility(View.VISIBLE);
             }
             else {

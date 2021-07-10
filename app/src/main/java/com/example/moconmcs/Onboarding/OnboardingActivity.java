@@ -40,7 +40,7 @@ public class OnboardingActivity extends AppCompatActivity {
     );
     private FirebaseAuth auth;
 
-    private void switchFragment() {
+    private void switchFragment(int axis) {
 
         if(curPage == pageFragments.size() - 1) {
             success.setVisibility(View.VISIBLE);
@@ -73,6 +73,10 @@ public class OnboardingActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        if(axis < 0)
+            fragmentTransaction.setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left);
+        else if(axis > 0)
+            fragmentTransaction.setCustomAnimations(R.anim.enter_left_to_right, R.anim.exit_left_to_right);
         fragmentTransaction.replace(R.id.obframe, fr);
         fragmentTransaction.commit();
     }
@@ -169,13 +173,13 @@ public class OnboardingActivity extends AppCompatActivity {
             startActivity(new Intent(OnboardingActivity.this, LoginActivity.class));
             finish();
         }
-        else switchFragment();
+        else switchFragment(-1);
     }
 
     void prevPage() {
         curPage--;
         if(curPage < 0) curPage = 0;
-        else switchFragment();
+        else switchFragment(1);
     }
 
 }
