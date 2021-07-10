@@ -59,4 +59,5 @@ class ProfileInfoActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, Intent())
         finish()
     }
+
 }

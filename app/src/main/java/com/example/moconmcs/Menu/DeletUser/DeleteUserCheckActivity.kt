@@ -111,4 +111,6 @@ class DeleteUserCheckActivity : AppCompatActivity() {
             finish()
         }
     }
+
+
 }

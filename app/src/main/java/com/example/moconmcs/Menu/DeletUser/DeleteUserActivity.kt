@@ -45,6 +45,7 @@ class DeleteUserActivity : AppCompatActivity() {
             finish()
         }
 
+
 //        binding.deleteUserBtn.setOnClickListener {
 //            if(binding.editText.text.toString().isEmpty()){
 //                Toast.makeText(this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -77,4 +78,6 @@ class DeleteUserActivity : AppCompatActivity() {
 //            }
 //        }
     }
+
+
 }

@@ -50,12 +50,14 @@ class FoodNumInput : AppCompatActivity(), CommDialogInterface{
     }
 
     override fun onCheckBtnClick() {
+        dialog.dismiss()
         finish()
     }
 
     override fun onCancleBtnClick() {
         dialog.dismiss()
     }
+
 
 
 }
