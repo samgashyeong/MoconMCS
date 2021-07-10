@@ -59,4 +59,9 @@ class ProfileInfoActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, Intent())
         finish()
     }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
+    }
 }

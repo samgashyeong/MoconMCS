@@ -39,11 +39,13 @@ class DeleteUserActivity : AppCompatActivity() {
                 .putExtra("userName", userName)
                 .putExtra("userKind", userKind))
             finish()
+            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
         }
 
         binding.backBtn.setOnClickListener {
             finish()
         }
+
 
 //        binding.deleteUserBtn.setOnClickListener {
 //            if(binding.editText.text.toString().isEmpty()){
@@ -76,5 +78,10 @@ class DeleteUserActivity : AppCompatActivity() {
 //                    }
 //            }
 //        }
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
     }
 }

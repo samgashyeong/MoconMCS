@@ -46,4 +46,9 @@ class FoodResultListActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
+    }
 }

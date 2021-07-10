@@ -74,6 +74,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                 startActivity(Intent(this, FoodResultListActivity::class.java)
                     .putExtra("foodList", a.data_res.materials)
                     .putExtra("prodName", a.data_res.prodName))
+                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
             }
             Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
             Log.d(TAG, "onCreate: FoodResult에서 받음")
@@ -193,5 +194,10 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
 
     override fun onCheckIsWhy() {
         whyDialog.dismiss()
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
     }
 }

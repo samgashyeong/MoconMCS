@@ -101,12 +101,16 @@ public class SignupActivity extends AppCompatActivity implements CommDialogInter
         if(i == 0){
             FragmentManager fmm = getSupportFragmentManager();
             fmm.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_left_to_right, R.anim.exit_left_to_right,
+                            R.anim.enter_right_to_left, R.anim.exit_right_to_left)
                     .replace(R.id.frame, new SignUpFragment1())
                     .commit();
         }
         else if(i == 1){
             FragmentManager fmm = getSupportFragmentManager();
             fmm.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                            R.anim.enter_left_to_right, R.anim.exit_left_to_right)
                     .replace(R.id.frame, new SignUpFragment2())
                     .commit();
         }

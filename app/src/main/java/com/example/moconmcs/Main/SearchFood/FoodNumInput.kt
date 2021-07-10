@@ -50,11 +50,17 @@ class FoodNumInput : AppCompatActivity(), CommDialogInterface{
     }
 
     override fun onCheckBtnClick() {
+        dialog.dismiss()
         finish()
     }
 
     override fun onCancleBtnClick() {
         dialog.dismiss()
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
     }
 
 
