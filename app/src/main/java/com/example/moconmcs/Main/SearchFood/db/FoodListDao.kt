@@ -11,6 +11,9 @@ interface FoodListDao {
     @Query("SELECT * FROM FoodListEntity")
     fun getAll(): List<FoodListEntity>?
 
+    @Query("SELECT foodNum FROM FoodListEntity")
+    fun foodNumgetAll(): List<String>
+
     @Insert
     fun insert(vararg foodListEntity: FoodListEntity?)
 

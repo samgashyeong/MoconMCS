@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var commDialog: CommDialog
     private lateinit var logoutDialog : LogoutDialog
     private lateinit var foodResultList : ArrayList<FoodListEntity>
+    private lateinit var foodNumList : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +94,9 @@ class MainActivity : AppCompatActivity(),
         }
         binding.floatingBtn.setOnClickListener {
             bottomSheetDialog.show(supportFragmentManager, "foodBottomSheet")
+            foodResultList = db.foodListDao().getAll() as ArrayList<FoodListEntity>
+//            foodNumList = db.foodListDao().foodNumgetAll() as ArrayList<String>
+//            Log.d(TAG, "onCreate: 푸드넘$foodNumList")
         }
     }
 

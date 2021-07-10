@@ -6,15 +6,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.Dialog.CommDialog
 import com.example.moconmcs.Dialog.CommDialogInterface
 import com.example.moconmcs.Dialog.ErrorDialog
 import com.example.moconmcs.Dialog.ErrorDialogInterface
+import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
+import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
 import com.example.moconmcs.databinding.ActivityFoodResultLodingBinding
@@ -39,6 +40,7 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
     private lateinit var data : FoodData
     private lateinit var auth : FirebaseAuth
     private lateinit var Fdb : FirebaseFirestore
+    private lateinit var db : AppDatabase
     private var ActivityOn = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +52,7 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
         errorDialog = ErrorDialog(this, this, "신고된 식품", "사용자들로 부터 접수된 데이터가 불명확한 데이터입니다.\n그래도 결과를 보시겠습니까?")
         commDialog = CommDialog(this, this, "검색 취소", "검색을 종료하시겠습니까?")
+        db = AppDatabase.getInstance(this)
 
         okHttpClient = OkHttpClient.Builder()
             .connectTimeout(100, TimeUnit.SECONDS)
@@ -131,9 +134,6 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                             if(commDialog.isShowing){
                                 commDialog.dismiss()
                             }
-                            startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
-                                .putExtra("ResultFail", true))
-                            finish()
                         }
                         else{
                             Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +
@@ -147,9 +147,10 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                                 errorDialog.show()
                             }
                             else{
+                                Log.d(TAG, "getFoodResult: 거의 다 되었서요!")
+                                binding.tvResult.text = "거의 다 되었어요!"
                                 if (isExecution != null) {
                                     IsEat(isExecution)
-                                    binding.tvResult.text = "거의 다 되었어요!"
                                 }
 //                                startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
 //                                    .putExtra("FoodResult", isExecution))
@@ -171,12 +172,16 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                 if(it.isSuccessful){
                     userKind = it.result.data!!.getValue("userKind").toString()
                     if(excution!!.data_res.aquaProd > 0 && excution!!.data_res.livestock > 0){
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meatAndFish")
                         resultIntent("0", "bad_meatAndFish", userKind, excution)
                     }
                     else if(excution?.data_res.livestock > 0){
+                        Log.d(TAG, "IsEat: 고기가 들어있음")
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meat")
                         resultIntent("0", "bad_meat", userKind, excution)
                     }
                     else if(excution?.data_res.aquaProd >0){
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_fish")
                         resultIntent("0", "bad_fish", userKind, excution)
                     }
                     else{
@@ -187,13 +192,25 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
 
     }
 
+    private fun checkIsSaveData(
+        excution: FoodData,
+        prodNum: String,
+        s: String
+    ) {
+        if(prodNum !in db.foodListDao().foodNumgetAll()){
+            db.foodListDao().insert(FoodListEntity(excution.data_res.prodNum, excution.data_res.prodName, s))
+        }
+    }
+
     private fun checkIsBadResult(userKind: String, excution: FoodData) {
         when(userKind){
             "비건"->{
                 if(excution.data_res.otherThanLivestock>0){
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg")
                     resultIntent("0", "bad_egg", userKind, excution)
                 }
                 else{
+                    checkIsSaveData(excution, excution.data_res.prodNum, "good_vegan")
                     resultIntent("1", "eat", userKind, excution)
 //                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
 //                    binding.resultTV.text = "드실 수 있습니다."
@@ -203,18 +220,21 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
             "락토"->{
                 //유제품, 꿀, 채소 과일 아닌것만 판별
                 if(excution.data_res.otherThanLivestock>0){
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg")
                     resultIntent("0", "bad_egg", userKind, excution)
-
                 }
                 else{
+                    checkIsSaveData(excution, excution.data_res.prodNum, "good_locto")
                     resultIntent("1", "eat", userKind, excution)
                 }
             }
             "오보"->{
                 //추가예정
+                checkIsSaveData(excution, excution.data_res.prodNum, "good_ovo")
                 resultIntent("1", "eat", userKind, excution)
             }
             "락토오보"->{
+                checkIsSaveData(excution, excution.data_res.prodNum, "good_loctoovo")
                 resultIntent("1", "eat", userKind, excution)
             }
         }
@@ -226,6 +246,7 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
             .putExtra("IsEat", s)
             .putExtra("cause", s1)
             .putExtra("userKind", userKind))
+        finish()
     }
 
 
@@ -249,10 +270,8 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
     }
 
     override fun onCheckBtnClick1() {
-        startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
-            .putExtra("FoodResult", data))
+        IsEat(data)
         errorDialog.dismiss()
-        finish()
     }
 
     override fun onCancleBtnClick1() {

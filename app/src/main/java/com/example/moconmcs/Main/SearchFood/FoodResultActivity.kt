@@ -69,30 +69,59 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
         }
         //코드 더러움 주의
         else if(intent.hasExtra("FoodResult")){
+            val a:FoodData = intent.getSerializableExtra("FoodResult") as FoodData
+            binding.button.setOnClickListener {
+                startActivity(Intent(this, FoodResultListActivity::class.java)
+                    .putExtra("foodList", a.data_res.materials)
+                    .putExtra("prodName", a.data_res.prodName))
+            }
+            Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
+            Log.d(TAG, "onCreate: FoodResult에서 받음")
             when(intent.getStringExtra("IsEat")){
                 "0"->{
+                    Log.d(TAG, "onCreate: 먹을 수 없음")
                     when(intent.getStringExtra("cause")){
                         "bad_egg"->{
-
+                            whyIsNotEat("계란이 포함되어있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_eggs_icon)
                         }
                         "bad_meatAndFish"->{
-
+                            whyIsNotEat("해산물이랑 고기가 포함되어있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_fish_meat)
                         }
                         "bad_fish"->{
-
+                            whyIsNotEat("해산물이 포함되어있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_fish)
                         }
                         "bad_meat"->{
-
+                            whyIsNotEat("동물성 성분이 포함되어 있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_meat_icon)
+                        }
+                    }
+                    binding.resultTV.text = "드실 수 없습니다.."
+                }
+                "1"->{
+                    Log.d(TAG, "onCreate: 먹을 수 있음.")
+                    val a : FoodData = intent.getSerializableExtra("FoodResult") as FoodData
+                    binding.resultTV.text = "드실 수 있습니다."
+                    binding.foodProductTv.text = a.data_res.prodName
+                    when(intent.getStringExtra("userKind")){
+                        "비건"->{
+                            binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
+                        }
+                        "락토"->{
+                            binding.resultIV.setImageResource(R.drawable.ic_locto_icon)
+                        }
+                        "오보"->{
+                            binding.resultIV.setImageResource(R.drawable.ic_ovo_icon)
+                        }
+                        "락토오보"->{
+                            binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
                         }
                     }
                 }
             }
         }
-//        binding.button.setOnClickListener {
-//            startActivity(Intent(this, FoodResultListActivity::class.java)
-//                .putExtra("foodList", foodResultData?.data_res?.materials as Serializable)
-//                .putExtra("prodName", foodResultData.data_res.prodName.toString()))
-//        }
         binding.IsStrangeTV.setOnClickListener {
             errorDialog.show()
 
@@ -107,74 +136,11 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     }
 
 
-    fun checkIsBadResult(userKind : String){
-        when(userKind){
-            "비건"->{
-                if(foodResultData.data_res.otherThanLivestock>0){
-                    eggResult()
-                }
-                else{
-                    eatable(1)
-                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
-                    binding.resultTV.text = "드실 수 있습니다."
-                    binding.foodProductTv.text = foodResultData.data_res.prodName
-                }
-            }
-            "락토"->{
-                //유제품, 꿀, 채소 과일 아닌것만 판별
-                if(foodResultData.data_res.otherThanLivestock>0){
-                    eggResult()
-                }
-                else{
-                    binding.resultIV.setImageResource(R.drawable.ic_locto_icon)
-                    binding.resultTV.text = "드실 수 있습니다."
-                    binding.foodProductTv.text = foodResultData.data_res.prodName
-                }
-            }
-            "오보"->{
-                //추가예정
-                binding.resultIV.setImageResource(R.drawable.ic_ovo_icon)
-                binding.resultTV.text = "드실 수 있습니다."
-                binding.foodProductTv.text = foodResultData.data_res.prodName
-            }
-            "락토오보"->{
-                binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
-                binding.resultTV.text = "드실 수 있습니다."
-                binding.foodProductTv.text = foodResultData.data_res.prodName
 
-            }
-        }
+    private fun whyIsNotEat(cause: String) {
+        binding.foodProductTv.text = cause
     }
 
-    private fun eatable(a : Int) {
-        when(a){
-            1->{
-                binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
-            }
-            2->{
-                binding.resultIV.setImageResource(R.drawable.ic_locto_icon)
-            }
-            3->{
-                binding.resultIV.setImageResource(R.drawable.ic_ovo_icon)
-            }
-            4->{
-                binding.resultIV.setImageResource(R.drawable.ic_locto_ovo_icon)
-            }
-        }
-        binding.resultTV.text = "드실 수 있습니다."
-        binding.foodProductTv.text = foodResultData.data_res.prodName
-        rDb.foodListDao().insert(
-            FoodListEntity(foodResultData.data_res.prodNum
-                , foodResultData.data_res.prodName
-                , "success")
-        )
-    }
-
-    fun badResult(){
-        binding.resultTV.text = "드실 수 없습니다."
-        binding.foodProductTv.text = "동물성 성분이 포함되어있습니다."
-        binding.resultIV.setImageResource(R.drawable.ic_meat_icon)
-    }
     fun failResult(){
         binding.resultTV.text = "검색 실패"
         binding.foodProductTv.text = "상품에 대한 데이터가 없습니다."
@@ -204,24 +170,6 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                 }
             }
         }
-    }
-
-    fun eggResult(){
-        binding.resultTV.text = "드실 수 없습니다."
-        binding.resultIV.setImageResource(R.drawable.ic_eggs_icon)
-        binding.foodProductTv.text = "계란이 포함되어 있습니다."
-    }
-
-    fun badResultFromAqua(){
-        binding.resultTV.text = "드실 수 없습니다."
-        binding.resultIV.setImageResource(R.drawable.ic_fish)
-        binding.foodProductTv.text = "해산물이 포함되어있습니다."
-   }
-
-    fun badResultFishAndMeet(){
-        binding.resultTV.text = "드실 수 없습니다."
-        binding.resultIV.setImageResource(R.drawable.ic_fish_meat)
-        binding.foodProductTv.text = "해산물이랑 고기가 포함되어있습니다."
     }
     fun barCodeFailResult(){
         binding.resultTV.text = "검색 실패"

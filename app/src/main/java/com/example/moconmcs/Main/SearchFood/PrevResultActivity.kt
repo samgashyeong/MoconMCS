@@ -24,7 +24,7 @@ class PrevResultActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: 넘겨받음$a")
 
 
-        binding.recycler.adapter = PrevResultFoodList(a as ArrayList<FoodListEntity>)
+        binding.recycler.adapter = PrevResultFoodListAdapter(a as ArrayList<FoodListEntity>)
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
