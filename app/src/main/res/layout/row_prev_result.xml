@@ -12,6 +12,7 @@
         android:id="@+id/foodName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="텍스트"
         android:textSize="30sp"
         app:layout_constraintEnd_toStartOf="@+id/resultIv"
         app:layout_constraintStart_toStartOf="parent"
