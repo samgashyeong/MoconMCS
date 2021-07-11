@@ -58,7 +58,7 @@
                 android:textColor="#2b7214"
                 android:includeFontPadding="false"
                 android:layout_marginTop="60dp"
-                android:text="회원님의 단계를 선택해주세요."
+                android:text="비건단계를 선택해주세요!"
                 android:lineSpacingExtra="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

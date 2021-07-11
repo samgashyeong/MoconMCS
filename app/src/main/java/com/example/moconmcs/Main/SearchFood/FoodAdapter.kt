@@ -1,5 +1,6 @@
 package com.example.moconmcs.Main.SearchFood
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,10 @@ class FoodAdapter(val DataList:List<Material>): RecyclerView.Adapter<FoodAdapter
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.foodName.text = DataList[position].matName
+        if(DataList[position].MLSFC_NM == "수산물" || DataList[position].MLSFC_NM == "축산물"){
+            holder.kindName.setTextColor(Color.RED)
+            holder.foodName.setTextColor(Color.RED)
+        }
         if(DataList[position].MLSFC_NM == "not-found"){
             holder.kindName.text = "성분을 아직 찾지 못하였습니다."
         }

@@ -3,7 +3,7 @@ package com.example.moconmcs.data.KyungrokApi
 import java.io.Serializable
 
 data class Material(
-    val MLSFC_NM: String,
-    val RPRSNT_NML: String,
-    val matName: String
+    public val MLSFC_NM: String,
+    public val RPRSNT_NML: String,
+    public val matName: String
 ) : Serializable

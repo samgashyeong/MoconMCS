@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="텍스트"
         android:textSize="30sp"
+        android:textColor="#2b7214"
         app:layout_constraintEnd_toStartOf="@+id/resultIv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:text="결과"
         android:textSize="20sp"
+        android:textColor="#2b7214"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/foodName" />
