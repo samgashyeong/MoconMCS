@@ -57,6 +57,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -82,11 +83,13 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private GoogleMap googleMap;
     private MapView mapView;
     private static List<Placemark> placemarkList;
+    public static Placemark searchedPlacemark;
     private final List<Marker> markers = new LinkedList<>();
     private Marker selectedMarker;
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
     private ConstraintLayout titleWrap;
+    private SlidingUpPanelLayout slideLayout;
     private Button writeReviewBtn;
 
     private BitmapDescriptor recycleMarker, recycleSelectedMarker;
@@ -108,6 +111,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeDesc = view.findViewById(R.id.map_desc);
         placeRate = view.findViewById(R.id.map_rate);
         titleWrap = view.findViewById(R.id.titleWrap);
+        slideLayout = view.findViewById(R.id.sliding_up_panel);
         reviewLoading = view.findViewById(R.id.map_review_loading);
         writeReviewBtn = view.findViewById(R.id.write_review_btn);
         writeReviewBtn.setVisibility(View.INVISIBLE);
@@ -437,7 +441,6 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 curPos = new LatLng(latitude, longitude);
-            } else {
             }
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -445,18 +448,29 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            Handler handler = new Handler();
-            LatLng finalCurPos = curPos;
-            googleMap.setMinZoomPreference(8);
-            handler.postDelayed(() -> googleMap
-                    .animateCamera(CameraUpdateFactory.newLatLngZoom(finalCurPos, 12))
-                    , 500);
-        }
 
-        selectedMarker = null;
-        placeTitle.setVisibility(View.INVISIBLE);
-        placeRate.setVisibility(View.INVISIBLE);
-        placeDesc.setVisibility(View.INVISIBLE);
+            selectedMarker = null;
+            placeTitle.setVisibility(View.INVISIBLE);
+            placeRate.setVisibility(View.INVISIBLE);
+            placeDesc.setVisibility(View.INVISIBLE);
+            googleMap.setMinZoomPreference(8);
+
+            searchedPlacemark = searchPlace("미쁨").get(0);
+
+            if(searchedPlacemark != null) {
+                for(Marker marker : markers) {
+                    if(Objects.requireNonNull(marker.getTitle())
+                            .equalsIgnoreCase(searchedPlacemark.getName())) {
+                        onMarkerClick(marker);
+                        slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+                        break;
+                    }
+                }
+                searchedPlacemark = null;
+            }
+            else
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 12));
+        }
     }
 
     private List<Placemark> getPlacemarkList() {
@@ -519,5 +533,16 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             }
             updateCameraToCurrentLocation();
         }
+    }
+
+    public List<Placemark> searchPlace(String keyword) {
+        LinkedList<Placemark> result = new LinkedList<>();
+        if(placemarkList == null) placemarkList = getPlacemarkList();
+        placemarkList.forEach(placemark -> {
+            if(placemark.getName().contains(keyword)) {
+                result.add(placemark);
+            }
+        });
+        return result;
     }
 }

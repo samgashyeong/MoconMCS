@@ -217,17 +217,25 @@ public class FoodDiaryFragment extends Fragment {
     private void updateDateChangeBtn() {
         if(nextDay != null) {
             if (viewModel.getSelectedDate().atTime(0, 0)
-                    .isEqual(LocalDate.now().atTime(0, 0)))
-                nextDay.setVisibility(View.INVISIBLE);
-            else
-                nextDay.setVisibility(View.VISIBLE);
+                    .isEqual(LocalDate.now().atTime(0, 0))) {
+                nextDay.setTextColor(nextDay.getTextColors().getDefaultColor() & 0x55ffffff);
+                nextDay.setEnabled(false);
+            }
+            else {
+                nextDay.setTextColor(nextDay.getTextColors().getDefaultColor() | 0xff000000);
+                nextDay.setEnabled(true);
+            }
         }
         if(nextMonth != null) {
             if (currentDate.withDayOfMonth(1).atTime(0, 0)
-                    .isEqual(LocalDate.now().withDayOfMonth(1).atTime(0, 0)))
-                nextMonth.setVisibility(View.INVISIBLE);
-            else
-                nextMonth.setVisibility(View.VISIBLE);
+                    .isEqual(LocalDate.now().withDayOfMonth(1).atTime(0, 0))) {
+                nextMonth.setTextColor(nextMonth.getTextColors().getDefaultColor() & 0x55ffffff);
+                nextMonth.setEnabled(false);
+            }
+            else {
+                nextMonth.setTextColor(nextMonth.getTextColors().getDefaultColor() | 0xff000000);
+                nextMonth.setEnabled(true);
+            }
         }
     }
 

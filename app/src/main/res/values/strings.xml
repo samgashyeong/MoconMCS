@@ -20,4 +20,5 @@
     <string name="Saturday">토</string>
     <string name="toToday">오늘 날짜</string>
     <string name="inputSPN">식품품목번호를 입력해주세요</string>
+    <string name="began_place_search">비건 식당 검색</string>
 </resources>

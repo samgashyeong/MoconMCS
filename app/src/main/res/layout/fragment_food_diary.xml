@@ -25,16 +25,17 @@
 
             <ImageView
                 android:id="@+id/openCal"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:paddingEnd="16dp"
                 android:scaleType="fitEnd"
-                android:src="@drawable/ic_diary2_icon"
+                android:src="@drawable/ic_calander"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/diaryNextDay"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -57,7 +58,7 @@
                 android:background="#00FFFFFF"
                 android:gravity="left|center_vertical"
                 android:text="@string/nextArrow"
-                android:textColor="#2b7214"
+                android:textColor="#2B7214"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/mainDateText"
