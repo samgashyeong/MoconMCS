@@ -26,11 +26,13 @@ class FoodResultListActivity : AppCompatActivity() {
         binding.title.text = prodName.toString()
         val foodArrayList: ArrayList<Material>
         val foodAdapterList : ArrayList<Material> = ArrayList()
+        var failLength : Int = 0
         if(foodList != null){
             foodArrayList = foodList as ArrayList<Material>
             for (i in 0 until foodArrayList.count()){
                 if(foodArrayList[i].MLSFC_NM == "축산물" || foodArrayList[i].MLSFC_NM == "수산물"){
                     foodAdapterList.add(foodArrayList[i])
+                    failLength = foodAdapterList.count()
                 }
             }
             for (i in 0 until foodArrayList.count()){
@@ -39,7 +41,7 @@ class FoodResultListActivity : AppCompatActivity() {
                     foodAdapterList.add(foodArrayList[i])
                 }
             }
-            binding.recycler.adapter = FoodAdapter(foodAdapterList)
+            binding.recycler.adapter = FoodAdapter(foodAdapterList, failLength)
         }
 
         setSupportActionBar(binding.toolbar)
