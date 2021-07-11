@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomViewHolder> {
 
-    ArrayList<ReviewInfo> arrayList;
+    private final ArrayList<ReviewInfo> arrayList;
 
     public ReviewAdapter(ArrayList<ReviewInfo> arrayList) {
         this.arrayList = arrayList;
@@ -78,6 +78,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.CustomView
             this.reviewText = itemView.findViewById(R.id.review_text);
             this.rate = itemView.findViewById(R.id.review_personal_rate);
         }
+    }
+
+    public static interface OnSearchItemClick {
+        void onClick(int position);
     }
 
 }

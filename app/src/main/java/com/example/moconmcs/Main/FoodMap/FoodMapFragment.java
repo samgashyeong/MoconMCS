@@ -1,6 +1,7 @@
 package com.example.moconmcs.Main.FoodMap;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -51,12 +52,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -82,12 +85,15 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private GoogleMap googleMap;
     private MapView mapView;
     private static List<Placemark> placemarkList;
+    public static Placemark searchedPlacemark;
     private final List<Marker> markers = new LinkedList<>();
     private Marker selectedMarker;
     private TextView placeTitle, placeDesc;
     private RatingBar placeRate;
     private ConstraintLayout titleWrap;
+    private SlidingUpPanelLayout slideLayout;
     private Button writeReviewBtn;
+    private FloatingActionButton moveToMyLoc;
 
     private BitmapDescriptor recycleMarker, recycleSelectedMarker;
 
@@ -108,9 +114,42 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         placeDesc = view.findViewById(R.id.map_desc);
         placeRate = view.findViewById(R.id.map_rate);
         titleWrap = view.findViewById(R.id.titleWrap);
+        slideLayout = view.findViewById(R.id.sliding_up_panel);
         reviewLoading = view.findViewById(R.id.map_review_loading);
         writeReviewBtn = view.findViewById(R.id.write_review_btn);
+        moveToMyLoc = view.findViewById(R.id.moveToMyPos);
         writeReviewBtn.setVisibility(View.INVISIBLE);
+
+        slideLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) { }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState,
+                                            SlidingUpPanelLayout.PanelState newState) {
+                if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
+                    moveToMyLoc.show();
+                else
+                    moveToMyLoc.hide();
+            }
+        });
+
+        moveToMyLoc.setOnClickListener(v -> {
+            LatLng curPos = null;
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                curPos = new LatLng(latitude, longitude);
+            }
+            if (ActivityCompat.checkSelfPermission(requireActivity().getApplicationContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(requireActivity().getApplicationContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            if(curPos != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 12));
+        });
 
         recyclerView = view.findViewById(R.id.reviews);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
@@ -315,6 +354,21 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1235 && searchedPlacemark != null) {
+            for(Marker marker : markers) {
+                if(Objects.requireNonNull(marker.getTitle())
+                        .equalsIgnoreCase(searchedPlacemark.getName())) {
+                    onMarkerClick(marker);
+                    break;
+                }
+            }
+            searchedPlacemark = null;
+        }
+    }
+
+    @Override
     public boolean onMarkerClick(Marker marker) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -427,7 +481,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
-        if (placemarkList == null) placemarkList = getPlacemarkList();
+        if (placemarkList == null) placemarkList = getPlacemarkList(requireActivity());
         addMarkers();
 
         LatLng curPos = new LatLng(37.56, 126.97);
@@ -437,7 +491,6 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 curPos = new LatLng(latitude, longitude);
-            } else {
             }
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -445,24 +498,33 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            Handler handler = new Handler();
-            LatLng finalCurPos = curPos;
-            googleMap.setMinZoomPreference(8);
-            handler.postDelayed(() -> googleMap
-                    .animateCamera(CameraUpdateFactory.newLatLngZoom(finalCurPos, 12))
-                    , 500);
-        }
 
-        selectedMarker = null;
-        placeTitle.setVisibility(View.INVISIBLE);
-        placeRate.setVisibility(View.INVISIBLE);
-        placeDesc.setVisibility(View.INVISIBLE);
+            selectedMarker = null;
+            placeTitle.setVisibility(View.INVISIBLE);
+            placeRate.setVisibility(View.INVISIBLE);
+            placeDesc.setVisibility(View.INVISIBLE);
+            googleMap.setMinZoomPreference(8);
+
+            if(searchedPlacemark != null) {
+                for(Marker marker : markers) {
+                    if(Objects.requireNonNull(marker.getTitle())
+                            .equalsIgnoreCase(searchedPlacemark.getName())) {
+                        onMarkerClick(marker);
+                        slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+                        break;
+                    }
+                }
+                searchedPlacemark = null;
+            }
+            else
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 12));
+        }
     }
 
-    private List<Placemark> getPlacemarkList() {
+    private static List<Placemark> getPlacemarkList(Activity activity) {
         LinkedList<Placemark> placemarks = new LinkedList<>();
         Gson gson = new Gson();
-        AssetManager assetManager = requireActivity().getResources().getAssets();
+        AssetManager assetManager = activity.getResources().getAssets();
         try {
             InputStream is = assetManager.open("places.json");
             StringBuilder builder = new StringBuilder();
@@ -519,5 +581,16 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             }
             updateCameraToCurrentLocation();
         }
+    }
+
+    public static List<Placemark> searchPlace(Activity activity, String keyword) {
+        LinkedList<Placemark> result = new LinkedList<>();
+        if(placemarkList == null) placemarkList = getPlacemarkList(activity);
+        placemarkList.forEach(placemark -> {
+            if(placemark.getName().contains(keyword)) {
+                result.add(placemark);
+            }
+        });
+        return result;
     }
 }

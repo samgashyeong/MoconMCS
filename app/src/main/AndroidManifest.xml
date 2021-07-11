@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoconMCS"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Main.SearchFood.PrevResultActivity"></activity>
+        <activity android:name=".Main.FoodMap.PlaceSearchActivity"></activity>
+        <activity android:name=".Main.SearchFood.PrevResultActivity" />
         <activity
             android:name=".Menu.QnaActivity"
             android:screenOrientation="portrait" />
