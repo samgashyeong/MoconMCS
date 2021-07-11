@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
@@ -9,26 +10,30 @@
     android:background="@drawable/food_list_item">
 
     <TextView
-        android:id="@+id/conductName"
+        android:id="@+id/searchPlaceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="상품명"
-        android:textSize="23sp"
-        android:textColor="#2b7214"
         android:fontFamily="@font/noto_sans_cj_kkr_medium"
         android:includeFontPadding="false"
+        android:textColor="#2b7214"
+        android:textSize="23sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="장소" />
 
     <TextView
-        android:id="@+id/conductKind"
+        android:id="@+id/searchPlaceDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="식품종류: "
-        android:textColor="#2b7214"
-        android:textSize="17sp"
         android:fontFamily="@font/noto_sans_cj_kkr_medium"
         android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="#2b7214"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conductName" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchPlaceName"
+        tools:text="설명" />
 </androidx.constraintlayout.widget.ConstraintLayout>

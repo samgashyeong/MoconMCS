@@ -95,7 +95,7 @@
                     android:backgroundTint="#2b7214"
                     android:src="@drawable/ic_search_icon"
                     app:layout_anchor="@id/bottomBar"
-                    app:tint="@android:color/white" />
+                    app:tint="@color/white" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -19,6 +19,7 @@ import com.example.moconmcs.Main.BottomSheet.BottomSheetButtonClickListener
 import com.example.moconmcs.Main.BottomSheet.BottomSheetDialog
 import com.example.moconmcs.Main.FoodDiary.FoodDiaryFragment
 import com.example.moconmcs.Main.FoodMap.FoodMapFragment
+import com.example.moconmcs.Main.FoodMap.PlaceSearchActivity
 import com.example.moconmcs.Main.SearchFood.BarCodeActivity
 import com.example.moconmcs.Main.SearchFood.FoodNumInput
 import com.example.moconmcs.Main.SearchFood.PrevResultActivity
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var curUserUid : String
+    private lateinit var curFragment : Fragment
     private lateinit var db : AppDatabase
     val bottomSheetDialog : BottomSheetDialog =
         BottomSheetDialog()
@@ -105,14 +107,12 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun setFragment(num: Int, title: String){
-        lateinit var fr :Fragment
         when(num){
-            1->fr = FoodMapFragment()
-            2->fr = FoodDiaryFragment()
+            1->curFragment = FoodMapFragment()
+            2->curFragment = FoodDiaryFragment()
         }
-
         supportFragmentManager.beginTransaction()
-                            .replace(R.id.frame, fr)
+                            .replace(R.id.frame, curFragment)
                             .commit()
         binding.title.text = title
     }
@@ -153,6 +153,9 @@ class MainActivity : AppCompatActivity(),
             }
             R.id.setting ->{
                 logoutDialog.show()
+            }
+            R.id.search -> {
+                curFragment.startActivityForResult(Intent(this, PlaceSearchActivity::class.java), 1235)
             }
             R.id.helpMenu ->{
                 startActivity(Intent(this, HelpMenuActivity::class.java))

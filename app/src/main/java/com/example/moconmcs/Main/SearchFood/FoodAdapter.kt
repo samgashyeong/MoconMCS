@@ -10,8 +10,8 @@ import com.example.moconmcs.data.KyungrokApi.Material
 
 class FoodAdapter(val DataList:List<Material>): RecyclerView.Adapter<FoodAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val foodName = itemView.findViewById<TextView>(R.id.productTv)
-        val kindName = itemView.findViewById<TextView>(R.id.kindName)
+        val foodName = itemView.findViewById<TextView>(R.id.conductName)
+        val kindName = itemView.findViewById<TextView>(R.id.conductKind)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
