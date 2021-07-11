@@ -80,12 +80,16 @@ class MainActivity : AppCompatActivity(),
                 }
             }
 
+
+
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false);
         binding.bottmnavview.run{
             setOnNavigationItemSelectedListener {
                 when(it.itemId){
-                    R.id.food_map -> setFragment(1, "푸드맵")
+                    R.id.food_map -> {
+                        setFragment(1, "푸드맵")
+                    }
                     R.id.setting -> setFragment(2, "식단다이어리")
                 }
                 true
@@ -121,13 +125,11 @@ class MainActivity : AppCompatActivity(),
             }
             2->{
                 startActivity(Intent(this, FoodNumInput::class.java))
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
                 bottomSheetDialog.dismiss()
             }
             3->{
                 startActivity(Intent(this, PrevResultActivity::class.java)
                     .putExtra("foodlist", foodResultList))
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
                 bottomSheetDialog.dismiss()
             }
         }
@@ -148,14 +150,12 @@ class MainActivity : AppCompatActivity(),
                     .putExtra("userKind", viewModel.userKind!!.value)
                     .putExtra("userEmail", viewModel.userEmail!!.value)
                     .putExtra("userHash", viewModel.userHash!!.value))
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
             }
             R.id.setting ->{
                 logoutDialog.show()
             }
             R.id.helpMenu ->{
                 startActivity(Intent(this, HelpMenuActivity::class.java))
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
             }
         }
         return super.onOptionsItemSelected(item)

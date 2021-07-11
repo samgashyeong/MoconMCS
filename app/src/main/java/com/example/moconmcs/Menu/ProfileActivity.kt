@@ -67,7 +67,7 @@ class ProfileActivity : AppCompatActivity() {
                 .putExtra("myKind", viewModel.userKind!!.value)
                 .putExtra("myEmail", firebaseAuth.currentUser?.email),
             200)
-            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
+
         }
 
         binding.deleteUserBtn.setOnClickListener {
@@ -77,14 +77,12 @@ class ProfileActivity : AppCompatActivity() {
                 .putExtra("userHash", viewModel.userHash!!.value)
                 .putExtra("userName", viewModel.userName!!.value)
                 .putExtra("userKind", viewModel.userKind!!.value))
-            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
         }
 
         binding.changePwBtn.setOnClickListener {
             startActivityForResult(Intent(this, UserInfoChangeActivity::class.java)
                 .putExtra("userHash", viewModel.userHash!!.value)
                 .putExtra("emailString", curUser.email.toString()), 100)
-            overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
         }
 
 
@@ -104,10 +102,6 @@ class ProfileActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right)
-    }
 
 
 

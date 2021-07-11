@@ -144,7 +144,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     fun failResult(){
         binding.resultTV.text = "검색 실패"
         binding.foodProductTv.text = "상품에 대한 데이터가 없습니다."
-        binding.resultIV.setImageResource(R.drawable.ic_notsearch_icon)
+        binding.resultIV.setImageResource(R.drawable.ic_hehe)
         binding.button.visibility = View.GONE
         binding.IsStrangeTV.visibility = View.INVISIBLE
         binding.WhatTv.visibility = View.VISIBLE
@@ -173,7 +173,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     }
     fun barCodeFailResult(){
         binding.resultTV.text = "검색 실패"
-        binding.resultIV.setImageResource(R.drawable.ic_notsearch_icon)
+        binding.resultIV.setImageResource(R.drawable.ic_hehe)
         binding.foodProductTv.text = "바코드 인식에 실패하셨습니다."
         binding.IsStrangeTV.visibility = View.INVISIBLE
         binding.button.text = "품목보고번호 조회하러 가기"

@@ -49,7 +49,7 @@
             android:textColor="#2b7214"
             android:hint="@string/inputSPN"
             android:layout_marginTop="20dp"
-            android:background="@drawable/shadow"
+            android:background="@drawable/shadow1"
             android:inputType="number|phone"
             app:layout_constraintWidth_percent="0.7"
             app:layout_constraintEnd_toEndOf="parent"

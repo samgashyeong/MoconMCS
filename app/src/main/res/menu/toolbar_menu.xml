@@ -31,4 +31,11 @@
 
         </menu>
     </item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_icon"
+        app:showAsAction="ifRoom"
+        android:title="TODO" />
+
 </menu>

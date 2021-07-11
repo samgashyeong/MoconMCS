@@ -27,7 +27,7 @@
             android:id="@+id/passwordEt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/shadow"
+            android:background="@drawable/shadow1"
             android:paddingVertical="10dp"
             android:layout_marginBottom="80dp"
             android:inputType="textPassword"
