@@ -97,6 +97,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private SlidingUpPanelLayout slideLayout;
     private Button writeReviewBtn;
     private FloatingActionButton moveToMyLoc;
+    private boolean mapTouched = false;
 
     private BitmapDescriptor recycleMarker, recycleSelectedMarker;
 
@@ -136,8 +137,9 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
                         || (previousState == SlidingUpPanelLayout.PanelState.HIDDEN && newState == SlidingUpPanelLayout.PanelState.DRAGGING)
                 )
                     moveToMyLoc.show();
-                else
+                else if(!mapTouched)
                     moveToMyLoc.hide();
+                mapTouched = false;
             }
         });
 
@@ -597,6 +599,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onMapClick(@NonNull @NotNull LatLng latLng) {
         changeSelectedMarker(null);
         if(slideLayout != null) {
+            mapTouched = true;
             slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         }
     }
