@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 
-class  PrevResultFoodListAdapter(val DataList:ArrayList<FoodListEntity>,val click : OnClickList): RecyclerView.Adapter<PrevResultFoodListAdapter.MyViewHolder>(){
+class  PrevResultFoodListAdapter(private val DataList:ArrayList<FoodListEntity>, private val click : OnClickList): RecyclerView.Adapter<PrevResultFoodListAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         //ex)val 변수명 = itemView.findViewById<xml이름>(아이디네임)
         val foodName = itemView.findViewById<TextView>(R.id.foodName)
