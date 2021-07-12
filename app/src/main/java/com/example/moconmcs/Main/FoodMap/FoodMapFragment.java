@@ -131,7 +131,10 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState,
                                             SlidingUpPanelLayout.PanelState newState) {
-                if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
+                if(newState == SlidingUpPanelLayout.PanelState.HIDDEN
+                        || newState == SlidingUpPanelLayout.PanelState.COLLAPSED
+                        || (previousState == SlidingUpPanelLayout.PanelState.HIDDEN && newState == SlidingUpPanelLayout.PanelState.DRAGGING)
+                )
                     moveToMyLoc.show();
                 else
                     moveToMyLoc.hide();

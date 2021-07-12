@@ -12,6 +12,8 @@ import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityPrevResultBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PrevResultActivity : AppCompatActivity(), PrevResultFoodListAdapter.OnClickList {
     private lateinit var binding: ActivityPrevResultBinding
