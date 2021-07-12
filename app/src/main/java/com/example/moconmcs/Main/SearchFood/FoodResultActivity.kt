@@ -70,11 +70,10 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
         //코드 더러움 주의
         else if(intent.hasExtra("FoodResult")){
             foodResultData = intent.getSerializableExtra("FoodResult") as FoodData
-            val a:FoodData = intent.getSerializableExtra("FoodResult") as FoodData
             binding.button.setOnClickListener {
                 startActivity(Intent(this, FoodResultListActivity::class.java)
-                    .putExtra("foodList", a.data_res.materials)
-                    .putExtra("prodName", a.data_res.prodName))
+                    .putExtra("foodList", foodResultData.data_res.materials)
+                    .putExtra("prodName", foodResultData.data_res.prodName))
             }
             Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
             Log.d(TAG, "onCreate: FoodResult에서 받음")
@@ -103,9 +102,8 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                 }
                 "1"->{
                     Log.d(TAG, "onCreate: 먹을 수 있음.")
-                    val a : FoodData = intent.getSerializableExtra("FoodResult") as FoodData
                     binding.resultTV.text = "드실 수 있습니다."
-                    binding.foodProductTv.text = a.data_res.prodName
+                    binding.foodProductTv.text = foodResultData.data_res.prodName
                     when(intent.getStringExtra("userKind")){
                         "비건"->{
                             binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
