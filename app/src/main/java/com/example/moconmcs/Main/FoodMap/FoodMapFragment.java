@@ -596,7 +596,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         LinkedList<Placemark> result = new LinkedList<>();
         if(placemarkList == null) placemarkList = getPlacemarkList(activity);
         placemarkList.forEach(placemark -> {
-            if(placemark.getName().contains(keyword)) {
+            if(placemark.getName().toLowerCase().contains(keyword.toLowerCase())) {
                 result.add(placemark);
             }
         });
