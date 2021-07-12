@@ -66,4 +66,7 @@ class  PrevResultFoodListAdapter(val DataList:ArrayList<FoodListEntity>): Recycl
     }
     override fun getItemCount() = DataList.size
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

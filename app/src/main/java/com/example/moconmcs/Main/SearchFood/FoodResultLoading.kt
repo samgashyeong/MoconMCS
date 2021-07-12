@@ -129,11 +129,14 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                     withContext(Dispatchers.Main){
 
 //                    Log.d("asdf", "getData :  ${isExecution}\n${isExecution?.C005?.total_count}")
-                        if(isExecution?.err_msg != null){
+                        if(isExecution?.err_msg == "Cannot find product with following prodNum : $FoodNum"){
                             Log.d(TAG, "getFoodResult: 내용이 없습니다.")
                             if(commDialog.isShowing){
                                 commDialog.dismiss()
                             }
+                            startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
+                                .putExtra("ResultFail", "값이 안찾아짐."))
+                            finish()
                         }
                         else{
                             Log.d(TAG, "getFoodResult: ${isExecution?.data_res?._id}" +

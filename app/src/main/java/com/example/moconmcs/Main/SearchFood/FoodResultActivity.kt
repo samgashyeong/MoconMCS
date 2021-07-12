@@ -69,6 +69,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
         }
         //코드 더러움 주의
         else if(intent.hasExtra("FoodResult")){
+            foodResultData = intent.getSerializableExtra("FoodResult") as FoodData
             val a:FoodData = intent.getSerializableExtra("FoodResult") as FoodData
             binding.button.setOnClickListener {
                 startActivity(Intent(this, FoodResultListActivity::class.java)
