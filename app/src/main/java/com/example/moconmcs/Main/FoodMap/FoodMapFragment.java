@@ -359,19 +359,17 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 1235 && searchedPlacemark != null) {
-            for(Marker marker : markers) {
-                if(Objects.requireNonNull(marker.getTitle())
-                        .equalsIgnoreCase(searchedPlacemark.getName())) {
-                    onMarkerClick(marker);
-                    break;
-                }
+    public void onSearchSucceed() {
+        if(searchedPlacemark == null) return;
+        for(Marker marker : markers) {
+            if(Objects.requireNonNull(marker.getTitle())
+                    .equalsIgnoreCase(searchedPlacemark.getName())) {
+                onMarkerClick(marker);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 13));
+                break;
             }
-            searchedPlacemark = null;
         }
+        searchedPlacemark = null;
     }
 
 
@@ -515,15 +513,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             googleMap.setMinZoomPreference(8);
 
             if(searchedPlacemark != null) {
-                for(Marker marker : markers) {
-                    if(Objects.requireNonNull(marker.getTitle())
-                            .equalsIgnoreCase(searchedPlacemark.getName())) {
-                        onMarkerClick(marker);
-                        slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-                        break;
-                    }
-                }
-                searchedPlacemark = null;
+                onSearchSucceed();
             }
             else
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPos, 12));

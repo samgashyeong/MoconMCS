@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity(),
                 logoutDialog.show()
             }
             R.id.search -> {
-                curFragment.startActivityForResult(Intent(this, PlaceSearchActivity::class.java), 1235)
+                startActivityForResult(Intent(this, PlaceSearchActivity::class.java), 1235)
             }
             R.id.helpMenu ->{
                 startActivity(Intent(this, HelpMenuActivity::class.java))
@@ -163,6 +163,13 @@ class MainActivity : AppCompatActivity(),
         }
         return super.onOptionsItemSelected(item)
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == 1235) {
+            binding.bottmnavview.selectedItemId = R.id.food_map
+        }
     }
 
     override fun onBackPressed() {
