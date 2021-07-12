@@ -9,5 +9,6 @@ import java.io.Serializable
 data class FoodListEntity(
     @PrimaryKey val foodNum : String,
     val foodName : String,
-    val foodResult : String
+    val foodResult : String,
+    val foodList : List<Material>
 ) : Serializable

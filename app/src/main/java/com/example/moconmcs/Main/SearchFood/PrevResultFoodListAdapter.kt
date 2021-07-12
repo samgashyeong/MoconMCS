@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 
-class  PrevResultFoodListAdapter(val DataList:ArrayList<FoodListEntity>): RecyclerView.Adapter<PrevResultFoodListAdapter.MyViewHolder>(){
-    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class  PrevResultFoodListAdapter(val DataList:ArrayList<FoodListEntity>,val click : OnClickList): RecyclerView.Adapter<PrevResultFoodListAdapter.MyViewHolder>(){
+    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         //ex)val 변수명 = itemView.findViewById<xml이름>(아이디네임)
         val foodName = itemView.findViewById<TextView>(R.id.foodName)
         val foodResult = itemView.findViewById<TextView>(R.id.resultTv)
@@ -63,10 +63,17 @@ class  PrevResultFoodListAdapter(val DataList:ArrayList<FoodListEntity>): Recycl
             }
 
         }
+        holder.itemView.setOnClickListener {
+            click.onClick(position)
+        }
     }
     override fun getItemCount() = DataList.size
 
     override fun getItemViewType(position: Int): Int {
         return position
+    }
+
+    interface OnClickList {
+        fun onClick(position: Int)
     }
 }

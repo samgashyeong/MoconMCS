@@ -15,9 +15,11 @@ import com.example.moconmcs.Dialog.ErrorDialogInterface
 import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
+import com.example.moconmcs.Main.SearchFood.db.Converters
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
+import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityFoodResultLodingBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -175,16 +177,16 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                 if(it.isSuccessful){
                     userKind = it.result.data!!.getValue("userKind").toString()
                     if(excution!!.data_res.aquaProd > 0 && excution!!.data_res.livestock > 0){
-                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meatAndFish")
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meatAndFish", excution.data_res.materials)
                         resultIntent("0", "bad_meatAndFish", userKind, excution)
                     }
                     else if(excution?.data_res.livestock > 0){
                         Log.d(TAG, "IsEat: 고기가 들어있음")
-                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meat")
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_meat", excution.data_res.materials)
                         resultIntent("0", "bad_meat", userKind, excution)
                     }
                     else if(excution?.data_res.aquaProd >0){
-                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_fish")
+                        checkIsSaveData(excution, excution.data_res.prodNum, "bad_fish", excution.data_res.materials)
                         resultIntent("0", "bad_fish", userKind, excution)
                     }
                     else{
@@ -198,10 +200,13 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
     private fun checkIsSaveData(
         excution: FoodData,
         prodNum: String,
-        s: String
+        s: String,
+        material: List<Material>
     ) {
         if(prodNum !in db.foodListDao().foodNumgetAll()){
-            db.foodListDao().insert(FoodListEntity(excution.data_res.prodNum, excution.data_res.prodName, s))
+            db.foodListDao().insert(FoodListEntity(excution.data_res.prodNum, excution.data_res.prodName, s,
+                material
+            ))
         }
     }
 
@@ -209,11 +214,11 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
         when(userKind){
             "비건"->{
                 if(excution.data_res.otherThanLivestock>0){
-                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg")
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg",excution.data_res.materials)
                     resultIntent("0", "bad_egg", userKind, excution)
                 }
                 else{
-                    checkIsSaveData(excution, excution.data_res.prodNum, "good_vegan")
+                    checkIsSaveData(excution, excution.data_res.prodNum, "good_vegan", excution.data_res.materials)
                     resultIntent("1", "eat", userKind, excution)
 //                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
 //                    binding.resultTV.text = "드실 수 있습니다."
@@ -223,21 +228,21 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
             "락토"->{
                 //유제품, 꿀, 채소 과일 아닌것만 판별
                 if(excution.data_res.otherThanLivestock>0){
-                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg")
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg", excution.data_res.materials)
                     resultIntent("0", "bad_egg", userKind, excution)
                 }
                 else{
-                    checkIsSaveData(excution, excution.data_res.prodNum, "good_locto")
+                    checkIsSaveData(excution, excution.data_res.prodNum, "good_locto", excution.data_res.materials)
                     resultIntent("1", "eat", userKind, excution)
                 }
             }
             "오보"->{
                 //추가예정
-                checkIsSaveData(excution, excution.data_res.prodNum, "good_ovo")
+                checkIsSaveData(excution, excution.data_res.prodNum, "good_ovo", excution.data_res.materials)
                 resultIntent("1", "eat", userKind, excution)
             }
             "락토오보"->{
-                checkIsSaveData(excution, excution.data_res.prodNum, "good_loctoovo")
+                checkIsSaveData(excution, excution.data_res.prodNum, "good_loctoovo", excution.data_res.materials)
                 resultIntent("1", "eat", userKind, excution)
             }
         }

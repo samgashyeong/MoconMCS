@@ -5,13 +5,17 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.example.moconmcs.Main.FoodDiary.DiaryDao;
 import com.example.moconmcs.Main.FoodDiary.DiaryEntity;
+import com.example.moconmcs.Main.SearchFood.db.Converters;
 import com.example.moconmcs.Main.SearchFood.db.FoodListDao;
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity;
 
-@Database(entities = {DiaryEntity.class, FoodListEntity.class}, version = 2, exportSchema = false)
+
+@TypeConverters(Converters.class)
+@Database(entities = {DiaryEntity.class, FoodListEntity.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DiaryDao diaryDao();

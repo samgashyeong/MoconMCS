@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity(),
         binding.floatingBtn.setOnClickListener {
             bottomSheetDialog.show(supportFragmentManager, "foodBottomSheet")
             foodResultList = db.foodListDao().getAll() as ArrayList<FoodListEntity>
-//            foodNumList = db.foodListDao().foodNumgetAll() as ArrayList<String>
-//            Log.d(TAG, "onCreate: 푸드넘$foodNumList")
+            foodNumList = db.foodListDao().foodNumgetAll() as ArrayList<String>
+            Log.d(TAG, "onCreate: 푸드넘$foodNumList\n푸드리스트$foodResultList")
         }
     }
 

@@ -10,7 +10,7 @@ import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityPrevResultBinding
 
-class PrevResultActivity : AppCompatActivity() {
+class PrevResultActivity : AppCompatActivity(), PrevResultFoodListAdapter.OnClickList {
     private lateinit var binding: ActivityPrevResultBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,8 @@ class PrevResultActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: 넘겨받음$a")
 
 
-        binding.recycler.adapter = PrevResultFoodListAdapter(a as ArrayList<FoodListEntity>)
+//        binding.recycler.adapter = PrevResultFoodListAdapter(a as ArrayList<FoodListEntity>)
+
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -39,6 +40,10 @@ class PrevResultActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onClick(position: Int) {
+
     }
 
 }
