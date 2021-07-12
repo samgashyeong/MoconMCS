@@ -33,6 +33,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -48,6 +50,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -80,7 +83,7 @@ import java.util.Scanner;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 
-public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class FoodMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap googleMap;
     private MapView mapView;
@@ -119,6 +122,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         writeReviewBtn = view.findViewById(R.id.write_review_btn);
         moveToMyLoc = view.findViewById(R.id.moveToMyPos);
         writeReviewBtn.setVisibility(View.INVISIBLE);
+        slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
         slideLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
@@ -158,9 +162,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
         adapter = new ReviewAdapter(arrayList);
         recyclerView.setAdapter(adapter);
 
-        writeReviewBtn.setOnClickListener(v -> {
-            openReviewWriteDialog();
-        });
+        writeReviewBtn.setOnClickListener(v -> openReviewWriteDialog());
 
         return view;
     }
@@ -312,7 +314,8 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     private void changeSelectedMarker(Marker marker) {
-        if (selectedMarker != null) {
+        slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        if(selectedMarker != null) {
             changeMarker(selectedMarker, false);
         }
 
@@ -367,6 +370,8 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             searchedPlacemark = null;
         }
     }
+
+
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -481,6 +486,7 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
         if (placemarkList == null) placemarkList = getPlacemarkList(requireActivity());
         addMarkers();
 
@@ -592,5 +598,13 @@ public class FoodMapFragment extends Fragment implements OnMapReadyCallback, Goo
             }
         });
         return result;
+    }
+
+    @Override
+    public void onMapClick(@NonNull @NotNull LatLng latLng) {
+        changeSelectedMarker(null);
+        if(slideLayout != null) {
+            slideLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        }
     }
 }
