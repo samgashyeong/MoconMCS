@@ -85,6 +85,7 @@
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shadow1"
+                android:popupBackground="#fff"
                 android:layout_centerHorizontal="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="60dp"

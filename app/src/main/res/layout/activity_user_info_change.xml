@@ -5,7 +5,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Menu.ChangePw.UserInfoChangeActivity">
+        tools:context=".Menu.ChangePw.UserInfoChangeActivity"
+        android:background="#fff">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -27,7 +28,7 @@
                     style="@style/Toolbar.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="유저정보 변경" />
+                    android:text="비밀번호 변경" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 

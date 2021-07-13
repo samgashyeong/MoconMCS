@@ -28,7 +28,8 @@
                     android:layout_height="wrap_content"
                     android:background="#FFFFFF"
                     app:menu="@menu/toolbar_menu"
-                    style="@style/MyItemFont">
+                    style="@style/MyItemFont"
+                    app:popupTheme="@style/ThemeOverlay.PopupTheme">
 
                     <TextView
                         android:id="@+id/title"
@@ -84,6 +85,8 @@
                         android:id="@+id/bottmnavview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        app:itemIconTint="@color/bottombarcolor"
+                        app:itemTextColor="@color/bottombarcolor"
                         android:background="#FFFFFF"
                         app:menu="@menu/main_menu" />
                 </FrameLayout>

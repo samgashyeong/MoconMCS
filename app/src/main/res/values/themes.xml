@@ -31,4 +31,8 @@
         <item name="android:actionMenuTextColor">#2B7214</item>
         <item name="android:fontFamily">@font/noto_sans_cj_kkr_medium</item>
     </style>
+    
+    <style name="ThemeOverlay.PopupTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorBackground">#fff</item>
+    </style>
 </resources>

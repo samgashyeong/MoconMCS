@@ -5,7 +5,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Main.SearchFood.FoodNumInput">
+        tools:context=".Main.SearchFood.FoodNumInput"
+        android:background="#fff">
 
         <TextView
             android:id="@+id/IvFoodNum"

@@ -36,6 +36,6 @@
         android:id="@+id/search"
         android:icon="@drawable/ic_search_icon"
         app:showAsAction="ifRoom"
-        android:title="TODO" />
+        android:title="식당 검색하기" />
 
 </menu>
