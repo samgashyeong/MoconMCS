@@ -118,7 +118,6 @@
             android:text="이전 기록 보기"
             android:textColor="#2b7214"
             android:layout_marginTop="30dp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view3" />

@@ -29,6 +29,12 @@ class FoodResultListActivity : AppCompatActivity() {
         var failLength : Int = 0
         if(foodList != null){
             foodArrayList = foodList as ArrayList<Material>
+            for (i in 0 until foodArrayList.count()){
+                if(foodArrayList[i].MLSFC_NM == "축산물" || foodArrayList[i].MLSFC_NM == "수산물"){
+                    foodAdapterList.add(foodArrayList[i])
+                }
+            }
+            Log.d(TAG, "onCreate: 1.$foodAdapterList")
             when(intent.getStringExtra("userKind")){
                 "비건"->{
                     for(i in 0 until foodArrayList.count()){
@@ -36,24 +42,28 @@ class FoodResultListActivity : AppCompatActivity() {
                             || foodArrayList[i].MLSFC_NM == "탈지분유"
                             || foodArrayList[i].MLSFC_NM == "난류"
                             || foodArrayList[i].MLSFC_NM == "우유"
+                            || foodArrayList[i].MLSFC_NM == "유제품"
                             || foodArrayList[i].MLSFC_NM == "체다치즈 분말"
                             || foodArrayList[i].MLSFC_NM == "까망베르 치즈분말"
                             || foodArrayList[i].MLSFC_NM == "치즈혼합분말"){
                             foodAdapterList.add(foodArrayList[i])
                         }
                     }
+                    failLength = foodAdapterList.count()
                 }
                 "오보"->{
                     for(i in 0 until foodArrayList.count()){
                         if (foodArrayList[i].MLSFC_NM == "혼합분유"
                             || foodArrayList[i].MLSFC_NM == "탈지분유"
                             || foodArrayList[i].MLSFC_NM == "우유"
+                            || foodArrayList[i].MLSFC_NM == "유제품"
                             || foodArrayList[i].MLSFC_NM == "체다치즈 분말"
                             || foodArrayList[i].MLSFC_NM == "까망베르 치즈분말"
                             || foodArrayList[i].MLSFC_NM == "치즈혼합분말"){
                             foodAdapterList.add(foodArrayList[i])
                         }
                     }
+                    failLength = foodAdapterList.count()
                 }
                 "락토"->{
                     for(i in 0 until foodArrayList.count()){
@@ -61,20 +71,25 @@ class FoodResultListActivity : AppCompatActivity() {
                             foodAdapterList.add(foodArrayList[i])
                         }
                     }
-                }
-            }
-            for (i in 0 until foodArrayList.count()){
-                if(foodArrayList[i].MLSFC_NM == "축산물" || foodArrayList[i].MLSFC_NM == "수산물"){
-                    foodAdapterList.add(foodArrayList[i])
                     failLength = foodAdapterList.count()
                 }
             }
+            Log.d(TAG, "onCreate: 2$foodAdapterList")
             for (i in 0 until foodArrayList.count()){
-                if(foodArrayList[i].MLSFC_NM != "축산물" && foodArrayList[i].MLSFC_NM != "수산물"){
+                if(foodArrayList[i].MLSFC_NM != "축산물" && foodArrayList[i].MLSFC_NM != "수산물"
+                    && foodArrayList[i].MLSFC_NM != "혼합분유"
+                    && foodArrayList[i].MLSFC_NM != "탈지분유"
+                    && foodArrayList[i].MLSFC_NM != "난류"
+                    && foodArrayList[i].MLSFC_NM != "우유"
+                    && foodArrayList[i].MLSFC_NM != "유제품"
+                    && foodArrayList[i].MLSFC_NM != "체다치즈 분말"
+                    && foodArrayList[i].MLSFC_NM != "까망베르 치즈분말"
+                    && foodArrayList[i].MLSFC_NM != "치즈혼합분말"){
                     Log.d(TAG, "onCreate: 맞는지 확인${foodArrayList[i].MLSFC_NM != "수산물"}")
                     foodAdapterList.add(foodArrayList[i])
                 }
             }
+            Log.d(TAG, "onCreate: 3$foodAdapterList")
             binding.recycler.adapter = FoodAdapter(foodAdapterList, failLength)
         }
 

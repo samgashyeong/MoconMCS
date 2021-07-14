@@ -48,7 +48,7 @@
             android:layout_height="50dp"
             android:ems="14"
             android:textColor="#2b7214"
-            android:hint="@string/inputSPN"
+            android:hint="품목보고번호를 입력해주세요"
             android:layout_marginTop="20dp"
             android:background="@drawable/shadow1"
             android:inputType="number|phone"
