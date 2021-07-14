@@ -9,15 +9,20 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Dialog.CommDialog
+import com.example.moconmcs.Dialog.CommDialogInterface
+import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.FragmentChangeUserInfoBinding
 import com.example.moconmcs.databinding.FragmentProfileInfoBinding
 
-class ProfileInfoFragment : Fragment() {
+class ProfileInfoFragment : Fragment(){
     private lateinit var activity: ProfileInfoActivity
 
     private lateinit var binding: FragmentProfileInfoBinding
     private lateinit var vM : ProfileChangeViewModel
+    private lateinit var rDb : AppDatabase
+    private lateinit var dialog : CommDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +34,7 @@ class ProfileInfoFragment : Fragment() {
 
         vM = ViewModelProvider(requireActivity()).get(ProfileChangeViewModel::class.java)
 
-
+        rDb = AppDatabase.getInstance(requireContext())
 
         binding.btn.setOnClickListener {
             activity.change(2)

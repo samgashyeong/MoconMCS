@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import com.example.moconmcs.R
 
 class CommDialog(

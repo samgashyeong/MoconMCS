@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
@@ -27,6 +28,10 @@ class PrevResultActivity : AppCompatActivity(), PrevResultFoodListAdapter.OnClic
         setSupportActionBar(binding.toolbar)
 
         foodList = intent.getSerializableExtra("foodlist") as ArrayList<FoodListEntity>
+
+        if(foodList.isEmpty()){
+            binding.notDataTv.visibility = View.VISIBLE
+        }
 
         binding.recycler.adapter = PrevResultFoodListAdapter(foodList, this)
 

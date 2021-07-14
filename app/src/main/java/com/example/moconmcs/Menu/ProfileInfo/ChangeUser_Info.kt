@@ -14,13 +14,17 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.moconmcs.Dialog.CommDialog
+import com.example.moconmcs.Dialog.CommDialogInterface
+import com.example.moconmcs.Main.AppDatabase
+import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.SignUP.SignupActivity
 import com.example.moconmcs.databinding.FragmentChangeUserInfoBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ChangeUser_Info : Fragment() {
+class ChangeUser_Info : Fragment(), CommDialogInterface {
     private lateinit var binding: FragmentChangeUserInfoBinding
 
     private lateinit var activity: ProfileInfoActivity
@@ -30,11 +34,14 @@ class ChangeUser_Info : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db : FirebaseFirestore
     private lateinit var userKind : String
+    private lateinit var room : AppDatabase
+    private lateinit var foodListData : List<FoodListEntity>
+    private lateinit var dialog: CommDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        room = AppDatabase.getInstance(this.requireContext())
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_change_user__info, container, false)
 
@@ -43,6 +50,8 @@ class ChangeUser_Info : Fragment() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        foodListData = room.foodListDao().getAll()!!
+        dialog = CommDialog(requireContext(), this, "식품 이전기록 삭제", "비건단계의 정보를 변경하시면 식품 이전기록 정보가 삭제됩니다.\n정보를 변경하시겠습니까?")
         val items = resources.getStringArray(R.array.my_array_change)
         val myAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.my_array_change, R.layout.spinner_layout)
         myAdapter.setDropDownViewResource(R.layout.spinner_layout)
@@ -111,19 +120,12 @@ class ChangeUser_Info : Fragment() {
         }
 
         binding.changeBtn.setOnClickListener {
-            db.collection("User").document(curUid).update("name", binding.myNameTv.text.toString()
-                , "userKind", userKind)
-                .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        vM.userName.value = binding.myNameTv.text.toString()
-                        vM.userKind.value = userKind
-                        Toast.makeText(requireContext(), "유저정보변경을 완료하였습니다.", Toast.LENGTH_SHORT).show()
-                        activity.change(1)
-                    }
-                    else{
-                        Toast.makeText(requireContext(), "오류가 발생하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            if(vM.userKind.value != userKind){
+                dialog.show()
+            }
+            else{
+                changeUser()
+            }
         }
 
         return binding.root
@@ -144,5 +146,36 @@ class ChangeUser_Info : Fragment() {
     override fun onDetach() {
         super.onDetach()
         activity.onDetachedFromWindow()
+    }
+
+    override fun onCheckBtnClick() {
+        changeUser()
+    }
+
+    private fun changeUser() {
+        db.collection("User").document(auth.currentUser!!.uid).update("name", binding.myNameTv.text.toString()
+            , "userKind", userKind)
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    if(vM.userKind.value != userKind){
+                        for (i in foodListData){
+                            room.foodListDao().delete(i)
+                        }
+                    }
+                    vM.userName.value = binding.myNameTv.text.toString()
+                    vM.userKind.value = userKind
+                    Toast.makeText(activity, "유저정보변경을 완료하였습니다.", Toast.LENGTH_SHORT).show()
+                    activity.change(1)
+                }
+                else{
+                    Toast.makeText(activity, "오류가 발생하였습니다. 다시시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        activity.change(1)
+        dialog.dismiss()
+    }
+
+    override fun onCancleBtnClick() {
+        dialog.dismiss()
     }
 }

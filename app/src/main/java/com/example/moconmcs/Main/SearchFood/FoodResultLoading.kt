@@ -15,7 +15,6 @@ import com.example.moconmcs.Dialog.ErrorDialogInterface
 import com.example.moconmcs.Main.AppDatabase
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodNum
 import com.example.moconmcs.Main.SearchFood.NetWork.GetFoodResult
-import com.example.moconmcs.Main.SearchFood.db.Converters
 import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.FoodData
@@ -102,7 +101,7 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                         finish()
                     }
                     else{ //나온다?
-                        binding.tvResult.text = "바코드가 인식되었습니다. 잠시 기달려주세요!"
+                        binding.tvResult.text = "바코드가 인식되었습니다. 잠시 기다려주세요!"
                         val foodName = isExecution!!.C005.row[0].PRDLST_NM
                         val foodNumber = isExecution.C005.row[0].PRDLST_REPORT_NO
                         Log.d(TAG, "getFoodNum: ${isExecution}")
