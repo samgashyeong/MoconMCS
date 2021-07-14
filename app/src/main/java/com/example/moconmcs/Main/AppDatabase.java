@@ -15,7 +15,7 @@ import com.example.moconmcs.Main.SearchFood.db.FoodListEntity;
 
 
 @TypeConverters(Converters.class)
-@Database(entities = {DiaryEntity.class, FoodListEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {DiaryEntity.class, FoodListEntity.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DiaryDao diaryDao();

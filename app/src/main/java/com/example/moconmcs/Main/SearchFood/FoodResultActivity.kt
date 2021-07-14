@@ -76,41 +76,42 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                     .putExtra("prodName", foodResultData.data_res.prodName)
                     .putExtra("userKind", intent.getStringExtra("userKind")))
             }
-            Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
-            Log.d(TAG, "onCreate: FoodResult에서 받음")
-            when(intent.getStringExtra("IsEat")){
-                "0"->{
-                    Log.d(TAG, "onCreate: 먹을 수 없음")
+//            Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
+//            Log.d(TAG, "onCreate: FoodResult에서 받음")
+            when(intent.getBooleanExtra("canEat", true)){
+
+                false -> {
+//                    Log.d(TAG, "onCreate: 먹을 수 없음")
                     when(intent.getStringExtra("cause")){
-                        "bad_egg"->{
+                        "egg"->{
                             whyIsNotEat("계란이 포함되어있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_eggs_icon)
                         }
-                        "bad_meatAndFish"->{
+                        "meat|fish"->{
                             whyIsNotEat("해산물이랑 고기가 포함되어있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_fish_meat)
                         }
-                        "bad_fish"->{
+                        "fish"->{
                             whyIsNotEat("해산물이 포함되어있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_fish)
                         }
-                        "bad_meat"->{
+                        "meat"->{
                             whyIsNotEat("동물성 성분이 포함되어 있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_meat_icon)
                         }
-                        "bad_dairy"->{
+                        "milk"->{
                             whyIsNotEat("유제품이 포함되어 있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_dailyproduct_icon)
                         }
-                        "bad_dairyAndEggs"->{
+                        "egg|milk"->{
                             whyIsNotEat("유제품과 달걀이 포함되어 있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_all_icon)
                         }
                     }
                     binding.resultTV.text = "드실 수 없습니다.."
                 }
-                "1"->{
-                    Log.d(TAG, "onCreate: 먹을 수 있음.")
+                true -> {
+//                    Log.d(TAG, "onCreate: 먹을 수 있음.")
                     binding.resultTV.text = "드실 수 있습니다."
                     binding.foodProductTv.text = foodResultData.data_res.prodName
                     when(intent.getStringExtra("userKind")){

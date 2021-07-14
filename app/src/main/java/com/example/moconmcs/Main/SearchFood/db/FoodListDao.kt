@@ -12,7 +12,7 @@ interface FoodListDao {
     fun getAll(): List<FoodListEntity>?
 
     @Query("SELECT foodNum FROM FoodListEntity")
-    fun foodNumgetAll(): List<String>
+    fun getAllFoodNum(): List<String>
 
     @Insert
     fun insert(vararg foodListEntity: FoodListEntity?)

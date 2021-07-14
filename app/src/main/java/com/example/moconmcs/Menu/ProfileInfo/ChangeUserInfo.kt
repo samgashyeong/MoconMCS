@@ -24,7 +24,7 @@ import com.example.moconmcs.databinding.FragmentChangeUserInfoBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ChangeUser_Info : Fragment(), CommDialogInterface {
+class ChangeUserInfo : Fragment(), CommDialogInterface {
     private lateinit var binding: FragmentChangeUserInfoBinding
 
     private lateinit var activity: ProfileInfoActivity
@@ -51,7 +51,7 @@ class ChangeUser_Info : Fragment(), CommDialogInterface {
         db = FirebaseFirestore.getInstance()
 
         foodListData = room.foodListDao().getAll()!!
-        dialog = CommDialog(requireContext(), this, "식품 이전기록 삭제", "비건단계의 정보를 변경하시면 식품 이전기록 정보가 삭제됩니다.\n정보를 변경하시겠습니까?")
+//        dialog = CommDialog(requireContext(), this, "식품 이전기록 삭제", "비건단계의 정보를 변경하시면 식품 이전기록 정보가 삭제됩니다.\n정보를 변경하시겠습니까?")
         val items = resources.getStringArray(R.array.my_array_change)
         val myAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.my_array_change, R.layout.spinner_layout)
         myAdapter.setDropDownViewResource(R.layout.spinner_layout)
@@ -120,12 +120,13 @@ class ChangeUser_Info : Fragment(), CommDialogInterface {
         }
 
         binding.changeBtn.setOnClickListener {
-            if(vM.userKind.value != userKind){
-                dialog.show()
-            }
-            else{
-                changeUser()
-            }
+//            if(vM.userKind.value != userKind){
+//                dialog.show()
+//            }
+//            else{
+//                changeUser()
+//            }
+            changeUser()
         }
 
         return binding.root
@@ -157,11 +158,11 @@ class ChangeUser_Info : Fragment(), CommDialogInterface {
             , "userKind", userKind)
             .addOnCompleteListener {
                 if(it.isSuccessful){
-                    if(vM.userKind.value != userKind){
-                        for (i in foodListData){
-                            room.foodListDao().delete(i)
-                        }
-                    }
+//                    if(vM.userKind.value != userKind){
+//                        for (i in foodListData){
+//                            room.foodListDao().delete(i)
+//                        }
+//                    }
                     vM.userName.value = binding.myNameTv.text.toString()
                     vM.userKind.value = userKind
                     Toast.makeText(activity, "유저정보변경을 완료하였습니다.", Toast.LENGTH_SHORT).show()
@@ -172,7 +173,7 @@ class ChangeUser_Info : Fragment(), CommDialogInterface {
                 }
             }
         activity.change(1)
-        dialog.dismiss()
+        //dialog.dismiss()
     }
 
     override fun onCancleBtnClick() {

@@ -27,7 +27,6 @@ import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.Menu.HelpMenu.HelpMenuActivity
 import com.example.moconmcs.Menu.ProfileActivity
 import com.example.moconmcs.Menu.ProfileViewModel
-import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -101,7 +100,7 @@ class MainActivity : AppCompatActivity(),
         binding.floatingBtn.setOnClickListener {
             bottomSheetDialog.show(supportFragmentManager, "foodBottomSheet")
             foodResultList = db.foodListDao().getAll() as ArrayList<FoodListEntity>
-            foodNumList = db.foodListDao().foodNumgetAll() as ArrayList<String>
+            foodNumList = db.foodListDao().getAllFoodNum() as ArrayList<String>
             Log.d(TAG, "onCreate: 푸드넘$foodNumList\n푸드리스트$foodResultList")
         }
     }

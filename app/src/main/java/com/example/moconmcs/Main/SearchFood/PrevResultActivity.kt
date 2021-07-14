@@ -13,6 +13,8 @@ import com.example.moconmcs.Main.SearchFood.db.FoodListEntity
 import com.example.moconmcs.R
 import com.example.moconmcs.data.KyungrokApi.Material
 import com.example.moconmcs.databinding.ActivityPrevResultBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,9 +53,18 @@ class PrevResultActivity : AppCompatActivity(), PrevResultFoodListAdapter.OnClic
     }
 
     override fun onClick(position: Int) {
-        startActivity(Intent(this, FoodResultListActivity::class.java)
-            .putExtra("foodList", foodList.get(position).foodList as ArrayList<Material>)
-            .putExtra("prodName", foodList.get(position).foodName))
+        val auth = FirebaseAuth.getInstance()
+        val Fdb = FirebaseFirestore.getInstance()
+        Fdb.collection("User").document(auth.currentUser!!.uid).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val userKind = it.result.data!!.getValue("userKind").toString()
+                    startActivity(Intent(this, FoodResultListActivity::class.java)
+                        .putExtra("foodList", foodList.get(position).foodList as ArrayList<Material>)
+                        .putExtra("prodName", foodList.get(position).foodName)
+                        .putExtra("userKind", userKind))
+                }
+            }
     }
 
 }

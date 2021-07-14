@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.moconmcs.R
 import com.example.moconmcs.databinding.ActivityProfileInfoBinding
@@ -51,7 +49,7 @@ class ProfileInfoActivity : AppCompatActivity() {
     public fun change(i : Int){
         when(i){
             1->supportFragmentManager.beginTransaction().replace(R.id.frame, ProfileInfoFragment()).commit()
-            2->supportFragmentManager.beginTransaction().replace(R.id.frame, ChangeUser_Info()).commit()
+            2->supportFragmentManager.beginTransaction().replace(R.id.frame, ChangeUserInfo()).commit()
         }
     }
 
