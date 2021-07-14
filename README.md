@@ -4,4 +4,5 @@
 
 조유찬 : Java
 
-이준상 : Kotlin, Java
+이준상 : Kotlin
+
