@@ -29,6 +29,40 @@ class FoodResultListActivity : AppCompatActivity() {
         var failLength : Int = 0
         if(foodList != null){
             foodArrayList = foodList as ArrayList<Material>
+            when(intent.getStringExtra("userKind")){
+                "비건"->{
+                    for(i in 0 until foodArrayList.count()){
+                        if (foodArrayList[i].MLSFC_NM == "혼합분유"
+                            || foodArrayList[i].MLSFC_NM == "탈지분유"
+                            || foodArrayList[i].MLSFC_NM == "난류"
+                            || foodArrayList[i].MLSFC_NM == "우유"
+                            || foodArrayList[i].MLSFC_NM == "체다치즈 분말"
+                            || foodArrayList[i].MLSFC_NM == "까망베르 치즈분말"
+                            || foodArrayList[i].MLSFC_NM == "치즈혼합분말"){
+                            foodAdapterList.add(foodArrayList[i])
+                        }
+                    }
+                }
+                "오보"->{
+                    for(i in 0 until foodArrayList.count()){
+                        if (foodArrayList[i].MLSFC_NM == "혼합분유"
+                            || foodArrayList[i].MLSFC_NM == "탈지분유"
+                            || foodArrayList[i].MLSFC_NM == "우유"
+                            || foodArrayList[i].MLSFC_NM == "체다치즈 분말"
+                            || foodArrayList[i].MLSFC_NM == "까망베르 치즈분말"
+                            || foodArrayList[i].MLSFC_NM == "치즈혼합분말"){
+                            foodAdapterList.add(foodArrayList[i])
+                        }
+                    }
+                }
+                "락토"->{
+                    for(i in 0 until foodArrayList.count()){
+                        if (foodArrayList[i].MLSFC_NM == "난류"){
+                            foodAdapterList.add(foodArrayList[i])
+                        }
+                    }
+                }
+            }
             for (i in 0 until foodArrayList.count()){
                 if(foodArrayList[i].MLSFC_NM == "축산물" || foodArrayList[i].MLSFC_NM == "수산물"){
                     foodAdapterList.add(foodArrayList[i])

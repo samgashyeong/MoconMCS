@@ -43,6 +43,7 @@
                         android:background="@drawable/shadow1"
                         android:gravity="center_vertical"
                         android:textColor="#2b7214"
+                        android:popupBackground="#fff"
                         android:textColorHint="#a7bea0"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"

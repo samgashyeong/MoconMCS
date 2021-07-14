@@ -154,6 +154,7 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                                 Log.d(TAG, "getFoodResult: 거의 다 되었서요!")
                                 binding.tvResult.text = "거의 다 되었어요!"
                                 if (isExecution != null) {
+                                    Log.d(TAG, "getFoodResult: 검사중")
                                     IsEat(isExecution)
                                 }
 //                                startActivity(Intent(this@FoodResultLoading, FoodResultActivity::class.java)
@@ -210,23 +211,29 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
     }
 
     private fun checkIsBadResult(userKind: String, excution: FoodData) {
+        Log.d(TAG, "checkIsBadResult: 세부검사중")
         when(userKind){
             "비건"->{
-                if(excution.data_res.otherThanLivestock>0){
+                if(excution.data_res.eggs>0){
                     checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg",excution.data_res.materials)
                     resultIntent("0", "bad_egg", userKind, excution)
+                }
+                else if(excution.data_res.dairy >0){
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_dairy",excution.data_res.materials)
+                    resultIntent("0", "bad_dairy", userKind, excution)
+                }
+                else if(excution.data_res.dairy >0 && excution.data_res.eggs > 0){
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_dairyAndEggs",excution.data_res.materials)
+                    resultIntent("0", "bad_dairyAndEggs", userKind, excution)
                 }
                 else{
                     checkIsSaveData(excution, excution.data_res.prodNum, "good_vegan", excution.data_res.materials)
                     resultIntent("1", "eat", userKind, excution)
-//                    binding.resultIV.setImageResource(R.drawable.ic_vegan_icon)
-//                    binding.resultTV.text = "드실 수 있습니다."
-//                    binding.foodProductTv.text = foodResultData.data_res.prodName
                 }
             }
             "락토"->{
                 //유제품, 꿀, 채소 과일 아닌것만 판별
-                if(excution.data_res.otherThanLivestock>0){
+                if(excution.data_res.eggs>0){
                     checkIsSaveData(excution, excution.data_res.prodNum, "bad_egg", excution.data_res.materials)
                     resultIntent("0", "bad_egg", userKind, excution)
                 }
@@ -236,9 +243,14 @@ class FoodResultLoading : AppCompatActivity(), ErrorDialogInterface, CommDialogI
                 }
             }
             "오보"->{
-                //추가예정
-                checkIsSaveData(excution, excution.data_res.prodNum, "good_ovo", excution.data_res.materials)
-                resultIntent("1", "eat", userKind, excution)
+                if(excution.data_res.dairy >0){
+                    checkIsSaveData(excution, excution.data_res.prodNum, "bad_dairy", excution.data_res.materials)
+                    resultIntent("0", "bad_dairy", userKind, excution)
+                }
+                else{
+                    checkIsSaveData(excution, excution.data_res.prodNum, "good_ovo", excution.data_res.materials)
+                    resultIntent("1", "eat", userKind, excution)
+                }
             }
             "락토오보"->{
                 checkIsSaveData(excution, excution.data_res.prodNum, "good_loctoovo", excution.data_res.materials)

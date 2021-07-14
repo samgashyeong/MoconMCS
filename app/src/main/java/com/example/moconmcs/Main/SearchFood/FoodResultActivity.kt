@@ -73,7 +73,8 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
             binding.button.setOnClickListener {
                 startActivity(Intent(this, FoodResultListActivity::class.java)
                     .putExtra("foodList", foodResultData.data_res.materials)
-                    .putExtra("prodName", foodResultData.data_res.prodName))
+                    .putExtra("prodName", foodResultData.data_res.prodName)
+                    .putExtra("userKind", intent.getStringExtra("userKind")))
             }
             Log.d(TAG, "onCreate: ?????${intent.getStringExtra("IsEat")}")
             Log.d(TAG, "onCreate: FoodResult에서 받음")
@@ -96,6 +97,14 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
                         "bad_meat"->{
                             whyIsNotEat("동물성 성분이 포함되어 있어요!")
                             binding.resultIV.setImageResource(R.drawable.ic_meat_icon)
+                        }
+                        "bad_dairy"->{
+                            whyIsNotEat("유제품이 포함되어 있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_dailyproduct_icon)
+                        }
+                        "bad_dairyAndEggs"->{
+                            whyIsNotEat("유제품과 달걀이 포함되어 있어요!")
+                            binding.resultIV.setImageResource(R.drawable.ic_all_icon)
                         }
                     }
                     binding.resultTV.text = "드실 수 없습니다.."
@@ -173,7 +182,7 @@ class FoodResultActivity : AppCompatActivity(), ErrorDialogInterface, WhyDialogI
     fun barCodeFailResult(){
         binding.resultTV.text = "검색 실패"
         binding.resultIV.setImageResource(R.drawable.ic_hehe)
-        binding.foodProductTv.text = "바코드 인식에 실패하셨습니다."
+        binding.foodProductTv.text = "상품명을 불러오는데에 실패하셨습니다."
         binding.IsStrangeTV.visibility = View.INVISIBLE
         binding.button.text = "품목보고번호 조회하러 가기"
         binding.button.setOnClickListener {

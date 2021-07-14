@@ -42,7 +42,6 @@ class  PrevResultFoodListAdapter(private val DataList:ArrayList<FoodListEntity>,
             "bad_meatAndFish"->{
                 holder.foodResult.text = "동물성 성분과 해산물이 포함되어있음."
                 holder.foodResultIv.setImageResource(R.drawable.ic_fish_meat)
-
             }
             "good_vegan"->{
                 holder.foodResult.text = "먹을 수 있음."
@@ -61,7 +60,6 @@ class  PrevResultFoodListAdapter(private val DataList:ArrayList<FoodListEntity>,
                 holder.foodResult.text = "먹을 수 있음."
                 holder.foodResultIv.setImageResource(R.drawable.ic_locto_ovo_icon)
             }
-
         }
         holder.itemView.setOnClickListener {
             click.onClick(position)
